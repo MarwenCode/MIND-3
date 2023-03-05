@@ -3,6 +3,7 @@ import mysql from "mysql"
 import dotenv from "dotenv";
 import cors from "cors";
 import authRoutes from "./routes/auth.js";
+import notesRoutes from "./routes/notes.js"
 
 const app = express();
 dotenv.config();
@@ -22,7 +23,8 @@ app.use(express.json())
 app.use(cors())
 
 
-app.use("/api/auth", authRoutes)
+app.use("/api/auth", authRoutes);
+app.use("/api/notes", notesRoutes)
 
 
 app.listen(8000, () => {
