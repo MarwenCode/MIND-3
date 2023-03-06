@@ -64,6 +64,14 @@ export const login = (req, res) => {
   });
 };
 
+
+// Logout endpoint
+export const  logout = (req, res) => {
+  req.logout();
+  res.status(200).json({ message: 'Logout successful.' });
+};
+
+
 //get a user
 // export const getUser = (req, res) => {
 //     const userId = req.params.userId;

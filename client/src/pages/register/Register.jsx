@@ -1,6 +1,6 @@
 import React, { useRef, useContext, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./register.scss";
 
 const Register = () => {
@@ -11,9 +11,30 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [passwordAgain, setPasswordAgain] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+ const navigate = useNavigate()
 
-
-
+  const handleSignIn = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch('auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password,username })
+        
+      });
+      console.log(response)
+      if (response.ok) {
+        // sign in was successful, navigate to the home page
+        navigate('/login');
+      } else {
+        // sign in failed, display an error message
+        setErrorMessage('Invalid email or password');
+      }
+    } catch (err) {
+      console.error(err);
+      setErrorMessage('An error occurred');
+    }
+  };
 
 
 //   console.log(user);
@@ -38,7 +59,7 @@ const Register = () => {
           </p>
         </div>
         <div className="loginRight">
-          <form className="loginBox" >
+          <form className="loginBox" onSubmit={handleSignIn} >
             <input
               placeholder="Username"
               className="loginInput"
@@ -46,7 +67,7 @@ const Register = () => {
             
               value={username}
               id="username"
-            //   onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => setUsername(e.target.value)}
             
             />
          
@@ -54,7 +75,7 @@ const Register = () => {
               placeholder="Email"
               type="email"
               className="loginInput"
-            //   onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <input
               placeholder="Password"
@@ -63,7 +84,7 @@ const Register = () => {
               // name="password"
               id="password"
               value={password}
-            //   onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
               //  onChange={handleChange}
             />
             {/* {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>} */}
