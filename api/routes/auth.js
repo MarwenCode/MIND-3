@@ -5,7 +5,7 @@ const authRoutes = express.Router()
 
 authRoutes.post("/login", login)
 authRoutes.post("/register", register)
-router.post("/logout", logout)
+authRoutes.post("/logout", logout)
 
 
 export default authRoutes

@@ -1,0 +1,104 @@
+.notes {
+  display: flex;
+  margin-top: 6%;
+  margin-left: -9%;
+  font-weight: 700;
+  height: 83vh;
+
+  .right {
+    flex: 3;
+    // background-color: rgb(85, 160, 226);
+    // height: 100%;
+    cursor: pointer;
+
+    .elements {
+      list-style-type: none;
+
+      margin-left: -250px;
+
+      li {
+        display: block;
+        height: 40px;
+        .nt {
+          color: grey;
+          margin-right: 10px;
+          width: 20px;
+        }
+        .icon {
+          margin-right: 10px;
+          width: 20px;
+          background-color: rgb(64, 131, 231);
+          border-radius: 20px;
+        }
+
+        .pen {
+          color: grey;
+          margin-right: 10px;
+        }
+        .more {
+        //   color: grey;
+          margin-right: 20px;
+          position: relative;
+          align-items: center;
+          justify-content: center;
+
+          .plus {
+            // margin-right: -70px;
+            margin-left:100px;
+            position: absolute;
+          margin-bottom: 30px;
+          margin-top: 4px;
+            
+          }
+     
+        }
+
+        // .addBtn {
+        //     // margin-left: 60px;
+        // }
+        .AddNote {
+            height: 60px;
+        }
+       
+        
+      
+      }
+
+      li.AddNote:hover{
+        background-color: rgb(67, 117, 226);
+        border-radius: 5px;
+       
+       
+      }
+
+      li.scratchpad:hover{
+        background-color: rgb(60, 62, 65);
+        border-radius: 5px;
+       
+       
+      }
+
+      li.notes:hover{
+        background-color: rgb(60, 62, 65);
+        border-radius: 5px;
+       
+       
+      }
+
+       
+
+       
+                   
+      
+     
+    }
+  }
+  .center {
+    flex: 3;
+    background-color: rgb(208, 212, 212);
+  }
+  .left {
+    flex: 7;
+    background-color: beige;
+  }
+}
