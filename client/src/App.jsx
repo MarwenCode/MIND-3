@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, AppContext } from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Register from './pages/register/Register';
 import Login from './pages/login/Login';
@@ -9,6 +9,7 @@ import Notes from './components/notes/Notes';
 import './App.scss'
 
 function App() {
+  
  
 
   return (
