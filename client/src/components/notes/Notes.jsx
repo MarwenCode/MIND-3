@@ -8,7 +8,6 @@ import "./notes.scss";
 import { AppContext } from "../../context/context";
 import axios from "axios";
 
-
 const Notes = () => {
   const { markdownText, setMarkdownText, setMarkdownTitle, markdownTitle } =
     useContext(AppContext);
@@ -17,6 +16,9 @@ const Notes = () => {
   const [getNotes, setGetNotes] = useState([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+
+  const [scratchOpen, setScratchOpen] = useState(false);
+  const [displayNotes, setDisplayNotes] = useState(false);
 
   const onInputChange = (e) => {
     const newValue = e.currentTarget.value;
@@ -49,18 +51,14 @@ const Notes = () => {
   };
 
   useEffect(() => {
+    const getAllNotes = async () => {
+      const res = await axios.get("http://localhost:8000/api/notes/note");
+      console.log(res);
+      setGetNotes(res.data);
+    };
 
-    const getAllNotes = async() => {
-
-      const res = await axios.get("http://localhost:8000/api/notes/note")
-      console.log(res)
-      setGetNotes(res.data)
-
-    }
-
-   getAllNotes()
-
-  }, [])
+    getAllNotes();
+  }, []);
 
   return (
     <div className="notes">
@@ -68,15 +66,15 @@ const Notes = () => {
         <ul className="elements">
           <li className="AddNote">
             <MdOutlineAdd className="icon" />
-            <span>New Note</span>
+            <span onClick={createNote}>New Note</span>
           </li>
           <li className="scratchpad">
             <FaPen className="pen" />
-            <span>ScratchPad</span>
+            <span onClick={() => setScratchOpen(true)}>ScratchPad</span>
           </li>
           <li className="notes">
             <GoNote className="nt" />
-            <span>Notes</span>
+            <span onClick={() => setScratchOpen(false)}>Notes</span>
           </li>
           <li className="categories">
             <summary className="more">
@@ -86,36 +84,35 @@ const Notes = () => {
           </li>
         </ul>
       </div>
-      <div className="center">
-        <input type="text" placeholder="search for note" />
+      {!scratchOpen && (
+        <div className="center">
+          <input type="text" placeholder="search for note" />
 
-        <div className="result">
-          <section>
-            <h1>Converted Text</h1>
+          <div className="result">
+            <section>
+              {/* <ReactMarkdown>{markdownContent}</ReactMarkdown> */}
 
-            {/* <ReactMarkdown>{markdownContent}</ReactMarkdown> */}
-
-            <div className="allNotes">
-              {getNotes.map((note) => (
-          <>
-           <div className="h"> {note.title}  </div>
-          <div className="h"> {note.description}  </div>
-          
-          </>
-         
-
-
-        ))}
-            </div>
-          </section>
+              <div className="allNotes">
+                {getNotes.map((note) => (
+                  <div className="container">
+                    <div className="title"> {note.title} </div>
+                    <div className="description"> {note.description} </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          </div>
         </div>
-      </div>
+      )}
 
-      <form onSubmit={createNote}>
-        <div className="left">
+      <form className="left">
+        {scratchOpen ? (
+          <textarea className="scratchOpen" />
+        ) : (
           <div className="markInput">
             <section>
               {/* <h1>Markdown Text</h1> */}
+
               <input
                 className="title"
                 placeholder="Title"
@@ -123,11 +120,13 @@ const Notes = () => {
                 autoFocus={true}
                 onChange={onInputChangeTitle}
               />
+              {/* <button type="submit">Create Note</button> */}
               <textarea onChange={onInputChange} />
             </section>
           </div>
-        </div>
-        <button type="submit">Create Note</button>
+        )}
+
+        <div></div>
       </form>
     </div>
   );

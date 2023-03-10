@@ -9,12 +9,14 @@
     flex: 3;
     // background-color: rgb(85, 160, 226);
     // height: 100%;
+   
     cursor: pointer;
 
     .elements {
       list-style-type: none;
+      position: fixed;
 
-      margin-left: -250px;
+      // margin-left: -250px;
 
       li {
         display: block;
@@ -36,7 +38,7 @@
           margin-right: 10px;
         }
         .more {
-        //   color: grey;
+          //   color: grey;
           margin-right: 20px;
           position: relative;
           align-items: center;
@@ -44,61 +46,96 @@
 
           .plus {
             // margin-right: -70px;
-            margin-left:100px;
+            margin-left: 100px;
             position: absolute;
-          margin-bottom: 30px;
-          margin-top: 4px;
-            
+            margin-bottom: 30px;
+            margin-top: 4px;
           }
-     
         }
 
         // .addBtn {
         //     // margin-left: 60px;
         // }
         .AddNote {
-            height: 60px;
+          height: 60px;
         }
-       
-        
-      
       }
 
-      li.AddNote:hover{
+      li.AddNote:hover {
         background-color: rgb(67, 117, 226);
         border-radius: 5px;
-       
-       
       }
 
-      li.scratchpad:hover{
+      li.scratchpad:hover {
         background-color: rgb(60, 62, 65);
         border-radius: 5px;
-       
-       
       }
 
-      li.notes:hover{
+      li.notes:hover {
         background-color: rgb(60, 62, 65);
         border-radius: 5px;
-       
-       
       }
-
-       
-
-       
-                   
-      
-     
     }
   }
   .center {
     flex: 3;
     background-color: rgb(213, 218, 219);
+
+    .result {
+      section {
+        .allNotes {
+          max-height: 574px; /* set max height for container */
+          overflow-y: auto; /* add vertical scrollbar */
+          .container {
+            width: 300px;
+            height: 50px;
+            border: 1px solid rgb(197, 194, 194);
+            padding: 10px;
+
+            .title {
+              font-size: 18px;
+              font-weight: bold;
+            }
+
+            .description {
+              font-size: 14px;
+            }
+          }
+
+       
+        }
+
+     
+      }
+    }
   }
   .left {
     flex: 7;
-    background-color: beige;
+    // background-color: beige;
+
+    .scratchOpen{
+      height: 570px;
+      width: 1043px;
+      resize: none;
+      background-color: whitesmoke;
+      color: black;
+      
+    }
+
+    .markInput {
+
+      input {
+        width: 99%;
+        height: 25px;
+      }
+
+      textarea {
+        height: 570px;
+        width: 743px;
+        resize: none;
+        background-color: whitesmoke;
+        color: black;
+      }
+    }
   }
 }
