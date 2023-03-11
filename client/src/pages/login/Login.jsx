@@ -3,25 +3,26 @@ import axios from "axios";
 import { Link, useNavigate} from "react-router-dom";
 import "./login.scss";
 // import Spinner from "../../components/spinner/Spinner";
+import { AppContext } from "../../context/context";
 import { useEffect } from "react";
 
 const Login = () => {
-  //   const { user, dispatch } = useContext(AppContext);
-  const [loading, setLoading] = useState(false);
+  const {email, setEmail,password, setPassword,handleLogin } = useContext(AppContext);
+  // const [loading, setLoading] = useState(false);
 
-  //   const email = useRef();
-  //   const password = useRef();
-  const navigate = useNavigate()
+  // //   const email = useRef();
+  // //   const password = useRef();
+  // const navigate = useNavigate()
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
 
-  const handleLogin = async() => {
-    const res = await axios.post("/auth/login", {email, password})
+  // const handleLogin = async() => {
+  //   const res = await axios.post("/auth/login", {email, password})
 
-    console.log(res)
-    navigate('/home')
-  }
+  //   console.log(res)
+  //   navigate('/home')
+  // }
 
 
 

@@ -54,7 +54,7 @@ export const login = (req, res) => {
       if (err) throw err;
 
       if (isMatch) {
-        return res.status(200).json({ message: "user is Logged  successfully" });
+        return res.status(200).json({ message: "user is Logged  successfully",user: result[0] });
       } else {
         return res
           .status(401)

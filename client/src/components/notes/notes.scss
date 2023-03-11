@@ -76,6 +76,17 @@
         border-radius: 5px;
       }
     }
+
+    .logout {
+      margin-top: 550px;
+      justify-content: center;
+      align-items: center;
+      margin-right: 170px;
+
+      span {
+        margin-left: 10px;
+      }
+    }
   }
   .center {
     flex: 3;

@@ -3,6 +3,7 @@ import ReactMarkdown from "react-markdown";
 import { MdOutlineAdd, MdExpandMore } from "react-icons/md";
 import { FaPen } from "react-icons/fa";
 import { GoNote } from "react-icons/go";
+
 import { AiOutlinePlus } from "react-icons/ai";
 import "./notes.scss";
 import { AppContext } from "../../context/context";
@@ -60,6 +61,9 @@ const Notes = () => {
     getAllNotes();
   }, []);
 
+
+
+
   return (
     <div className="notes">
       <div className="right">
@@ -83,6 +87,8 @@ const Notes = () => {
             </summary>
           </li>
         </ul>
+
+       
       </div>
       {!scratchOpen && (
         <div className="center">
