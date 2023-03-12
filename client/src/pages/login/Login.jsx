@@ -31,7 +31,7 @@ const Login = () => {
       <div className="loginWrapper">
         <div className="loginLeft">
           {/* <img src="images/logo.jpg" className='logo'/> */}
-          <span className="loginDesc">Make a touch & connect every where.</span>
+          <span className="loginDesc">Manage your Tasks and  organize your day on connected with your Team.</span>
           <p>
             Do not have an account?
             <Link to="/register" className="link">

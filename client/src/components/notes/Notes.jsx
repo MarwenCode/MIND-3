@@ -18,22 +18,33 @@ const Notes = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
+  //edited notes
+  const [editedTitle, setEditedTitle] = useState("");
+  const [editedDescription, setEditedDescription] = useState("");
+
   const [scratchOpen, setScratchOpen] = useState(false);
-  const [displayNotes, setDisplayNotes] = useState(false);
+
+  const [selectedNote, setSelectedNote] = useState(null);
 
   const onInputChange = (e) => {
     const newValue = e.currentTarget.value;
     setMarkdownText(newValue);
     setDescription(newValue);
+   
   };
+
   const onInputChangeTitle = (e) => {
     const newValue = e.currentTarget.value;
     setMarkdownTitle(newValue);
     setTitle(newValue);
+   
   };
 
   const createNote = async (e) => {
     e.preventDefault();
+    if (!title && !description) {
+      return;
+    }
     const newNote = {
       title,
       description,
@@ -46,6 +57,10 @@ const Notes = () => {
         newNote
       );
       console.log(res);
+      // setGetNotes([...getNotes, res.data]);
+      setTitle("");
+      setDescription("");
+      // setIsCreatingNewNote(false);
     } catch (error) {
       console.log(error);
     }
@@ -61,8 +76,37 @@ const Notes = () => {
     getAllNotes();
   }, []);
 
+  const handleNoteClick = (note) => {
+    setSelectedNote({
+      id: note.id,
+      title: note.title,
+      description: note.description,
+    });
+  };
 
+  const handleUpdate = async (id) => {
+    
+    const updatedNote = {
+     
+      title: editedTitle,
+      description: editedDescription,
+    };
 
+    try {
+      await axios.put(
+        `http://localhost:8000/api/notes/note/${id}`,
+        updatedNote
+      );
+      console.log("Note updated successfully");
+      setSelectedNote({
+        ...selectedNote,
+        title: editedTitle,
+        description: editedDescription,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="notes">
@@ -87,8 +131,6 @@ const Notes = () => {
             </summary>
           </li>
         </ul>
-
-       
       </div>
       {!scratchOpen && (
         <div className="center">
@@ -100,7 +142,10 @@ const Notes = () => {
 
               <div className="allNotes">
                 {getNotes.map((note) => (
-                  <div className="container">
+                  <div
+                    className="container"
+                    key={note.id}
+                    onClick={() => handleNoteClick(note)}>
                     <div className="title"> {note.title} </div>
                     <div className="description"> {note.description} </div>
                   </div>
@@ -111,29 +156,49 @@ const Notes = () => {
         </div>
       )}
 
-      <form className="left">
-        {scratchOpen ? (
-          <textarea className="scratchOpen" />
+<form className="left" onSubmit={(e) => {
+  e.preventDefault();
+  handleUpdate(selectedNote.id);
+}}>
+  {scratchOpen ? (
+    <textarea className="scratchOpen" />
+  ) : (
+    <div className="markInput">
+      <section>
+        {selectedNote ? (
+          <>
+            <input
+              className="title"
+              placeholder="Title"
+              type="text"
+              autoFocus={true}
+              value={editedTitle || selectedNote.title}
+              onChange={(e) => setEditedTitle(e.target.value)}
+            />
+            <textarea
+              value={editedDescription || selectedNote.description}
+              onChange={(e) => setEditedDescription(e.target.value)}
+            />
+            <button type="submit">Update</button>
+          </>
         ) : (
-          <div className="markInput">
-            <section>
-              {/* <h1>Markdown Text</h1> */}
-
-              <input
-                className="title"
-                placeholder="Title"
-                type="text"
-                autoFocus={true}
-                onChange={onInputChangeTitle}
-              />
-              {/* <button type="submit">Create Note</button> */}
-              <textarea onChange={onInputChange} />
-            </section>
-          </div>
+          <>
+            <input
+              className="title"
+              placeholder="Title"
+              type="text"
+              autoFocus={true}
+              value={title}
+              onChange={onInputChangeTitle}
+            />
+            <textarea value={description} onChange={onInputChange} />
+          </>
         )}
+      </section>
+    </div>
+  )}
+</form>
 
-        <div></div>
-      </form>
     </div>
   );
 };

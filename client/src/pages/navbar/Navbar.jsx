@@ -6,7 +6,7 @@ import "./navbar.scss"
 import { AppContext } from '../../context/context';
 
 const Navbar = () => {
-  const {logout} = useContext(AppContext)
+  const {logout, currentUser} = useContext(AppContext)
 
   
 
@@ -29,12 +29,18 @@ const Navbar = () => {
         <Link to="/chat" className="link">
           <li className="item"> Chat</li>
         </Link>
-        <div className="logout">
-        <FiLogOut />
-        
-          <span onClick={logout}>Logout</span>
-        
-        </div>
+
+        {currentUser  && (
+           <div className="logout">
+           <FiLogOut />
+           
+             <span onClick={logout}>Logout</span>
+           
+           </div>
+
+
+        )}
+       
          
         
      

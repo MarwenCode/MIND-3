@@ -45,7 +45,7 @@ export const AppProvider = ({ children }) => {
     localStorage.setItem("user", JSON.stringify(currentUser));
   }, [currentUser]);
 
-  console.log(currentUser);
+  // console.log(currentUser);
 
   //logout
 
