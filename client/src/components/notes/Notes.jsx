@@ -3,6 +3,7 @@ import ReactMarkdown from "react-markdown";
 import { MdOutlineAdd, MdExpandMore } from "react-icons/md";
 import { FaPen } from "react-icons/fa";
 import { GoNote } from "react-icons/go";
+import { AiFillDelete } from "react-icons/ai";
 
 import { AiOutlinePlus } from "react-icons/ai";
 import "./notes.scss";
@@ -141,13 +142,24 @@ const Notes = () => {
               {/* <ReactMarkdown>{markdownContent}</ReactMarkdown> */}
 
               <div className="allNotes">
+              
                 {getNotes.map((note) => (
                   <div
                     className="container"
                     key={note.id}
                     onClick={() => handleNoteClick(note)}>
-                    <div className="title"> {note.title} </div>
-                    <div className="description"> {note.description} </div>
+                      
+                        <span> <AiFillDelete />  </span>
+                  
+
+                    
+                      <div className="title"> {note.title} </div>
+                   
+                   <div className="description"> {note.description} </div>
+
+                    
+                  
+                   
                   </div>
                 ))}
               </div>

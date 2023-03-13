@@ -97,11 +97,13 @@
         .allNotes {
           max-height: 574px; /* set max height for container */
           overflow-y: auto; /* add vertical scrollbar */
+          cursor: pointer;
           .container {
             width: 300px;
-            height: 50px;
+            height: 90px;
             border: 1px solid rgb(197, 194, 194);
             padding: 10px;
+            position: absolute;
 
             .title {
               font-size: 18px;
@@ -111,6 +113,23 @@
             .description {
               font-size: 14px;
             }
+
+            span {
+              position: relative;
+              margin-left: 260px;
+              display: none;
+            }
+            &:hover {
+              span {
+                display: block;
+                position: absolute;
+                margin-left: 260px;
+              }
+            }
+          
+          
+
+           
           }
 
        
