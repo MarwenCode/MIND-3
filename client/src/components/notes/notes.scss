@@ -9,7 +9,7 @@
     flex: 3;
     // background-color: rgb(85, 160, 226);
     // height: 100%;
-   
+
     cursor: pointer;
 
     .elements {
@@ -100,10 +100,14 @@
           cursor: pointer;
           .container {
             width: 300px;
-            height: 90px;
-            border: 1px solid rgb(197, 194, 194);
+            height: 150px;
+         
             padding: 10px;
-            position: absolute;
+            color: rgb(68, 65, 65);
+            // display: block;
+           .text {
+            // border: 1px solid rgb(197, 194, 194);
+            color: black;
 
             .title {
               font-size: 18px;
@@ -126,16 +130,13 @@
                 margin-left: 260px;
               }
             }
-          
-          
 
+
+
+           }
            
           }
-
-       
         }
-
-     
       }
     }
   }
@@ -143,17 +144,15 @@
     flex: 7;
     // background-color: beige;
 
-    .scratchOpen{
+    .scratchOpen {
       height: 570px;
       width: 1043px;
       resize: none;
       background-color: whitesmoke;
       color: black;
-      
     }
 
     .markInput {
-
       input {
         width: 99%;
         height: 25px;

@@ -2,12 +2,17 @@ import express from "express";
 import mysql from "mysql"
 import dotenv from "dotenv";
 import cors from "cors";
+// import morgan from "morgan"
 import authRoutes from "./routes/auth.js";
 import notesRoutes from "./routes/notes.js"
 
 const app = express();
 dotenv.config();
 const passWord = process.env.passWord
+
+
+// Log HTTP requests and responses
+// app.use(morgan('dev'));
 
 app.use(express.json())
 app.use(cors())

@@ -25,6 +25,7 @@ export const createNote = (req, res) => {
       "INSERT INTO notes (`id`, `title`,`description`,`created_at`) VALUES ?";
     const values = [
       [req.body.id, req.body.title, req.body.description, req.body.created_at],
+      // [req.body.id, req.body.title, req.body.description],
     ];
     DataBase.query(notes, [values], (error, data) => {
       if (error) return res.status(500).json(error);
@@ -65,6 +66,67 @@ export const updateNote = (req, res) => {
     return res.status(200).json("Note updated");
   });
 };
+
+//delete a note 
+// export const deleteNote = (req, res) => {
+//   const { id: noteId } = req.params;
+//   const query = "DELETE FROM notes WHERE id=?";
+//   const values = [noteId];
+
+//   console.log("query:", query);
+//   console.log("values:", values);
+//   res.set('Cache-Control', 'no-store');
+
+//   DataBase.query(query, values, (error, result) => {
+//     if (error) {
+//       console.error(error);
+//       return res.status(500).json({ error: "Internal server error" });
+//     }
+//     if (result.affectedRows === 0) {
+//       console.log(`Note with id ${noteId} not found.`);
+//       return res.status(404).json({ error: "Note not found" });
+//     }
+//     console.log(`Note with id ${noteId} deleted.`);
+
+//     return res.status(200).json({ message: "Note deleted" });
+//   });
+// };
+
+
+// delete a single book
+// export const deleteNote = (req, res) => {
+//   const noteId = req.params.id;
+//   const query = "DELETE FROM notes WHERE id = ?";
+
+//   DataBase.query(query, [noteId], (error, data) => {
+//     if (error) {
+//       res.json(error)
+//     } else {
+//       res.status(200).json("Note deleted ");
+//       console.log("note deleted");
+//     }
+//   })
+// }
+
+export const deleteNote = (req, res) => {
+  const noteId = req.params.id;
+  console.log("Deleting note with id:", noteId);
+
+  const query = "DELETE FROM notes WHERE id = ?";
+
+  DataBase.query(query, [noteId], (error, data) => {
+    if (error) {
+      res.json(error);
+    } else {
+      res.status(200).json("Note deleted ");
+      console.log("Note deleted successfully");
+    }
+  });
+};
+
+
+
+
 
 
 
