@@ -61,6 +61,7 @@ const Notes = () => {
       // setGetNotes([...getNotes, res.data]);
       setTitle("");
       setDescription("");
+      window.location.reload();
       // setIsCreatingNewNote(false);
     } catch (error) {
       console.log(error);
@@ -174,8 +175,11 @@ const Notes = () => {
   const handleDelete = async (id) => {
     try {
       await axios.delete("http://localhost:8000/api/notes/note/" + id);
+      window.location.reload();
       const res = await axios.get("http://localhost:8000/api/notes");
+    
       setGetNotes(res.data);
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }
