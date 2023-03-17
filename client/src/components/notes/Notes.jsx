@@ -29,6 +29,11 @@ const Notes = () => {
   const [selectedNote, setSelectedNote] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
 
+  const [categories, setCategories] = useState([]);
+  const [getAllcategories, setAllCategories] = useState([])
+
+  const [inputCatOpen, setInputCatOpen] = useState(false);
+
   const onInputChange = (e) => {
     const newValue = e.currentTarget.value;
     setMarkdownText(newValue);
@@ -50,6 +55,7 @@ const Notes = () => {
       title,
       description,
       created_at: new Date().toISOString().slice(0, 19).replace("T", " "),
+      category_id,
     };
 
     try {
@@ -77,46 +83,7 @@ const Notes = () => {
     getAllNotes();
   }, []);
 
-  // const handleDelete = (event, noteId) => {
-  //   event.preventDefault(); // stop the default form submission behavior
 
-  //   axios.delete(`http://localhost:8000/api/notes/note/${noteId}`)
-  //     .then(response => {
-  //       console.log(response.data); // log the response message here
-  //       // Note successfully deleted, do something (e.g. update state)
-  //       const updatedNotes = getNotes.filter(note => note.id !== noteId);
-  //       setGetNotes(updatedNotes);
-  //     })
-  //     .catch(error => {
-  //       console.error(error);
-  //       setErrorMessage('Error deleting note');
-  //     });
-  // }
-
-  // const handleDelete = async (id) => {
-  //   try {
-  //     await axios.delete("http://localhost:8000/api/notes/note/" + id)
-  //     // window.location.reload()
-
-  //   } catch (error) {
-  //     console.log(error)
-
-  //   }
-  // }
-
-  // const handleDelete = async (id) => {
-  //   try {
-  //     const response = await fetch(`http://localhost:8000/api/notes/note/${id}`, {
-  //       method: 'DELETE',
-  //     });
-
-  //     if (response.status === 200) {
-  //       setGetNotes((prevNotes) => prevNotes.filter((note) => note.id !== id));
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
 
   const handleNoteClick = (note) => {
     setSelectedNote({
@@ -148,43 +115,57 @@ const Notes = () => {
     }
   };
 
-  // console.log(getNotes);
-
-  // const handleDelete = (noteId) => {
-  //   console.log("Deleting note with ID:", noteId);
-  //   axios.delete(`http://localhost:8000/api/notes/note/${noteId}`)
-  //     .then(response => {
-  //       console.log(response.data);
-  //       // Note successfully deleted, do something (e.g. update state)
-  //     })
-  //     .catch(error => {
-  //       console.error(error);
-  //       setErrorMessage('Error deleting note');
-  //     });
-  // }
-  // const handleDelete = async (id) => {
-  //   console.log(id); // log the noteID
-  //   try {
-  //     await axios.delete("http://localhost:8000/api/notes/note/" + id);
-  //     // window.location.reload();
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  
 
   const handleDelete = async (id) => {
     try {
       await axios.delete("http://localhost:8000/api/notes/note/" + id);
       window.location.reload();
       const res = await axios.get("http://localhost:8000/api/notes");
-    
+
       setGetNotes(res.data);
       window.location.reload();
     } catch (error) {
       console.log(error);
     }
   };
-  
+
+  //create a category
+
+
+  const createCategory = async (e) => {
+
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const newCategory = {
+        name: categories,
+        created_at: new Date().toISOString().slice(0, 19).replace("T", " "),
+      };
+
+    try {
+      const res = await axios.post(
+        "http://localhost:8000/api/categories/categorie",
+        newCategory
+      );
+
+      console.log(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+}
+
+
+//get all categories
+useEffect(() => {
+  const getAllCategories = async () => {
+    const res = await axios.get( "http://localhost:8000/api/categories/categorie");
+    setAllCategories(res.data);
+  };
+
+  getAllCategories();
+}, []);
 
   return (
     <div className="notes">
@@ -205,8 +186,37 @@ const Notes = () => {
           <li className="categories">
             <summary className="more">
               <MdExpandMore /> Categories
-              <AiOutlinePlus className="plus" />
+              <AiOutlinePlus className="plus"  onClick={() => setInputCatOpen((prev) => !prev)} />
             </summary>
+        
+          {inputCatOpen && (
+
+                <input className="categorieInput"
+                type="text" 
+                  value={categories}
+                  onKeyDown={createCategory}
+                  onChange={(e) => setCategories(e.target.value)}
+                
+                
+                
+                />
+
+
+
+
+          ) }
+          <div className="cat">
+            {getAllcategories.map((cat) => (
+              <div  className="items">
+                <span>+</span>
+                <span> {cat.name}</span>
+
+              </div>
+
+
+            ))}
+
+          </div>
           </li>
         </ul>
       </div>
@@ -223,17 +233,15 @@ const Notes = () => {
                   <div
                     className="container"
                     key={note.id}
-                    // onClick={() => handleNoteClick(note)}
-                    >
+                    onClick={() => handleNoteClick(note)}>
                     <button
                       className="delete-button"
-                      onClick={() =>handleDelete(note.id)}>
+                      onClick={() => handleDelete(note.id)}>
                       <AiFillDelete />
-                      
                     </button>
                     {/* <span> <AiFillDelete />  </span> */}
 
-                    <div className="text" >
+                    <div className="text">
                       <h3 className="title"> {note.title} </h3>
 
                       <p className="description"> {note.description} </p>
@@ -274,7 +282,9 @@ const Notes = () => {
                     onChange={(e) => setEditedDescription(e.target.value)}
                   />
                   <button type="submit">Update</button>
-                  <button type="submit"   onClick={(note) => handleDelete(note)} >Delete</button>
+                  <button type="submit" onClick={(note) => handleDelete(note)}>
+                    Delete
+                  </button>
                 </>
               ) : (
                 <>
