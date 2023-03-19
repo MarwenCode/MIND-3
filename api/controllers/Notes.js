@@ -21,17 +21,23 @@ import { DataBase } from "../connect.js";
 
 
 export const createNote = (req, res) => {
-    const notes =
-      "INSERT INTO notes (`id`, `title`,`description`,`created_at`) VALUES ?";
-    const values = [
-      [req.body.id, req.body.title, req.body.description, req.body.created_at],
-      // [req.body.id, req.body.title, req.body.description],
-    ];
-    DataBase.query(notes, [values], (error, data) => {
-      if (error) return res.status(500).json(error);
-      if (data) return res.status(200).json("note created");
-    });
-  };
+  const notes =
+    "INSERT INTO notes (`id`, `title`, `description`, `created_at`, `category_id`) VALUES ?";
+  const values = [
+    [
+      req.body.id,
+      req.body.title,
+      req.body.description,
+      req.body.created_at,
+      req.body.category_id,
+    ],
+  ];
+  DataBase.query(notes, [values], (error, data) => {
+    if (error) return res.status(500).json(error);
+    if (data) return res.status(200).json("note created");
+  });
+};
+
 
 
   export const getAllNotes = (req, res) => {

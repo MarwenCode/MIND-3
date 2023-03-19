@@ -3,6 +3,7 @@ import ReactMarkdown from "react-markdown";
 import { MdOutlineAdd, MdExpandMore } from "react-icons/md";
 import { FaPen } from "react-icons/fa";
 import { GoNote } from "react-icons/go";
+import { CiFolderOn } from "react-icons/ci";
 import { AiFillDelete } from "react-icons/ai";
 
 import { AiOutlinePlus } from "react-icons/ai";
@@ -30,7 +31,7 @@ const Notes = () => {
   const [errorMessage, setErrorMessage] = useState(null);
 
   const [categories, setCategories] = useState([]);
-  const [getAllcategories, setAllCategories] = useState([])
+  const [getAllcategories, setAllCategories] = useState([]);
 
   const [inputCatOpen, setInputCatOpen] = useState(false);
 
@@ -46,8 +47,9 @@ const Notes = () => {
     setTitle(newValue);
   };
 
-  const createNote = async (e) => {
+  const createNote = async (e, categoryId) => {
     e.preventDefault();
+    console.log(categoryId);
     if (!title && !description) {
       return;
     }
@@ -55,7 +57,7 @@ const Notes = () => {
       title,
       description,
       created_at: new Date().toISOString().slice(0, 19).replace("T", " "),
-      category_id,
+      category_id: categoryId,
     };
 
     try {
@@ -67,7 +69,7 @@ const Notes = () => {
       // setGetNotes([...getNotes, res.data]);
       setTitle("");
       setDescription("");
-      window.location.reload();
+      // window.location.reload();
       // setIsCreatingNewNote(false);
     } catch (error) {
       console.log(error);
@@ -83,7 +85,8 @@ const Notes = () => {
     getAllNotes();
   }, []);
 
-
+  console.log(getAllcategories);
+  console.log(getNotes);
 
   const handleNoteClick = (note) => {
     setSelectedNote({
@@ -115,8 +118,6 @@ const Notes = () => {
     }
   };
 
-  
-
   const handleDelete = async (id) => {
     try {
       await axios.delete("http://localhost:8000/api/notes/note/" + id);
@@ -132,40 +133,42 @@ const Notes = () => {
 
   //create a category
 
-
   const createCategory = async (e) => {
-
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       e.preventDefault();
       const newCategory = {
         name: categories,
         created_at: new Date().toISOString().slice(0, 19).replace("T", " "),
       };
 
-    try {
-      const res = await axios.post(
-        "http://localhost:8000/api/categories/categorie",
-        newCategory
-      );
+      try {
+        const res = await axios.post(
+          "http://localhost:8000/api/categories/categorie",
+          newCategory
+        );
 
-      console.log(res.data);
-    } catch (error) {
-      console.log(error);
+        console.log(res.data);
+        setCategories("");
+        window.location.reload();
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
-}
+  //get all categories
+  useEffect(() => {
+    const getAllCategories = async () => {
+      const res = await axios.get(
+        "http://localhost:8000/api/categories/categorie"
+      );
+      console.log(res.data); // Add this line
 
+      setAllCategories(res.data);
+    };
 
-//get all categories
-useEffect(() => {
-  const getAllCategories = async () => {
-    const res = await axios.get( "http://localhost:8000/api/categories/categorie");
-    setAllCategories(res.data);
-  };
-
-  getAllCategories();
-}, []);
+    getAllCategories();
+  }, []);
 
   return (
     <div className="notes">
@@ -173,7 +176,9 @@ useEffect(() => {
         <ul className="elements">
           <li className="AddNote">
             <MdOutlineAdd className="icon" />
-            <span onClick={createNote}>New Note</span>
+            <span onClick={(e, categoryId) => createNote(e, categoryId)}>
+              New Note
+            </span>
           </li>
           <li className="scratchpad">
             <FaPen className="pen" />
@@ -186,37 +191,33 @@ useEffect(() => {
           <li className="categories">
             <summary className="more">
               <MdExpandMore /> Categories
-              <AiOutlinePlus className="plus"  onClick={() => setInputCatOpen((prev) => !prev)} />
+              <AiOutlinePlus
+                className="plus"
+                onClick={() => setInputCatOpen((prev) => !prev)}
+              />
             </summary>
-        
-          {inputCatOpen && (
 
-                <input className="categorieInput"
-                type="text" 
-                  value={categories}
-                  onKeyDown={createCategory}
-                  onChange={(e) => setCategories(e.target.value)}
-                
-                
-                
-                />
-
-
-
-
-          ) }
-          <div className="cat">
+            {inputCatOpen && (
+              <input
+                className="categorieInput"
+                type="text"
+                value={categories}
+                onKeyDown={createCategory}
+                onChange={(e) => setCategories(e.target.value)}
+              />
+            )}
+            {/* <div className="cat">
             {getAllcategories.map((cat) => (
               <div  className="items">
-                <span>+</span>
-                <span> {cat.name}</span>
+                <span><CiFolderOn/>    </span>
+                <span className="name"> {cat.name}</span>
 
               </div>
 
 
             ))}
 
-          </div>
+          </div> */}
           </li>
         </ul>
       </div>

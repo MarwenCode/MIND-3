@@ -6,6 +6,7 @@ import cors from "cors";
 import authRoutes from "./routes/auth.js";
 import notesRoutes from "./routes/notes.js"
 import catergoriesRoutes from "./routes/categories.js";
+import tasksRoutes from "./routes/tasks.js";
 
 const app = express();
 dotenv.config();
@@ -32,6 +33,7 @@ app.use(cors())
 app.use("/api/auth", authRoutes);
 app.use("/api/notes", notesRoutes);
 app.use("/api/categories", catergoriesRoutes)
+app.use("/api/tasks", tasksRoutes)
 
 
 app.listen(8000, () => {

@@ -5,6 +5,7 @@ import Login from './pages/login/Login';
 import Home from './pages/home/Home';
 import Navbar from './pages/navbar/Navbar';
 import Notes from './components/notes/Notes';
+import Tasks from "./components/tasks/Tasks"
 import { AppContext } from './context/context'
 
 import './App.scss'
@@ -24,6 +25,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/notes" element={ currentUser ? <Notes /> : <Login />} />
+        <Route path="/tasks" element={ currentUser ? <Tasks /> : <Login />} />
      
       </Routes>
     </div>

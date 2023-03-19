@@ -51,6 +51,10 @@
             margin-bottom: 30px;
             margin-top: 4px;
           }
+
+         
+
+          
         }
 
         // .addBtn {
@@ -59,7 +63,27 @@
         .AddNote {
           height: 60px;
         }
+
+      
       }
+
+      li.categories {
+       
+        .cat {
+          
+          .items {
+            display: flex;
+            margin-left: 0px;
+            margin-bottom: 20px;
+
+            .name {
+              margin-left: 20px;
+            }
+          
+          }
+        }
+      }
+
 
       li.AddNote:hover {
         background-color: rgb(67, 117, 226);
