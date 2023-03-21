@@ -40,6 +40,8 @@ export const AppProvider = ({ children }) => {
     }
   };
 
+  console.log(currentUser)
+
   //set user to localStorage
   useEffect(() => {
     localStorage.setItem("user", JSON.stringify(currentUser));

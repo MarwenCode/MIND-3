@@ -72,14 +72,14 @@ export const  logout = (req, res) => {
 };
 
 
-//get a user
-// export const getUser = (req, res) => {
-//     const userId = req.params.userId;
-//     const q = "SELECT * FROM users WHERE id=?";
-
-//     db.query(q, [userId], (err, data) => {
-//       if (err) return res.status(500).json(err);
-//       const { password, ...info } = data[0];
-//       return res.json(info);
-//     });
-//   };
+//get all users 
+export const getAllusers = (req, res) => {
+  const sql = "SELECT * FROM users";
+  DataBase.query(sql, (error, data) => {
+      if (error) {
+          console.log(error)
+          return res.json({error: error.message})
+      }
+      return res.json(data)
+  })
+}
