@@ -16,6 +16,8 @@ import axios from "axios";
 
 const Inprogress = () => {
   const [description, setDescription] = useState("");
+  const [getTask, setGetTask] = useState([]);
+  const [addTicketMode, setAddTicketMode] = useState(false);
 
   //create a new task
   const createTask = async (e) => {
@@ -41,43 +43,75 @@ const Inprogress = () => {
     }
   };
 
+  //get all tasks
+  useEffect(() => {
+    const getAllTasks = async () => {
+      const res = await axios.get("http://localhost:8000/api/tasks/task");
+      console.log(res);
+      setGetTask(res.data);
+    };
+
+    getAllTasks();
+  }, []);
+
+  console.log(getTask);
+
   return (
     <>
       <div className="backlog">
         <div className="section">
-          <h1 className="title">Inprogress</h1>
+          <h1 className="title">Backlog</h1>
           <div className="color"></div>
 
-          <button
-            className="addCardBtn"
-            // onClick={() => setAddTicketMode((prev) => !prev)}
-          >
-            + add a card
-          </button>
+          {!addTicketMode && (
+            <button
+              className="addCardBtn"
+              onClick={() => setAddTicketMode((prev) => !prev)}>
+              + add a card
+            </button>
+          )}
 
-          <form>
-            <textarea
-              className="inputField"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
-          </form>
+          {addTicketMode && (
+            <form>
+              <textarea
+                className="inputField"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </form>
+          )}
 
           <div className="center">
             <div className="description">
-              <p className="text"></p>
-              <span className="edit">
-                <AiOutlineEdit />
-              </span>
+              {/* {getTask.map((task) => (
+                <>
+                  <p className="text">{task.description}</p>
+                  <span className="edit">
+                    <AiOutlineEdit />
+                  </span>
+                </>
+              ))} */}
             </div>
+
+          
           </div>
 
+          {addTicketMode && (
           <div className="down">
-            <button className="adBtn" onClick={createTask}>
+            <button
+              className="adBtn"
+              onClick={(e) => {
+                createTask(e);
+              }}>
               Add a card
             </button>
-            <button className="cancel">X</button>
+            <button
+              className="cancel"
+              onClick={() => setAddTicketMode((prev) => !prev)}>
+              X
+            </button>
           </div>
+        )}
         </div>
       </div>
     </>

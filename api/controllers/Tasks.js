@@ -32,3 +32,20 @@ export const createTask = (req, res) => {
         return res.json(data)
     })
   }
+
+  //update a task 
+  export const updateTask = (req, res) => {
+    const { id: taskId } = req.params;
+    const { description } = req.body;
+    const query = "UPDATE tasks SET description=? WHERE id=?";
+    const values = [description, taskId];
+    DataBase.query(query, values, (error, result) => {
+      if (error) {
+        return res.status(500).json(error);
+      }
+      if (result.affectedRows === 0) {
+        return res.status(404).json("task not found");
+      }
+      return res.status(200).json("task updated");
+    });
+  };
