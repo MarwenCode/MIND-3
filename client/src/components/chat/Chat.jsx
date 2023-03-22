@@ -1,10 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { FaLocationArrow } from "react-icons/fa";
 import { RxAvatar } from "react-icons/rx";
+import { AppContext } from "../../context/context";
 import axios from "axios";
 import "./chat.scss";
 
 function Chat() {
+  const {currentUser} = useContext(AppContext)
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [messageInput, setMessageInput] = useState("");
@@ -22,39 +24,55 @@ function Chat() {
   }, []);
 
   console.log(onlineUsers);
+  console.log(currentUser.user)
 
   const handleUserSelect = (user) => {
-    // Code to set the selected user in the state
+    setSelectedUser(user);
   };
 
   const handleInputChange = (event) => {
-    // Code to set the message input in the state
+    setMessageInput(event.target.value);
   };
 
   const handleSendMessage = () => {
-    // Code to send the message to the selected user
+    if (!selectedUser) return; // Check if a user is selected
+    axios.post("http://localhost:8000/api/messages/message", {
+    to: selectedUser.id,
+    text: messageInput,
+    username: currentUser.user.username, // pass the username value to the server-side code
+    })
+    .then((res) => {
+      console.log(res.data);
+      setMessages([...messages, res.data]); // Add the new message to the messages state
+      setMessageInput(""); // Clear the message input
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   };
 
   return (
     <div className="chat">
       <div className="usersList">
         {onlineUsers.map((user) => (
-          <div className="user">
-             <div className="left"><RxAvatar /></div>
+          <div className="user" key={user.id} onClick={() => handleUserSelect(user)}>
+            <div className="left"><RxAvatar /></div>
             <div className="right">{user.username}</div>
-           
           </div>
         ))}
       </div>
       <div className="chatBox">
         <div className="chatBoxWrapper">
-          <div className="chatBoxTop"></div>
+          <div className="chatBoxTop">
+            <div className="right">
+              {selectedUser && <span>Chatting with {selectedUser.username}</span>}
+            </div>
+          </div>
           <div className="chatBoxBottom">
-            <button className="chatSubmitButton">
-            
+            <button className="chatSubmitButton" onClick={handleSendMessage}>
               <FaLocationArrow />
             </button>
-            <textarea className="chatMessageInput" />
+            <textarea className="chatMessageInput" value={messageInput} onChange={handleInputChange} />
           </div>
         </div>
       </div>
@@ -63,3 +81,4 @@ function Chat() {
 }
 
 export default Chat;
+
