@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { SECRET_KEY } from "../config.js";
 import { DataBase } from "../connect.js";
 
 //register
@@ -20,22 +21,15 @@ export const register = (req, res) => {
     const values = [req.body.username, req.body.email, hashedPassword];
     DataBase.query(user, [values], (err, data) => {
       if (err) return res.status(500).json(err);
-      return res.status(200).json("User has been created.");
+
+      const token = jwt.sign({ userId: data.insertId }, SECRET_KEY);
+      return res.status(200).json({ token });
     });
   });
 };
 
 // login
 export const login = (req, res) => {
-  // const Query = "SELECT * FROM users WHERE email = ?";
-  // DataBase.query (Query, [req.body.email], (error, data) => {
-  //   if (error) return res.status(500).json(error);
-  //   if (data.length === 0) return(404).json("user not found ! ")
-  //   else {
-  //     res.status(200).json(200)
-  //   }
-  // })
-
   const { email, password } = req.body;
 
   // Check if user exists in database
@@ -54,7 +48,8 @@ export const login = (req, res) => {
       if (err) throw err;
 
       if (isMatch) {
-        return res.status(200).json({ message: "user is Logged  successfully",user: result[0] });
+        const token = jwt.sign({ userId: result[0].id }, SECRET_KEY);
+        return res.status(200).json({ token, user: result[0] });
       } else {
         return res
           .status(401)

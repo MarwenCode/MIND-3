@@ -15,30 +15,34 @@ export const AppProvider = ({ children }) => {
     JSON.parse(localStorage.getItem("user")) || null
   );
 
+  const currentUsername = currentUser ? currentUser.username : '';
+
+  console.log(currentUser)
+
   //login
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
+  
     try {
       const res = await axios.post("http://localhost:8000/api/auth/login", {
         email,
         password,
       });
-
+  
       localStorage.setItem("user", JSON.stringify(res));
       console.log(res);
-
-      
-      setCurrentUser(res.data);
-      res.data && window.location.replace("/notes");
+  
+      setCurrentUser(res.data.user);
+      res.data.user && window.location.replace("/notes");
      
     } catch (error) {
       console.log(error);
     }
   };
+  
 
   console.log(currentUser)
 
@@ -61,16 +65,17 @@ export const AppProvider = ({ children }) => {
     <AppContext.Provider
       value={{
         markdownText,
-        setMarkdownText,
-        markdownTitle,
-        setMarkdownTitle,
-        email,
-        setEmail,
-        password,
-        setPassword,
-        handleLogin,
-        currentUser,
-        logout
+      setMarkdownText,
+      markdownTitle,
+      setMarkdownTitle,
+      email,
+      setEmail,
+      password,
+      setPassword,
+      handleLogin,
+      currentUser,
+      currentUsername,
+      logout
       }}>
       {children}
     </AppContext.Provider>

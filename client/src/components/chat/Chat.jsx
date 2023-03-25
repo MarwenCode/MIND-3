@@ -6,7 +6,7 @@ import axios from "axios";
 import "./chat.scss";
 
 function Chat() {
-  const {currentUser} = useContext(AppContext)
+  const { currentUser } = useContext(AppContext);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [messageInput, setMessageInput] = useState("");
@@ -24,39 +24,78 @@ function Chat() {
   }, []);
 
   console.log(onlineUsers);
-  console.log(currentUser.user)
+  console.log(currentUser);
+  console.log(selectedUser);
 
-  const handleUserSelect = (user) => {
+  const handleUserSelect = async (user) => {
     setSelectedUser(user);
+    try {
+      const response = await axios.get(`http://localhost:8000/api/messages/${currentUser.username}/${user.username}`);
+      setMessages(response.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleInputChange = (event) => {
     setMessageInput(event.target.value);
   };
 
-  const handleSendMessage = () => {
-    if (!selectedUser) return; // Check if a user is selected
-    axios.post("http://localhost:8000/api/messages/message", {
-    to: selectedUser.id,
-    text: messageInput,
-    username: currentUser.user.username, // pass the username value to the server-side code
-    })
-    .then((res) => {
-      console.log(res.data);
-      setMessages([...messages, res.data]); // Add the new message to the messages state
-      setMessageInput(""); // Clear the message input
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+
+
+
+  const handleSendMessage = async() => {
+    if (!selectedUser) {
+      console.log("No user selected");
+      return;
+    }
+  
+    if (!selectedUser.id) {
+      console.log("Selected user has no id");
+      return;
+    }
+  
+    if (!currentUser || !currentUser.id) {
+      console.log("Current user not found");
+      return;
+    }
+  
+    const message = {
+      text: messageInput,
+      sender: currentUser.id,
+      receiver: selectedUser.id,
+    };
+  
+    try {
+      const res = await axios.post(
+        `http://localhost:8000/api/messages/sendmessage/${selectedUser.id}`,
+        message
+      );
+      setMessages([...messages, res.data])
+    } catch (error) {
+      console.log(error);
+    }
   };
+  
+  
+  
+  
+
+
+  console.log(messages);
 
   return (
     <div className="chat">
       <div className="usersList">
         {onlineUsers.map((user) => (
-          <div className="user" key={user.id} onClick={() => handleUserSelect(user)}>
-            <div className="left"><RxAvatar /></div>
+          <div
+            className="user"
+            key={user.id}
+            onClick={() => handleUserSelect(user)}
+          >
+            <div className="left">
+              <RxAvatar />
+            </div>
             <div className="right">{user.username}</div>
           </div>
         ))}
@@ -65,14 +104,33 @@ function Chat() {
         <div className="chatBoxWrapper">
           <div className="chatBoxTop">
             <div className="right">
-              {selectedUser && <span>Chatting with {selectedUser.username}</span>}
+              {selectedUser && (
+                <>
+                  <span>Chatting with {selectedUser.username}</span>
+                  <div className="conversation">
+                    {messages.map((msg) => (
+                      // Add a unique key to each message element in the map
+                      <div key={msg.id} className="right">
+                        <span className="logo">{msg.sender?.username}</span>
+                        <p>{msg.text}</p>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
           </div>
           <div className="chatBoxBottom">
             <button className="chatSubmitButton" onClick={handleSendMessage}>
               <FaLocationArrow />
             </button>
-            <textarea className="chatMessageInput" value={messageInput} onChange={handleInputChange} />
+            <textarea
+              className="chatMessageInput"
+              
+
+              value={messageInput}
+              onChange={handleInputChange}
+            />
           </div>
         </div>
       </div>
@@ -81,4 +139,3 @@ function Chat() {
 }
 
 export default Chat;
-

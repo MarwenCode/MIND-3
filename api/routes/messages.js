@@ -1,10 +1,25 @@
 import express from "express";
-import { createMessage, getAllMessages  } from "../controllers/Messages.js";
+import { sendMessage, getMessages } from "../controllers/Messages.js";
 
 const messageRoutes = express.Router()
 
-messageRoutes.post("/message", createMessage)
-messageRoutes.get("/message", getAllMessages)
+// messageRoutes.post("/message", createMessage)
+
+messageRoutes.post("/sendmessage/:id", sendMessage);
+messageRoutes.get("/:user1/:user2", getMessages);
+// messageRoutes.get("/:toUser", getAllMessagesForRecipient)
 
 
 export default messageRoutes
+
+
+// import express from "express";
+// import { postMessage, getMessages } from "../controllers/messageControllers.js";
+// import { auth } from "../controllers/jwt.js";
+
+// const messageRoutes = express.Router();
+
+// messageRoutes.post("/:friend", auth, postMessage);
+// messageRoutes.get("/:friend", auth, getMessages);
+
+// export default messageRoutes;
