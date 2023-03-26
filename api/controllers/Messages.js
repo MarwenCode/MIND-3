@@ -75,10 +75,11 @@ export const sendMessage = (req, res) => {
       return res.status(500).json({ message: "Failed to send message" });
     }
 
-    return res.status(200).json({ message: "Message sent successfully" });
+    const message = { id: result.insertId, text: text };
+    console.log(message);
+    return res.status(200).json(message);
   });
 };
-
 
 
 
@@ -103,19 +104,54 @@ export const sendMessage = (req, res) => {
 
 export const getMessages = (req, res) => {
   const { user1, user2 } = req.params;
+  console.log('user1:', user1);
+  console.log('user2:', user2);
 
   const sql = `SELECT * FROM \`specific-messages\` WHERE (sender = ? AND receiver = ?) OR (sender = ? AND receiver = ?) ORDER BY created_at ASC`;
-  const values = [user1, user2, user2, user1];
+ 
 
-  DataBase.query(sql, values, (err, result) => {
+
+  console.log('SQL:', sql);
+
+  DataBase.query(sql, [user1, user2, user2, user1], (err, result) => {
     if (err) {
       console.error(err);
-      return res.status(500).json({ message: 'Server Error' });
+      return res.status(500).json({ message: "Failed to retrieve messages" });
     }
 
-    res.json(result);
+    console.log(result);
+    return res.status(200).json(result);
   });
 };
+
+// export const getMessages = (req, res) => {
+//   if (!req.user || !req.user.id) {
+//     return res.status(401).json({ message: 'Unauthorized' });
+//   }
+
+//   const currentUserID = req.user.id;
+//   const { user2 } = req.params;
+
+//   const sql = `SELECT * FROM \`specific-messages\` WHERE (sender = :sender AND receiver = :receiver) OR (sender = :receiver AND receiver = :sender) ORDER BY created_at ASC`;
+
+//   DataBase.query(sql, {sender: currentUserID, receiver: user2}, (err, result) => {
+//     if (err) {
+//       console.error(err);
+//       return res.status(500).json({ message: "Failed to retrieve messages" });
+//     }
+
+//     console.log(result);
+//     return res.status(200).json(result);
+//   });
+// };
+
+
+
+
+
+
+
+
 
 
 

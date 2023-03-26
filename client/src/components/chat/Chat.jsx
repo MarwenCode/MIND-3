@@ -10,7 +10,7 @@ function Chat() {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [messageInput, setMessageInput] = useState("");
-  const [messages, setMessages] = useState([]);
+  const [getMessages, setGetMessages] = useState([]);
 
   useEffect(() => {
     // Code to fetch online users and set them in the state
@@ -27,22 +27,43 @@ function Chat() {
   console.log(currentUser);
   console.log(selectedUser);
 
+  // const handleUserSelect = async (user) => {
+  //   setSelectedUser(user);
+  
+  //   try {
+  //     const response = await axios.get(`http://localhost:8000/api/messages/${currentUser.id}/${user.id}`);
+ 
+  //     console.log('response data:', response.data);
+    
+  //     setGetMessages([...getMessages, ...response.data]);
+    
+   
+  //   } catch (error) {
+  //     console.log('error:', error);
+  //   }
+  // };
   const handleUserSelect = async (user) => {
     setSelectedUser(user);
+  
     try {
-      const response = await axios.get(`http://localhost:8000/api/messages/${currentUser.username}/${user.username}`);
-      setMessages(response.data);
+      const response = await axios.get(`http://localhost:8000/api/messages/${currentUser.id}/${user.id}`);
+  
+      console.log('response data:', response.data);
+  
+      setGetMessages(response.data);
+  
     } catch (error) {
-      console.log(error);
+      console.log('error:', error);
     }
   };
-
+  
+  
+  
+  
+  
   const handleInputChange = (event) => {
     setMessageInput(event.target.value);
   };
-
-
-
 
   const handleSendMessage = async() => {
     if (!selectedUser) {
@@ -71,18 +92,14 @@ function Chat() {
         `http://localhost:8000/api/messages/sendmessage/${selectedUser.id}`,
         message
       );
-      setMessages([...messages, res.data])
+      setGetMessages((prevMessages) => [...prevMessages, res.data]);
+
     } catch (error) {
       console.log(error);
     }
   };
-  
-  
-  
-  
 
-
-  console.log(messages);
+  console.log(getMessages);
 
   return (
     <div className="chat">
@@ -104,20 +121,21 @@ function Chat() {
         <div className="chatBoxWrapper">
           <div className="chatBoxTop">
             <div className="right">
-              {selectedUser && (
-                <>
-                  <span>Chatting with {selectedUser.username}</span>
-                  <div className="conversation">
-                    {messages.map((msg) => (
-                      // Add a unique key to each message element in the map
-                      <div key={msg.id} className="right">
-                        <span className="logo">{msg.sender?.username}</span>
-                        <p>{msg.text}</p>
-                      </div>
-                    ))}
-                  </div>
-                </>
-              )}
+            {selectedUser && (
+              <>
+                <span>Chatting with {selectedUser.username}</span>
+                <div className="conversation">
+                  {getMessages.map((msg) => (
+                    <div key={msg.id}>
+                      <span className="logo">{msg.sender?.username}</span>
+                      <p>{msg?.text}</p>
+                    </div>
+
+      ))}
+    </div>
+  </>
+)}
+
             </div>
           </div>
           <div className="chatBoxBottom">

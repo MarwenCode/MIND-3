@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
+import axiosInstance from "./axiosinstance";
 import axios from "axios";
 
 export const AppContext = React.createContext();
@@ -7,6 +8,11 @@ export const AppContext = React.createContext();
 export const AppProvider = ({ children }) => {
   const [markdownText, setMarkdownText] = useState("");
   const [markdownTitle, setMarkdownTitle] = useState("");
+
+
+
+
+
 
 
 
@@ -23,6 +29,25 @@ export const AppProvider = ({ children }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  // const handleLogin = async (e) => {
+  //   e.preventDefault();
+  
+  //   try {
+  //     const res = await axios.post("http://localhost:8000/api/auth/login", {
+  //       email,
+  //       password,
+  //     });
+  
+  //     localStorage.setItem("user", JSON.stringify(res));
+  //     console.log(res);
+  
+  //     setCurrentUser(res.data.user);
+  //     res.data.user && window.location.replace("/notes");
+     
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
   const handleLogin = async (e) => {
     e.preventDefault();
   
@@ -32,12 +57,9 @@ export const AppProvider = ({ children }) => {
         password,
       });
   
-      localStorage.setItem("user", JSON.stringify(res));
-      console.log(res);
-  
+      localStorage.setItem("token", res.data.token);
       setCurrentUser(res.data.user);
-      res.data.user && window.location.replace("/notes");
-     
+      window.location.replace("/notes");
     } catch (error) {
       console.log(error);
     }
