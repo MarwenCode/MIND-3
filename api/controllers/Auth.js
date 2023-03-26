@@ -28,6 +28,37 @@ export const register = (req, res) => {
   });
 };
 
+
+//registration without JWT
+// export const register = (req, res) => {
+//   const { username, email, password } = req.body;
+
+//   const hashedPassword = bcrypt.hashSync(password, 10);
+//   const user = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+
+//   const values = [username, email, hashedPassword];
+
+//   DataBase.query(user, values, (err, result) => {
+//     if (err) {
+//       console.error(err);
+//       return res.status(500).json({ message: "Failed to register user" });
+//     }
+
+//     const getUser = "SELECT id, username, email FROM users WHERE id = ?";
+
+//     DataBase.query(getUser, [result.insertId], (err, data) => {
+//       if (err) {
+//         console.error(err);
+//         return res.status(500).json({ message: "Failed to retrieve user" });
+//       }
+
+//       const user = data[0];
+//       return res.status(200).json({ user });
+//     });
+//   });
+// };
+
+
 // login
 export const login = (req, res) => {
   const { email, password } = req.body;

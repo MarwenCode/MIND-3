@@ -27,73 +27,54 @@ function Chat() {
   console.log(currentUser);
   console.log(selectedUser);
 
-  // const handleUserSelect = async (user) => {
-  //   setSelectedUser(user);
-  
-  //   try {
-  //     const response = await axios.get(`http://localhost:8000/api/messages/${currentUser.id}/${user.id}`);
- 
-  //     console.log('response data:', response.data);
-    
-  //     setGetMessages([...getMessages, ...response.data]);
-    
-   
-  //   } catch (error) {
-  //     console.log('error:', error);
-  //   }
-  // };
   const handleUserSelect = async (user) => {
     setSelectedUser(user);
-  
+
     try {
-      const response = await axios.get(`http://localhost:8000/api/messages/${currentUser.id}/${user.id}`);
-  
-      console.log('response data:', response.data);
-  
+      const response = await axios.get(
+        `http://localhost:8000/api/messages/${currentUser.id}/${user.id}`
+      );
+
+      console.log("response data:", response.data);
+
       setGetMessages(response.data);
-  
     } catch (error) {
-      console.log('error:', error);
+      console.log("error:", error);
     }
   };
-  
-  
-  
-  
-  
+
   const handleInputChange = (event) => {
     setMessageInput(event.target.value);
   };
 
-  const handleSendMessage = async() => {
+  const handleSendMessage = async () => {
     if (!selectedUser) {
       console.log("No user selected");
       return;
     }
-  
+
     if (!selectedUser.id) {
       console.log("Selected user has no id");
       return;
     }
-  
+
     if (!currentUser || !currentUser.id) {
       console.log("Current user not found");
       return;
     }
-  
+
     const message = {
       text: messageInput,
       sender: currentUser.id,
       receiver: selectedUser.id,
     };
-  
+
     try {
       const res = await axios.post(
         `http://localhost:8000/api/messages/sendmessage/${selectedUser.id}`,
         message
       );
       setGetMessages((prevMessages) => [...prevMessages, res.data]);
-
     } catch (error) {
       console.log(error);
     }
@@ -104,12 +85,13 @@ function Chat() {
   return (
     <div className="chat">
       <div className="usersList">
-        {onlineUsers.map((user) => (
+        {onlineUsers
+        .filter((user) => user.id !== currentUser.id)
+        .map((user) => (
           <div
             className="user"
             key={user.id}
-            onClick={() => handleUserSelect(user)}
-          >
+            onClick={() => handleUserSelect(user)}>
             <div className="left">
               <RxAvatar />
             </div>
@@ -121,21 +103,19 @@ function Chat() {
         <div className="chatBoxWrapper">
           <div className="chatBoxTop">
             <div className="right">
-            {selectedUser && (
-              <>
-                <span>Chatting with {selectedUser.username}</span>
-                <div className="conversation">
-                  {getMessages.map((msg) => (
-                    <div key={msg.id}>
-                      <span className="logo">{msg.sender?.username}</span>
-                      <p>{msg?.text}</p>
-                    </div>
-
-      ))}
-    </div>
-  </>
-)}
-
+              {selectedUser && (
+                <>
+                  <span>Chatting with {selectedUser.username}</span>
+                  <div className="conversation">
+                    {getMessages.map((msg) => (
+                      <div key={msg.id}>
+                        <span className="logo">{msg.sender?.username}</span>
+                        <p>{msg?.text}</p>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
           </div>
           <div className="chatBoxBottom">
@@ -144,8 +124,6 @@ function Chat() {
             </button>
             <textarea
               className="chatMessageInput"
-              
-
               value={messageInput}
               onChange={handleInputChange}
             />
