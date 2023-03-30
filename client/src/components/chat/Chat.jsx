@@ -15,43 +15,49 @@ function Chat() {
   const [getMessages, setGetMessages] = useState([]);
   const [newMessageCounts, setNewMessageCounts] = useState({});
 
-  // Connect to the server with the user ID
-  // const socket = io('http://localhost:8000', { query: { userId: currentUser.id } });
-
-  // const socket = io("http://localhost:8000", {
-  //   withCredentials: true,
-  // });
-
   // Connect to the Socket.io server
-  const socket = io("http://127.0.0.1:5173");
+  const socketRef = useRef();
+  const socket = socketRef.current || io("http://127.0.0.1:5173");
+  socketRef.current = socket;
 
   useEffect(() => {
     socket.on("connect", () => {
       console.log("Connected to server");
     });
-  });
-  // Join a room for the current user
-useEffect(() => {
-  if (currentUser) {
-    console.log(`Joining room for user ${currentUser.id}`);
-    socket.emit("joinRoom", currentUser.id);
-  }
-}, [currentUser, socket]);
 
-// Listen for new messages from the server using Socket.io
-useEffect(() => {
-  socket.on(`newMessage`, (msg) => {
-    console.log(msg.sender, msg.text);
-    // Add the new message to your state or update your UI as required
-    setGetMessages((prevMessages) => [...prevMessages, msg]);
-  });
-}, [socket]);
+    // Listen for new messages and update the UI in real-time
+    socket.on("newMessage", (message) => {
+      setGetMessages((prevMessages) => [...prevMessages, message]);
 
+      // Increment the message count for the receiver
+      setNewMessageCounts((counts) => ({
+        ...counts,
+        [message.receiver]: (counts[message.receiver] || 0) + 1,
+      }));
+    });
 
+    return () => {
+      socket.off("newMessage");
+    };
+  }, [socket]);
 
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const res = await axios.get(`http://localhost:8000/api/users`);
+        setOnlineUsers(
+          res.data.map((user) => ({
+            ...user,
+            newMessageCounts: newMessageCounts[user.id] || 0,
+          }))
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-
-  // const socket = io('http://localhost:8000', { query: { userId: currentUser.id } });
+    fetchUsers();
+  }, [newMessageCounts]);
 
   // Reference to the latest message element
   const messagesEndRef = useRef(null);
@@ -60,96 +66,151 @@ useEffect(() => {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [getMessages]);
-
+  
   useEffect(() => {
     // Code to fetch online users and set them in the state
     const getAllusers = async () => {
-      const res = await axios.get("http://localhost:8000/api/auth/users");
-      console.log(res);
-      setOnlineUsers(res.data);
+      const res = await axios.get(`http://localhost:8000/api/auth/users?currentUserId=${currentUser.id}`);
+      const users = res.data.map((user) => ({
+        ...user,
+        newMessageCounts: newMessageCounts[user.id] || 0,
+      }));
+      setOnlineUsers(users);
     };
-
     getAllusers();
-  }, []);
+  }, [newMessageCounts, currentUser.id]);
+  
+  // const socket = useRef(io("http://127.0.0.1:5173"));
+  
+  useEffect(() => {
+    if (!selectedUser) return;
+  
+    // Listen for new messages from the server
+    socket.current?.on("newMessage", ({ sender, text }) => {
+      if (sender === selectedUser.id) {
+        setGetMessages((prevMessages) => [...prevMessages, { sender, text }]);
+        setNewMessageCounts((prevCounts) => ({
+          ...prevCounts,
+          [selectedUser.id]: prevCounts[selectedUser.id] ? prevCounts[selectedUser.id] + 1 : 1,
+        }));
+      } else {
+        setNewMessageCounts((prevCounts) => ({
+          ...prevCounts,
+          [sender]: prevCounts[sender] ? prevCounts[sender] + 1 : 1,
+        }));
+      }
+    });
+  
+    return () => {
+      socket.current?.off("newMessage");
+    };
+  }, [selectedUser]);
 
-  console.log(onlineUsers);
-  console.log(currentUser.id);
-  console.log(selectedUser);
+  const [prevSelectedUser, setPrevSelectedUser] = useState(null);
 
+  
+  useEffect(() => {
+    async function fetchMessages() {
+      if (!selectedUser) {
+        setGetMessages([]);
+        return;
+      }
+  
+      if (selectedUser.id !== prevSelectedUser?.id) {
+        setNewMessageCounts((prevCounts) => ({
+          ...prevCounts,
+          [selectedUser.id]: 0,
+        }));
+      }
+  
+      try {
+        const response = await axios.get(`/api/messages/${currentUser.id}/${selectedUser.id}`);
+        setGetMessages(response.data.messages);
+        setNewMessageCounts(response.data.newMessageCounts);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  
+    fetchMessages();
+  }, [currentUser?.id, selectedUser?.id, prevSelectedUser?.id]);
+  
   const handleUserSelect = async (user) => {
     setSelectedUser(user);
-
     try {
       const response = await axios.get(
         `http://localhost:8000/api/messages/${currentUser.id}/${user.id}`
       );
-
-      console.log("response data:", response.data);
-
       setGetMessages(response.data);
+      setSelectedUser(user);
+      setPrevSelectedUser(user);
     } catch (error) {
       console.log("error:", error);
     }
   };
+  
 
+  const handleSendMessage = async () => {
+    if (!selectedUser) {
+      console.log("No user selected");
+      return;
+    }
+
+    if (!selectedUser.id) {
+      console.log("Selected user has no id");
+      return;
+    }
+
+    if (!currentUser || !currentUser.id) {
+      console.log("Current user not found");
+      return;
+    }
+
+    const message = {
+      text: messageInput,
+      sender: currentUser.id,
+      receiver: selectedUser.id,
+    };
+
+    try {
+      socket.current.emit("newMessage", message);
+    } catch (error) {
+      console.log(error);
+    }
+
+    try {
+      await axios.post(
+        `http://localhost:8000/api/messages/sendmessage/${selectedUser.id}`,
+        message
+      );
+
+      setGetMessages((prevMessages) => [...prevMessages, message]);
+      setMessageInput("");
+    } catch (error) {
+      console.log(error);
+    }
+
+    setNewMessageCounts((prevCounts) => ({
+      ...prevCounts,
+      [message.receiver]: (prevCounts[message.receiver] || 0) + 1,
+    }));
+  };
+
+  // Event listener for incoming messages
+  useEffect(() => {
+    socket.current?.on("newMessage", (message) => {
+      setGetMessages((prevMessages) => [...prevMessages, message]);
+      setNewMessageCounts((prevCounts) => ({
+        ...prevCounts,
+        [message.sender]: (prevCounts[message.sender] || 0) + 1,
+      }));
+    });
+  }, []);
+  
+  
   const handleInputChange = (event) => {
     setMessageInput(event.target.value);
   };
-
-
-
-
-const handleSendMessage = async () => {
-  if (!selectedUser) {
-    console.log("No user selected");
-    return;
-  }
-
-  if (!selectedUser.id) {
-    console.log("Selected user has no id");
-    return;
-  }
-
-  if (!currentUser || !currentUser.id) {
-    console.log("Current user not found");
-    return;
-  }
-
-  const message = {
-    text: messageInput,
-    sender: currentUser.id,
-    receiver: selectedUser.id,
-  };
-
-  try {
-    // Emit the new message to the server using Socket.io
-    socket.emit("newMessage", {
-      sender: currentUser.id,
-      receiver: selectedUser.id,
-      text: messageInput,
-    });
-  } catch (error) {
-    console.log(error);
-  }
-
-  try {
-    const res = await axios.post(
-      `http://localhost:8000/api/messages/sendmessage/${selectedUser.id}`,
-      message
-    );
-
-    console.log(res.data); // check the response data from server
-
-    setGetMessages(prevMessages => [...prevMessages, message]);
-    setMessageInput("");
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-
-  
-  
   
 
   console.log(getMessages);
@@ -175,9 +236,7 @@ const handleSendMessage = async () => {
               </div>
               <div className="right">
                 <span className="username">{user.username}</span>
-                <span className="badge">2</span>
-
-                {newMessageCounts[user.id] && (
+                {newMessageCounts[user.id] > 0 && (
                   <div className="badge">{newMessageCounts[user.id]}</div>
                 )}
               </div>

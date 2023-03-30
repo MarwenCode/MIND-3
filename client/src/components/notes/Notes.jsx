@@ -5,6 +5,9 @@ import { FaPen } from "react-icons/fa";
 import { GoNote } from "react-icons/go";
 import { CiFolderOn } from "react-icons/ci";
 import { AiFillDelete } from "react-icons/ai";
+import { BsThreeDots } from "react-icons/bs";
+
+import { useNavigate } from "react-router-dom";
 
 import { AiOutlinePlus } from "react-icons/ai";
 import "./notes.scss";
@@ -15,6 +18,8 @@ const Notes = () => {
   const { markdownText, setMarkdownText, setMarkdownTitle, markdownTitle } =
     useContext(AppContext);
   const markdownContent = `# ${markdownTitle}\n\n${markdownText}`;
+
+  const navigate = useNavigate()
 
   const [getNotes, setGetNotes] = useState([]);
   const [notesFetched, setNotesFetched] = useState(false);
@@ -47,9 +52,9 @@ const Notes = () => {
     setTitle(newValue);
   };
 
-  const createNote = async (e, categoryId) => {
+  const createNote = async (e) => {
     e.preventDefault();
-    console.log(categoryId);
+    // console.log(categoryId);
     if (!title && !description) {
       return;
     }
@@ -57,7 +62,7 @@ const Notes = () => {
       title,
       description,
       created_at: new Date().toISOString().slice(0, 19).replace("T", " "),
-      category_id: categoryId,
+      // category_id: categoryId,
     };
 
     try {
@@ -69,7 +74,8 @@ const Notes = () => {
       // setGetNotes([...getNotes, res.data]);
       setTitle("");
       setDescription("");
-      // window.location.reload();
+      window.location.reload("/notes")
+      // navigate("/notes")
       // setIsCreatingNewNote(false);
     } catch (error) {
       console.log(error);
@@ -113,6 +119,9 @@ const Notes = () => {
         title: editedTitle,
         description: editedDescription,
       });
+      window.location.reload("/notes")
+
+
     } catch (error) {
       console.log(error);
     }
@@ -235,19 +244,24 @@ const Notes = () => {
                     className="container"
                     key={note.id}
                     onClick={() => handleNoteClick(note)}>
-                    <button
+                      <div className="threeDots">
+                        <span><BsThreeDots/>  </span>
+                      </div>
+
+
+                    {/* <button
                       className="delete-button"
                       onClick={() => handleDelete(note.id)}>
                       <AiFillDelete />
-                    </button>
+                    </button> */}
                     {/* <span> <AiFillDelete />  </span> */}
 
                     <div className="text">
-                      <h3 className="title"> {note.title} </h3>
+                      <h2 className="title"> {note.title} </h2>
 
-                      <p className="description"> {note.description} </p>
-                      <p>{note.created_at}</p>
-                      <p>{note.id}</p>
+                      <p className="description"> {(note.description).length <= 10 ? note.description :
+                      `${(note.description).slice(0, 40)}...`}</p>
+                     {/* <span className="date">{new Date(note.created_at).toLocaleDateString()}</span> */}
                     </div>
                   </div>
                 ))}

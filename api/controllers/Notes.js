@@ -22,14 +22,14 @@ import { DataBase } from "../connect.js";
 
 export const createNote = (req, res) => {
   const notes =
-    "INSERT INTO notes (`id`, `title`, `description`, `created_at`, `category_id`) VALUES ?";
+    "INSERT INTO notes (`id`, `title`, `description`, `created_at`) VALUES ?";
   const values = [
     [
       req.body.id,
       req.body.title,
       req.body.description,
       req.body.created_at,
-      req.body.category_id,
+      // req.body.category_id,
     ],
   ];
   DataBase.query(notes, [values], (error, data) => {

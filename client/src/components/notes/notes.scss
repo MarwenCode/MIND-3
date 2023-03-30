@@ -115,6 +115,7 @@
   .center {
     flex: 3;
     background-color: rgb(213, 218, 219);
+   
 
     .result {
       section {
@@ -124,22 +125,58 @@
           cursor: pointer;
           .container {
             width: 300px;
-            height: 150px;
+            // height: 150px;
+            height: 100%;
          
             padding: 10px;
             color: rgb(68, 65, 65);
             // display: block;
+
+            .threeDots {
+              justify-content: flex-end;
+              margin-left: 250px;
+              
+
+            }
+           
+
+            .delete-button {
+              width: 20px;
+              background-color: inherit;
+            }
+
+
+
            .text {
             // border: 1px solid rgb(197, 194, 194);
-            color: black;
+            color: rgb(59, 56, 56);
+            width: 100%;
+            display: block;
+            margin-right: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            width: 100%;
+            border-bottom: 1px solid rgb(243, 243, 243);
 
             .title {
               font-size: 18px;
               font-weight: bold;
+              margin-bottom: 5px;
+              text-align: left;
             }
 
             .description {
               font-size: 14px;
+              color: rgb(103, 103, 105);
+              font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+              margin-top: 0;
+              text-align: left;
+            }
+
+            .date {
+
             }
 
             span {
@@ -180,10 +217,11 @@
       input {
         width: 99%;
         height: 25px;
+        border: none;
       }
 
       textarea {
-        height: 570px;
+        height: 559px;
         width: 743px;
         resize: none;
         background-color: whitesmoke;

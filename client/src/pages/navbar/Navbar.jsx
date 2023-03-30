@@ -23,16 +23,18 @@ const Navbar = () => {
       
         </Link>
 
-        <Link to="/tasks" className="link">
+        {/* <Link to="/tasks" className="link">
           <li className="item">   Tasks</li>
         </Link>
         <Link to="/chat" className="link">
           <li className="item"> Chat</li>
-        </Link>
+        </Link> */}
 
         {currentUser  && (
            <div className="logout">
            <FiLogOut />
+
+           <span>{currentUser?.username}</span>
            
              <span onClick={logout}>Logout</span>
            

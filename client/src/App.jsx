@@ -27,8 +27,8 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/notes" element={ currentUser ? <Notes /> : <Login />} />
-        <Route path="/tasks" element={ currentUser ? <Tasks /> : <Login />} />
-        <Route path="/chat" element={ currentUser ? <Chat /> : <Login />} />
+        {/* <Route path="/tasks" element={ currentUser ? <Tasks /> : <Login />} />
+        <Route path="/chat" element={ currentUser ? <Chat /> : <Login />} /> */}
      
       </Routes>
     </div>
