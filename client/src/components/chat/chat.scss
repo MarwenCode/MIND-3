@@ -2,9 +2,7 @@
   width: 80%;
   height: 78vh;
   background-color: white;
-  // height: 80vh;
   display: flex;
-  // align-items: center;
   margin-top: 70px;
   margin-left: 10px;
   margin-right: 50px;
@@ -27,7 +25,26 @@
       }
 
       .right {
-        margin-left: 30px;
+        display: flex;
+        align-items: center;
+
+        .username {
+          
+
+        }
+
+        .badge {
+
+          border-radius: 80%;
+          background-color: #646cff;
+          font-size: 20px;
+          margin-left: 10px;
+          color: white;
+          width: 20px;
+          cursor: pointer;
+
+        }
+
       }
     }
   }
@@ -49,28 +66,69 @@
         display: flex;
         width: 100%;
         height: 80vh;
+
         .right {
           flex:50%;
           margin-left:15px;
           background-color: #555555;
-          color:#f7f0f0
+          color:#f7f0f0;
+          margin-left: 30px;
+          
+          .conversation {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow-y: auto;
+            height: calc(100% - 70px);
 
+            .sender {
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+              justify-content: flex-start;
+            
 
+              .logo {
+                margin-left: 10px;
+              }
+
+              .messageText {
+                background-color: #edebf3;
+                color: #000;
+                padding: 10px;
+                border-radius: 10px;
+              }
+            }
+
+            .receiver {
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+              justify-content: flex-end;
+             
+
+              .logo {
+                margin-right: 10px;
+              }
+
+              .messageText {
+                background-color: #f0eaea;
+                color: #000;
+                padding: 10px;
+                border-radius: 10px;
+              }
+            }
+          }
         }
 
         .left {
           flex:50%;
           background-color: aquamarine;
-
         }
-
-
-
       }
 
       .chatBoxTop::-webkit-scrollbar {
         width: 10px;
-        // background-color: #9cd5e4;
       }
 
       .chatBoxTop::-webkit-scrollbar-thumb {
@@ -103,6 +161,7 @@
           resize:none ;
         }
 
+       
         .chatSubmitButton {
           width: 70px;
           height: 40px;
@@ -115,7 +174,6 @@
           position: absolute;
           margin-left: 550px;
           margin-top: -20px;
-        
         }
       }
     }

@@ -1,5 +1,6 @@
 import { useState, useContext } from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 import Register from './pages/register/Register';
 import Login from './pages/login/Login';
 import Home from './pages/home/Home';
@@ -31,7 +32,7 @@ function App() {
      
       </Routes>
     </div>
-    {/* <ToastContainer /> */}
+    <ToastContainer />
   </Router>
   )
 }
