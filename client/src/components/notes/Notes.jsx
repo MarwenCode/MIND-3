@@ -12,12 +12,14 @@ import { useNavigate } from "react-router-dom";
 import { AiOutlinePlus } from "react-icons/ai";
 import "./notes.scss";
 import { AppContext } from "../../context/context";
+import Modal from "./modal/Modal";
 import axios from "axios";
 
 const Notes = () => {
   const { markdownText, setMarkdownText, setMarkdownTitle, markdownTitle } =
     useContext(AppContext);
   const markdownContent = `# ${markdownTitle}\n\n${markdownText}`;
+  const [showModal, setShowModal] = useState(false)
 
   const navigate = useNavigate()
 
@@ -245,8 +247,11 @@ const Notes = () => {
                     key={note.id}
                     onClick={() => handleNoteClick(note)}>
                       <div className="threeDots">
-                        <span><BsThreeDots/>  </span>
+                        <span onClick={() =>setShowModal((prev) =>!prev)} ><BsThreeDots/>  </span>
                       </div>
+                      {showModal && (
+                        <Modal  setShowModal={setShowModal} />
+                      )}
 
 
                     {/* <button
