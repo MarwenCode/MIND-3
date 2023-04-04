@@ -7,6 +7,7 @@ import { CiFolderOn } from "react-icons/ci";
 import { AiFillDelete } from "react-icons/ai";
 import { BsThreeDots } from "react-icons/bs";
 
+
 import { useNavigate } from "react-router-dom";
 
 import { AiOutlinePlus } from "react-icons/ai";
@@ -95,6 +96,7 @@ const Notes = () => {
 
   console.log(getAllcategories);
   console.log(getNotes);
+  console.log(selectedNote);
 
   const handleNoteClick = (note) => {
     setSelectedNote({
@@ -106,8 +108,8 @@ const Notes = () => {
 
   const handleUpdate = async (id) => {
     const updatedNote = {
-      title: editedTitle,
-      description: editedDescription,
+        title: editedTitle !== "" ? editedTitle : selectedNote.title,
+        description: editedDescription !== "" ? editedDescription : selectedNote.description,
     };
 
     try {
@@ -130,13 +132,15 @@ const Notes = () => {
   };
 
   const handleDelete = async (id) => {
+   
     try {
       await axios.delete("http://localhost:8000/api/notes/note/" + id);
       window.location.reload();
-      const res = await axios.get("http://localhost:8000/api/notes");
+      // const res = await axios.get("http://localhost:8000/api/notes");
 
-      setGetNotes(res.data);
-      window.location.reload();
+      setGetNotes(prevNotes => prevNotes.filter(note => note.id !== id));
+      // window.location.reload();
+      console.log(id)
     } catch (error) {
       console.log(error);
     }
@@ -250,7 +254,12 @@ const Notes = () => {
                         <span onClick={() =>setShowModal((prev) =>!prev)} ><BsThreeDots/>  </span>
                       </div>
                       {showModal && (
-                        <Modal  setShowModal={setShowModal} />
+                        <Modal  setShowModal={setShowModal}
+
+                        handleDelete={handleDelete}
+                        noteId={selectedNote.id}
+                        
+                        />
                       )}
 
 
@@ -302,9 +311,9 @@ const Notes = () => {
                     onChange={(e) => setEditedDescription(e.target.value)}
                   />
                   <button type="submit">Update</button>
-                  <button type="submit" onClick={(note) => handleDelete(note)}>
+                  {/* <button type="submit" onClick={(note) => handleDelete(note)}>
                     Delete
-                  </button>
+                  </button> */}
                 </>
               ) : (
                 <>

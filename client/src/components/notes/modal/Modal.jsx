@@ -1,7 +1,9 @@
 import React from 'react';
+import { FiTrash } from "react-icons/fi";
+import { BiDownload } from "react-icons/bi";
 import "./modal.scss"
 
-const Modal = ({setShowModal}) => {
+const Modal = ({setShowModal, handleDelete, noteId}) => {
   return (
     <div className="modal">
         
@@ -12,13 +14,13 @@ const Modal = ({setShowModal}) => {
 
 
       <div className="inputText">
-        <div className="elements">
-        <span>icon</span>
+        <div className="elements" onClick={() => handleDelete(noteId)}   >
+        <span className='icon' > <FiTrash/>  </span>
         <span>Delete note</span>
 
         </div>
         <div className="elements">
-        <span>icon</span>
+        <span className='icon'> <BiDownload/>  </span>
         <span>Download</span>
 
         </div>
