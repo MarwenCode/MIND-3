@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import { MdOutlineAdd, MdExpandMore } from "react-icons/md";
 import { FaPen } from "react-icons/fa";
@@ -6,23 +6,21 @@ import { GoNote } from "react-icons/go";
 import { CiFolderOn } from "react-icons/ci";
 import { AiFillDelete } from "react-icons/ai";
 import { BsThreeDots } from "react-icons/bs";
-
-
 import { useNavigate } from "react-router-dom";
-
 import { AiOutlinePlus } from "react-icons/ai";
 import "./notes.scss";
 import { AppContext } from "../../context/context";
 import Modal from "./modal/Modal";
 import axios from "axios";
 
+
 const Notes = () => {
   const { markdownText, setMarkdownText, setMarkdownTitle, markdownTitle } =
     useContext(AppContext);
   const markdownContent = `# ${markdownTitle}\n\n${markdownText}`;
-  const [showModal, setShowModal] = useState(false)
+  const [showModal, setShowModal] = useState(false);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [getNotes, setGetNotes] = useState([]);
   const [notesFetched, setNotesFetched] = useState(false);
@@ -77,7 +75,7 @@ const Notes = () => {
       // setGetNotes([...getNotes, res.data]);
       setTitle("");
       setDescription("");
-      window.location.reload("/notes")
+      window.location.reload("/notes");
       // navigate("/notes")
       // setIsCreatingNewNote(false);
     } catch (error) {
@@ -108,8 +106,9 @@ const Notes = () => {
 
   const handleUpdate = async (id) => {
     const updatedNote = {
-        title: editedTitle !== "" ? editedTitle : selectedNote.title,
-        description: editedDescription !== "" ? editedDescription : selectedNote.description,
+      title: editedTitle !== "" ? editedTitle : selectedNote.title,
+      description:
+        editedDescription !== "" ? editedDescription : selectedNote.description,
     };
 
     try {
@@ -123,24 +122,21 @@ const Notes = () => {
         title: editedTitle,
         description: editedDescription,
       });
-      window.location.reload("/notes")
-
-
+      window.location.reload("/notes");
     } catch (error) {
       console.log(error);
     }
   };
 
   const handleDelete = async (id) => {
-   
     try {
       await axios.delete("http://localhost:8000/api/notes/note/" + id);
       window.location.reload();
       // const res = await axios.get("http://localhost:8000/api/notes");
 
-      setGetNotes(prevNotes => prevNotes.filter(note => note.id !== id));
+      setGetNotes((prevNotes) => prevNotes.filter((note) => note.id !== id));
       // window.location.reload();
-      console.log(id)
+      console.log(id);
     } catch (error) {
       console.log(error);
     }
@@ -185,6 +181,21 @@ const Notes = () => {
     getAllCategories();
   }, []);
 
+  //close modal
+
+  const modalRef = useRef(null);
+
+    
+    
+    
+    
+    
+
+  
+
+
+  // }, [showModal]);
+
   return (
     <div className="notes">
       <div className="right">
@@ -221,7 +232,7 @@ const Notes = () => {
                 onChange={(e) => setCategories(e.target.value)}
               />
             )}
-            {/* <div className="cat">
+            <div className="cat">
             {getAllcategories.map((cat) => (
               <div  className="items">
                 <span><CiFolderOn/>    </span>
@@ -232,7 +243,7 @@ const Notes = () => {
 
             ))}
 
-          </div> */}
+          </div>
           </li>
         </ul>
       </div>
@@ -250,18 +261,21 @@ const Notes = () => {
                     className="container"
                     key={note.id}
                     onClick={() => handleNoteClick(note)}>
-                      <div className="threeDots">
-                        <span onClick={() =>setShowModal((prev) =>!prev)} ><BsThreeDots/>  </span>
-                      </div>
-                      {showModal && (
-                        <Modal  setShowModal={setShowModal}
-
+                    <div className="threeDots">
+                      <span onClick={() => setShowModal((prev) => !prev)}>
+                        <BsThreeDots />{" "}
+                      </span>
+                    </div>
+                    {showModal && (
+                      <Modal
+                       
                         handleDelete={handleDelete}
                         noteId={selectedNote.id}
+                        closeModal={() => setShowModal(false)}
+                        modalRef={modalRef}
                         
-                        />
-                      )}
-
+                      />
+                    )}
 
                     {/* <button
                       className="delete-button"
@@ -273,9 +287,13 @@ const Notes = () => {
                     <div className="text">
                       <h2 className="title"> {note.title} </h2>
 
-                      <p className="description"> {(note.description).length <= 10 ? note.description :
-                      `${(note.description).slice(0, 40)}...`}</p>
-                     {/* <span className="date">{new Date(note.created_at).toLocaleDateString()}</span> */}
+                      <p className="description">
+                        {" "}
+                        {note.description.length <= 10
+                          ? note.description
+                          : `${note.description.slice(0, 40)}...`}
+                      </p>
+                      {/* <span className="date">{new Date(note.created_at).toLocaleDateString()}</span> */}
                     </div>
                   </div>
                 ))}

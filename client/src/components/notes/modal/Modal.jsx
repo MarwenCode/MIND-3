@@ -1,37 +1,47 @@
-import React from 'react';
+import React, { useEffect } from "react";
 import { FiTrash } from "react-icons/fi";
 import { BiDownload } from "react-icons/bi";
-import "./modal.scss"
+import "./modal.scss";
 
-const Modal = ({setShowModal, handleDelete, noteId}) => {
+const Modal = ({ handleDelete, noteId, closeModal, modalRef }) => {
+  const handleClickOutside = (event) => {
+    console.log(event.target);
+    if (modalRef.current && !modalRef.current.contains(event.target)) {
+      closeModal();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className="modal">
-        
-       
-    <form className="settingForm">
-    {/* <button  className='button'    onClick={() => setShowModal((prev) => !prev)}>x</button> */}
- 
+      <form className="settingForm" ref={modalRef}>
+        {/* <button  className='button'    onClick={() => setShowModal((prev) => !prev)}>x</button> */}
 
-
-      <div className="inputText">
-        <div className="elements" onClick={() => handleDelete(noteId)}   >
-        <span className='icon' > <FiTrash/>  </span>
-        <span>Delete note</span>
-
+        <div className="inputText">
+          <div className="elements" onClick={() => handleDelete(noteId)}>
+            <span className="icon">
+              {" "}
+              <FiTrash />{" "}
+            </span>
+            <span>Delete note</span>
+          </div>
+          <div className="elements">
+            <span className="icon">
+              {" "}
+              <BiDownload />{" "}
+            </span>
+            <span>Download</span>
+          </div>
         </div>
-        <div className="elements">
-        <span className='icon'> <BiDownload/>  </span>
-        <span>Download</span>
+      </form>
+    </div>
+  );
+};
 
-        </div>
-       
-      
-       
-      </div>
-      
-    </form>
-  </div>
-  )
-}
-
-export default Modal
+export default Modal;
