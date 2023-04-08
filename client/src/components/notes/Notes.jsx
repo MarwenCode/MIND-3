@@ -30,6 +30,7 @@ const Notes = () => {
   //edited notes
   const [editedTitle, setEditedTitle] = useState("");
   const [editedDescription, setEditedDescription] = useState("");
+  const [categoriesList, setCategoriesList] = useState([]);
 
   const [scratchOpen, setScratchOpen] = useState(false);
 
@@ -83,14 +84,25 @@ const Notes = () => {
     }
   };
 
+
+
+
   useEffect(() => {
     const getAllNotes = async () => {
       const res = await axios.get("http://localhost:8000/api/notes/note");
-      setGetNotes(res.data);
+      console.log(res);
+      setGetNotes(
+        res.data.map((note) => ({
+          ...note,
+          name: note.name
+        }))
+      );
+      
     };
 
     getAllNotes();
   }, []);
+
 
   console.log(getAllcategories);
   console.log(getNotes);
@@ -160,37 +172,115 @@ const Notes = () => {
 
         console.log(res.data);
         setCategories("");
-        window.location.reload();
+        setCategoriesList((prevCategories) => [...prevCategories, res.data]);
       } catch (error) {
         console.log(error);
       }
     }
   };
 
-  //get all categories
+  
   useEffect(() => {
     const getAllCategories = async () => {
-      const res = await axios.get(
+      const response = await axios.get(
         "http://localhost:8000/api/categories/categorie"
       );
-      console.log(res.data); // Add this line
+      setCategoriesList(response.data);
 
-      setAllCategories(res.data);
+      // setAllCategories(response.data);
     };
 
     getAllCategories();
   }, []);
+  
+
+  //get all categories
+
+  // const getCategories = async () => {
+  //   try {
+  //     const res = await axios.get("http://localhost:8000/api/categories/categorie");
+  //     setCategories(res.data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  
+
+  // useEffect(() => {
+  //   setGetNotes();
+  //   getCategories();
+  // }, []);
+  
+
+
+
+
+
+ 
 
   //close modal
 
   const modalRef = useRef(null);
 
-    
-    
-    
-    
-    
+  console.log(categories)
 
+
+  //drag notes to categories 
+
+   const [draggedNote, setDraggedNote] = useState(null);
+    
+   const handleNoteDragStart = (e, note) => {
+    const noteId = note.id;
+    e.dataTransfer.setData("text/plain", noteId);
+    setDraggedNote(note);
+  };
+  
+
+  const handleCategoryDragOver = (e, category) => {
+    e.preventDefault();
+  };
+
+  const handleCategoryDrop = (categoryId, noteId) => {
+    const noteIndex = getNotes.findIndex((note) => note.id === noteId);
+
+    if (noteIndex === -1) {
+      console.log(`Note with ID ${noteId} not found.`);
+      return;
+    }
+
+    const note = getNotes[noteIndex];
+    const category = categoriesList.find((c) => c.id === categoryId);
+
+    if (!category) {
+      console.log(`Category with ID ${categoryId} not found.`);
+      return;
+    }
+
+    note.category_id = categoryId;
+    note.category_name = category.name;
+
+    axios
+      .put(`http://localhost:8000/api/notes/note/${noteId}`, {
+        title: note.title,
+        description: note.description,
+        category_id: categoryId,
+      })
+      .then(() => {
+        setGetNotes((prevNotes) => {
+          const newNotes = [...prevNotes];
+          newNotes[noteIndex] = note;
+          return newNotes;
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  
+  
+  
+  
+  
   
 
 
@@ -233,10 +323,16 @@ const Notes = () => {
               />
             )}
             <div className="cat">
-            {getAllcategories.map((cat) => (
-              <div  className="items">
+            {categoriesList.map((cat) => (
+              <div  className="items"
+              onDragOver={(e) => handleCategoryDragOver(e, cat)}
+              onDrop={() => handleCategoryDrop(cat.id, draggedNote.id)}
+              
+              
+              
+              >
                 <span><CiFolderOn/>    </span>
-                <span className="name"> {cat.name}</span>
+                <span className="name"> {cat.name}  </span>
 
               </div>
 
@@ -256,14 +352,18 @@ const Notes = () => {
               {/* <ReactMarkdown>{markdownContent}</ReactMarkdown> */}
 
               <div className="allNotes">
-                {getNotes.map((note) => (
+                {getNotes?.map((note) => (
                   <div
                     className="container"
                     key={note.id}
+                    draggable
+                    onDragStart={(e) => handleNoteDragStart(e, note)}
+
+
                     onClick={() => handleNoteClick(note)}>
                     <div className="threeDots">
                       <span onClick={() => setShowModal((prev) => !prev)}>
-                        <BsThreeDots />{" "}
+                        <BsThreeDots />
                       </span>
                     </div>
                     {showModal && (
@@ -285,10 +385,15 @@ const Notes = () => {
                     {/* <span> <AiFillDelete />  </span> */}
 
                     <div className="text">
-                      <h2 className="title"> {note.title} </h2>
+                      <h2 className="title"> {note.title} {note?.category_name}  </h2>
+                      {/* {note.category_name && (
+      // <span className="category-name">({note.category_name})</span>
+      
+    )} */}
+    {note.category_id}
 
                       <p className="description">
-                        {" "}
+                        
                         {note.description.length <= 10
                           ? note.description
                           : `${note.description.slice(0, 40)}...`}

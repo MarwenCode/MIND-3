@@ -20,48 +20,52 @@ import { DataBase } from "../connect.js";
 // };
 
 
+// create a new note
 export const createNote = (req, res) => {
-  const notes =
-    "INSERT INTO notes (`id`, `title`, `description`, `created_at`) VALUES ?";
+  const notesQuery =
+    "INSERT INTO notes (`id`, `title`, `description`, `created_at`, `category_id`, `category_name`) VALUES ?";
   const values = [
     [
       req.body.id,
       req.body.title,
       req.body.description,
       req.body.created_at,
-      // req.body.category_id,
+      req.body.category_id,
+      req.body.category_name,
     ],
   ];
-  DataBase.query(notes, [values], (error, data) => {
+  DataBase.query(notesQuery, [values], (error, data) => {
     if (error) return res.status(500).json(error);
-    if (data) return res.status(200).json("note created");
+    if (data) return res.status(200).json("Note created");
   });
 };
 
+// get all notes
+export const getAllNotes = (req, res) => {
+  const sql =
+    "SELECT n.*, c.name AS category_name FROM notes n LEFT JOIN categories c ON n.category_id = c.id ORDER BY created_at DESC";
+  DataBase.query(sql, (error, data) => {
+    if (error) {
+      console.log(error);
+      return res.json({ error: error.message });
+    }
+    return res.json(data);
+  });
+};
 
-
-  export const getAllNotes = (req, res) => {
-    const sql = "SELECT * FROM notes";
-    DataBase.query(sql, (error, data) => {
-        if (error) {
-            console.log(error)
-            return res.json({error: error.message})
-        }
-        return res.json(data)
-    })
-  }
-
-
-  //update a note
-
-  // Update a note by id
-// Notes.js
-
+// update a note
 export const updateNote = (req, res) => {
   const { id: noteId } = req.params;
   const { title, description } = req.body;
-  const query = "UPDATE notes SET title=?, description=? WHERE id=?";
-  const values = [title, description, noteId];
+  const query =
+    "UPDATE notes SET title=?, description=?, category_id=?, category_name=? WHERE id=?";
+  const values = [
+    title,
+    description,
+    req.body.category_id,
+    req.body.category_name,
+    noteId,
+  ];
   DataBase.query(query, values, (error, result) => {
     if (error) {
       return res.status(500).json(error);
@@ -72,6 +76,8 @@ export const updateNote = (req, res) => {
     return res.status(200).json("Note updated");
   });
 };
+
+
 
 //delete a note 
 // export const deleteNote = (req, res) => {
