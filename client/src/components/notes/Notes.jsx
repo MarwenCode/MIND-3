@@ -13,7 +13,6 @@ import { AppContext } from "../../context/context";
 import Modal from "./modal/Modal";
 import axios from "axios";
 
-
 const Notes = () => {
   const { markdownText, setMarkdownText, setMarkdownTitle, markdownTitle } =
     useContext(AppContext);
@@ -41,6 +40,8 @@ const Notes = () => {
   const [getAllcategories, setAllCategories] = useState([]);
 
   const [inputCatOpen, setInputCatOpen] = useState(false);
+
+  const [selectedNoteId, setSelectedNoteId] = useState(null);
 
   const onInputChange = (e) => {
     const newValue = e.currentTarget.value;
@@ -84,9 +85,6 @@ const Notes = () => {
     }
   };
 
-
-
-
   useEffect(() => {
     const getAllNotes = async () => {
       const res = await axios.get("http://localhost:8000/api/notes/note");
@@ -94,15 +92,13 @@ const Notes = () => {
       setGetNotes(
         res.data.map((note) => ({
           ...note,
-          name: note.name
+          name: note.name,
         }))
       );
-      
     };
 
     getAllNotes();
   }, []);
-
 
   console.log(getAllcategories);
   console.log(getNotes);
@@ -179,7 +175,6 @@ const Notes = () => {
     }
   };
 
-  
   useEffect(() => {
     const getAllCategories = async () => {
       const response = await axios.get(
@@ -192,7 +187,6 @@ const Notes = () => {
 
     getAllCategories();
   }, []);
-  
 
   //get all categories
 
@@ -204,37 +198,27 @@ const Notes = () => {
   //     console.log(error);
   //   }
   // };
-  
 
   // useEffect(() => {
   //   setGetNotes();
   //   getCategories();
   // }, []);
-  
-
-
-
-
-
- 
 
   //close modal
 
   const modalRef = useRef(null);
 
-  console.log(categories)
+  console.log(categories);
 
+  //drag notes to categories
 
-  //drag notes to categories 
+  const [draggedNote, setDraggedNote] = useState(null);
 
-   const [draggedNote, setDraggedNote] = useState(null);
-    
-   const handleNoteDragStart = (e, note) => {
+  const handleNoteDragStart = (e, note) => {
     const noteId = note.id;
     e.dataTransfer.setData("text/plain", noteId);
     setDraggedNote(note);
   };
-  
 
   const handleCategoryDragOver = (e, category) => {
     e.preventDefault();
@@ -276,13 +260,6 @@ const Notes = () => {
         console.log(error);
       });
   };
-  
-  
-  
-  
-  
-  
-
 
   // }, [showModal]);
 
@@ -323,23 +300,18 @@ const Notes = () => {
               />
             )}
             <div className="cat">
-            {categoriesList.map((cat) => (
-              <div  className="items"
-              onDragOver={(e) => handleCategoryDragOver(e, cat)}
-              onDrop={() => handleCategoryDrop(cat.id, draggedNote.id)}
-              
-              
-              
-              >
-                <span><CiFolderOn/>    </span>
-                <span className="name"> {cat.name}  </span>
-
-              </div>
-
-
-            ))}
-
-          </div>
+              {categoriesList.map((cat) => (
+                <div
+                  className="items"
+                  onDragOver={(e) => handleCategoryDragOver(e, cat)}
+                  onDrop={() => handleCategoryDrop(cat.id, draggedNote.id)}>
+                  <span>
+                    <CiFolderOn />
+                  </span>
+                  <span className="name"> {cat.name} </span>
+                </div>
+              ))}
+            </div>
           </li>
         </ul>
       </div>
@@ -358,22 +330,19 @@ const Notes = () => {
                     key={note.id}
                     draggable
                     onDragStart={(e) => handleNoteDragStart(e, note)}
-
-
                     onClick={() => handleNoteClick(note)}>
                     <div className="threeDots">
-                      <span onClick={() => setShowModal((prev) => !prev)}>
+                      <span onClick={() => setSelectedNoteId(note.id)}>
                         <BsThreeDots />
                       </span>
                     </div>
-                    {showModal && (
+                    {selectedNoteId === note.id && (
                       <Modal
-                       
                         handleDelete={handleDelete}
-                        noteId={selectedNote.id}
-                        closeModal={() => setShowModal(false)}
+                        noteId={note.id}
+                        closeModal={() => setSelectedNoteId(null)}
                         modalRef={modalRef}
-                        
+                        selectedNote={note}
                       />
                     )}
 
@@ -385,15 +354,23 @@ const Notes = () => {
                     {/* <span> <AiFillDelete />  </span> */}
 
                     <div className="text">
-                      <h2 className="title"> {note.title} {note?.category_name}  </h2>
+                      <h2 className="title">{note.title}</h2>
+
+                      <div className="cat">
+                      
+                      
+                       <CiFolderOn />
+                      
+
+                       <h4>{note?.category_name}  </h4>
+                      </div>
                       {/* {note.category_name && (
       // <span className="category-name">({note.category_name})</span>
       
     )} */}
-    {note.category_id}
+                      {/* {note.category_id} */}
 
                       <p className="description">
-                        
                         {note.description.length <= 10
                           ? note.description
                           : `${note.description.slice(0, 40)}...`}

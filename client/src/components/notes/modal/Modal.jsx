@@ -26,15 +26,15 @@ const Modal = ({ handleDelete, noteId, closeModal, modalRef }) => {
         <div className="inputText">
           <div className="elements" onClick={() => handleDelete(noteId)}>
             <span className="icon">
-              {" "}
-              <FiTrash />{" "}
+            
+              <FiTrash />
             </span>
             <span>Delete note</span>
           </div>
           <div className="elements">
             <span className="icon">
-              {" "}
-              <BiDownload />{" "}
+              
+              <BiDownload />
             </span>
             <span>Download</span>
           </div>

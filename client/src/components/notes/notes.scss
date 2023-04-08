@@ -125,7 +125,7 @@
           overflow-y: auto; /* add vertical scrollbar */
           cursor: pointer;
           .container {
-            width: 300px;
+            width: 350px;
             // height: 150px;
             height: 100%;
          
@@ -159,12 +159,37 @@
             justify-content: flex-start;
             width: 100%;
             border-bottom: 1px solid rgb(243, 243, 243);
+          
 
             .title {
               font-size: 18px;
               font-weight: bold;
               margin-bottom: 5px;
               text-align: left;
+              position: fixed;
+              
+            }
+            .cat {
+              font-size: 12px;
+              font-weight: bold;
+              margin-top: 20px;
+     
+              display: flex;
+            
+              color: grey;
+              align-items: center;
+             
+               
+
+              h4 {
+                margin-left: 10px;
+               
+
+              }
+
+             
+
+
             }
 
             .description {
@@ -172,7 +197,7 @@
               color: rgb(103, 103, 105);
               font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 
-              margin-top: 0;
+              margin-top: 30px;
               text-align: left;
             }
 
