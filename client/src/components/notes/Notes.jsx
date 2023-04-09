@@ -8,6 +8,7 @@ import { AiFillDelete } from "react-icons/ai";
 import { BsThreeDots } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { AiOutlinePlus } from "react-icons/ai";
+import { AiOutlineDelete } from "react-icons/ai";
 import "./notes.scss";
 import { AppContext } from "../../context/context";
 import Modal from "./modal/Modal";
@@ -168,6 +169,8 @@ const Notes = () => {
 
         console.log(res.data);
         setCategories("");
+        window.location.reload("/notes");
+     
         setCategoriesList((prevCategories) => [...prevCategories, res.data]);
       } catch (error) {
         console.log(error);
@@ -308,7 +311,17 @@ const Notes = () => {
                   <span>
                     <CiFolderOn />
                   </span>
-                  <span className="name"> {cat.name} </span>
+                  <span className="name"> {cat.name}
+                  <button
+          className="delete"
+          // onClick={() => handleDeleteCategory(cat.id)}
+        >
+          <AiOutlineDelete />
+        </button>
+                  
+                  
+                  
+                   </span>
                 </div>
               ))}
             </div>
