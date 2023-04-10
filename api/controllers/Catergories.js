@@ -29,3 +29,21 @@ export const getAllCategries = (req, res) => {
     })
   }
 
+
+  //delete category 
+  export const deleteCategory = (req, res) => {
+    const categoryId = req.params.id;
+    console.log("Deleting category with id:", categoryId);
+  
+    const query = "DELETE FROM categories WHERE id = ?";
+  
+    DataBase.query(query, [categoryId], (error, data) => {
+      if (error) {
+        res.json(error);
+      } else {
+        res.status(200).json("Category deleted ");
+        console.log("Category deleted successfully");
+      }
+    });
+  };
+

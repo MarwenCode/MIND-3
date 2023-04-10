@@ -88,8 +88,8 @@
             margin-top: 50px;
         
             .name {
-              margin-left: 0px;
-              width: 120px;
+              margin-left: -10px;
+              width: 140px;
               position: relative;
               // white-space: nowrap;
               
@@ -102,7 +102,7 @@
               .delete {
                 position: absolute;
                 top: 50%;
-                right: -30px;
+                right: -40px;
                 transform: translateY(-50%);
                 display: none;
                 cursor: pointer;
@@ -150,7 +150,7 @@
   .center {
     flex: 3;
     background-color: rgb(213, 218, 219);
-    height: 683px;
+    height: 580px;
    
 
     .result {
@@ -279,13 +279,14 @@
 
     .markInput {
       input {
-        width: 99%;
+        // width: 99%;
+         width: 743px;
         height: 25px;
         border: none;
       }
 
       textarea {
-        height: 650px;
+        height: 547px;
         width: 743px;
         resize: none;
         background-color: whitesmoke;

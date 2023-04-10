@@ -191,6 +191,31 @@ const Notes = () => {
     getAllCategories();
   }, []);
 
+  //delete category
+
+    const handleDeleteCategory = async (id) => {
+    try {
+      await axios.delete("http://localhost:8000/api/categories/categorie/" + id);
+      // window.location.reload();
+      // const res = await axios.get("http://localhost:8000/api/notes");
+
+      setCategories((prevCat) => prevCat.filter((cat) => cat.id !== id));
+      // window.location.reload();
+      console.log(id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+
+
+
+
+
+
+
+
   //get all categories
 
   // const getCategories = async () => {
@@ -314,7 +339,7 @@ const Notes = () => {
                   <span className="name"> {cat.name}
                   <button
           className="delete"
-          // onClick={() => handleDeleteCategory(cat.id)}
+          onClick={() => handleDeleteCategory(cat.id)}
         >
           <AiOutlineDelete />
         </button>
