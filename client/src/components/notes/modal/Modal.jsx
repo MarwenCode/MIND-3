@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { FiTrash } from "react-icons/fi";
 import { BiDownload } from "react-icons/bi";
+import { BsShare } from "react-icons/bs";
 import "./modal.scss";
 
 const Modal = ({ handleDelete, noteId, closeModal, modalRef }) => {
@@ -37,6 +38,13 @@ const Modal = ({ handleDelete, noteId, closeModal, modalRef }) => {
               <BiDownload />
             </span>
             <span>Download</span>
+          </div>
+          <div className="elements">
+            <span className="icon">
+              
+              <BsShare />
+            </span>
+            <span>Share</span>
           </div>
         </div>
       </form>

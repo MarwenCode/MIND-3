@@ -44,6 +44,8 @@ const Notes = () => {
 
   const [selectedNoteId, setSelectedNoteId] = useState(null);
 
+  const [searchTerm, setSearchTerm] = useState("");
+
   const onInputChange = (e) => {
     const newValue = e.currentTarget.value;
     setMarkdownText(newValue);
@@ -170,7 +172,7 @@ const Notes = () => {
         console.log(res.data);
         setCategories("");
         window.location.reload("/notes");
-     
+
         setCategoriesList((prevCategories) => [...prevCategories, res.data]);
       } catch (error) {
         console.log(error);
@@ -193,9 +195,11 @@ const Notes = () => {
 
   //delete category
 
-    const handleDeleteCategory = async (id) => {
+  const handleDeleteCategory = async (id) => {
     try {
-      await axios.delete("http://localhost:8000/api/categories/categorie/" + id);
+      await axios.delete(
+        "http://localhost:8000/api/categories/categorie/" + id
+      );
       // window.location.reload();
       // const res = await axios.get("http://localhost:8000/api/notes");
 
@@ -206,15 +210,6 @@ const Notes = () => {
       console.log(error);
     }
   };
-
-
-
-
-
-
-
-
-
 
   //get all categories
 
@@ -291,6 +286,11 @@ const Notes = () => {
 
   // }, [showModal]);
 
+  const filteredNotes = getNotes?.filter((note) =>
+  note.title.toLowerCase().includes(searchTerm.toLowerCase())
+);
+
+
   return (
     <div className="notes">
       <div className="right">
@@ -336,17 +336,15 @@ const Notes = () => {
                   <span>
                     <CiFolderOn />
                   </span>
-                  <span className="name"> {cat.name}
-                  <button
-          className="delete"
-          onClick={() => handleDeleteCategory(cat.id)}
-        >
-          <AiOutlineDelete />
-        </button>
-                  
-                  
-                  
-                   </span>
+                  <span className="name">
+                    {" "}
+                    {cat.name}
+                    <button
+                      className="delete"
+                      onClick={() => handleDeleteCategory(cat.id)}>
+                      <AiOutlineDelete />
+                    </button>
+                  </span>
                 </div>
               ))}
             </div>
@@ -355,14 +353,16 @@ const Notes = () => {
       </div>
       {!scratchOpen && (
         <div className="center">
-          <input type="text" placeholder="search for note" />
+        
+         <input type="text" placeholder="search for note" onChange={(e) => setSearchTerm(e.target.value)} />
+
 
           <div className="result">
             <section>
               {/* <ReactMarkdown>{markdownContent}</ReactMarkdown> */}
 
               <div className="allNotes">
-                {getNotes?.map((note) => (
+                {filteredNotes?.map((note) => (
                   <div
                     className="container"
                     key={note.id}
@@ -395,18 +395,12 @@ const Notes = () => {
                       <h2 className="title">{note.title}</h2>
 
                       <div className="cat">
+                      {note?.category_name && <CiFolderOn />    }       
                       
-                      
-                       <CiFolderOn />
-                      
+                       
 
-                       <h4>{note?.category_name}  </h4>
+                        <h4>   {note?.category_name   } </h4>
                       </div>
-                      {/* {note.category_name && (
-      // <span className="category-name">({note.category_name})</span>
-      
-    )} */}
-                      {/* {note.category_id} */}
 
                       <p className="description">
                         {note.description.length <= 10
