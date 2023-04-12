@@ -1,0 +1,21 @@
+/* Editor.css */
+/* Hide the editor body */
+.ql-editor  {
+    // display: none;
+    height: 502px;
+      resize: none;
+  }
+  
+  /* Show the toolbar */
+  .ql-toolbar {
+    height: 50px;
+    border-bottom: 1px solid #ccc;
+  }
+  /* Show the wrapper */
+  .editor-wrapper {
+    position: relative;
+    width: 100%;
+  }
+
+
+  

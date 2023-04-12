@@ -2,9 +2,10 @@ import React, { useEffect } from "react";
 import { FiTrash } from "react-icons/fi";
 import { BiDownload } from "react-icons/bi";
 import { BsShare } from "react-icons/bs";
+
 import "./modal.scss";
 
-const Modal = ({ handleDelete, noteId, closeModal, modalRef }) => {
+const Modal = ({ handleDelete, noteId, closeModal, modalRef, downloadNote , selectedNote}) => {
   const handleClickOutside = (event) => {
     console.log(event.target);
     if (modalRef.current && !modalRef.current.contains(event.target)) {
@@ -19,6 +20,8 @@ const Modal = ({ handleDelete, noteId, closeModal, modalRef }) => {
     };
   }, []);
 
+
+
   return (
     <div className="modal">
       <form className="settingForm" ref={modalRef}>
@@ -32,13 +35,13 @@ const Modal = ({ handleDelete, noteId, closeModal, modalRef }) => {
             </span>
             <span>Delete note</span>
           </div>
-          <div className="elements">
-            <span className="icon">
-              
-              <BiDownload />
-            </span>
-            <span>Download</span>
-          </div>
+          <div className="elements" onClick={() => downloadNote(selectedNote)}>
+  <span className="icon">
+    <BiDownload />
+  </span>
+  <span>Download</span>
+</div>
+
           <div className="elements">
             <span className="icon">
               

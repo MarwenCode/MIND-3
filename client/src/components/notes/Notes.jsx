@@ -10,9 +10,12 @@ import { useNavigate } from "react-router-dom";
 import { AiOutlinePlus } from "react-icons/ai";
 import { AiOutlineDelete } from "react-icons/ai";
 import "./notes.scss";
+import striptags from "striptags";
 import { AppContext } from "../../context/context";
 import Modal from "./modal/Modal";
 import axios from "axios";
+import { saveAs } from 'file-saver';
+// import Editor from "../editor/Editor";
 
 const Notes = () => {
   const { markdownText, setMarkdownText, setMarkdownTitle, markdownTitle } =
@@ -287,9 +290,17 @@ const Notes = () => {
   // }, [showModal]);
 
   const filteredNotes = getNotes?.filter((note) =>
-  note.title.toLowerCase().includes(searchTerm.toLowerCase())
-);
+    note.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
+  //download note : 
+  
+  const downloadNote = (note) => {
+    const title = note.title;
+    const description = note.description;
+    const blob = new Blob([`Title: ${title}\n\nDescription: ${description}`], { type: 'text/plain;charset=utf-8' });
+    saveAs(blob, `${title}.txt`);
+  };
 
   return (
     <div className="notes">
@@ -337,7 +348,6 @@ const Notes = () => {
                     <CiFolderOn />
                   </span>
                   <span className="name">
-                    {" "}
                     {cat.name}
                     <button
                       className="delete"
@@ -353,9 +363,11 @@ const Notes = () => {
       </div>
       {!scratchOpen && (
         <div className="center">
-        
-         <input type="text" placeholder="search for note" onChange={(e) => setSearchTerm(e.target.value)} />
-
+          <input
+            type="text"
+            placeholder="search for note"
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
 
           <div className="result">
             <section>
@@ -381,31 +393,25 @@ const Notes = () => {
                         closeModal={() => setSelectedNoteId(null)}
                         modalRef={modalRef}
                         selectedNote={note}
+                        downloadNote={downloadNote}
                       />
                     )}
 
-                    {/* <button
-                      className="delete-button"
-                      onClick={() => handleDelete(note.id)}>
-                      <AiFillDelete />
-                    </button> */}
-                    {/* <span> <AiFillDelete />  </span> */}
+                  
 
                     <div className="text">
                       <h2 className="title">{note.title}</h2>
 
                       <div className="cat">
-                      {note?.category_name && <CiFolderOn />    }       
-                      
-                       
+                        {note?.category_name && <CiFolderOn />}
 
-                        <h4>   {note?.category_name   } </h4>
+                        <h4> {note?.category_name} </h4>
                       </div>
 
                       <p className="description">
-                        {note.description.length <= 10
-                          ? note.description
-                          : `${note.description.slice(0, 40)}...`}
+                        {striptags(note.description).length <= 10
+                          ? striptags(note.description)
+                          : `${striptags(note.description).slice(0, 40)}...`}
                       </p>
                       {/* <span className="date">{new Date(note.created_at).toLocaleDateString()}</span> */}
                     </div>
@@ -417,7 +423,7 @@ const Notes = () => {
         </div>
       )}
 
-      <form
+<form
         className="left"
         onSubmit={(e) => {
           e.preventDefault();

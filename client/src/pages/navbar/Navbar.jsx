@@ -1,6 +1,7 @@
 import React, {useContext} from 'react';
 import { Link } from "react-router-dom";
 import { FiLogOut } from "react-icons/fi";
+import Editor from '../../components/editor/Editor';
 
 import "./navbar.scss"
 import { AppContext } from '../../context/context';
@@ -20,8 +21,11 @@ const Navbar = () => {
 
         <Link to="/notes" className="link">
           <li className="item">  Notes </li>
+        
       
         </Link>
+
+       
 
         {/* <Link to="/tasks" className="link">
           <li className="item">   Tasks</li>
