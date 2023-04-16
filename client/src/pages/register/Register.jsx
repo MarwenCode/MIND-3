@@ -44,7 +44,7 @@ const Register = () => {
     <div className="register">
       <div className="loginWrapper">
         <div className="loginLeft">
-          <span className="loginDesc">Manage your Tasks and  organize your day on connected with your Team.</span>
+        <span className="loginDesc">Take your notes !</span>
           <p>
             Already have an account?
             <Link to="/login" className="link">
@@ -52,6 +52,7 @@ const Register = () => {
                 style={{
                   textDecoration: "none",
                   color: "#1c7ed6",
+                  marginLeft:"20px"
                 }}>
                 Login
               </span>

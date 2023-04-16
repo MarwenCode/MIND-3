@@ -31,7 +31,8 @@ const Login = () => {
       <div className="loginWrapper">
         <div className="loginLeft">
           {/* <img src="images/logo.jpg" className='logo'/> */}
-          <span className="loginDesc">Manage your Tasks and  organize your day on connected with your Team.</span>
+          {/* <span className="loginDesc">Manage your Tasks and  organize your day on connected with your Team.</span> */}
+          <span className="loginDesc">Take your notes !</span>
           <p>
             Do not have an account?
             <Link to="/register" className="link">
@@ -39,6 +40,7 @@ const Login = () => {
                 style={{
                   textDecoration: "none",
                   color: "#1c7ed6",
+                  marginLeft:"20px"
                 }}>
                 Register
               </span>
