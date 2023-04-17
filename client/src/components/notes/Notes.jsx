@@ -49,6 +49,8 @@ const Notes = () => {
 
   const [searchTerm, setSearchTerm] = useState("");
 
+  const [showCat, setShowCat] = useState(false)
+
   const onInputChange = (e) => {
     const newValue = e.currentTarget.value;
     setMarkdownText(newValue);
@@ -207,7 +209,7 @@ const Notes = () => {
       // const res = await axios.get("http://localhost:8000/api/notes");
 
       setCategories((prevCat) => prevCat.filter((cat) => cat.id !== id));
-      // window.location.reload();
+      window.location.reload();
       console.log(id);
     } catch (error) {
       console.log(error);
@@ -322,7 +324,7 @@ const Notes = () => {
           </li>
           <li className="categories">
             <summary className="more">
-              <MdExpandMore /> Categories
+              <MdExpandMore   onClick={() => setShowCat((prev) => !prev)} /> Categories
               <AiOutlinePlus
                 className="plus"
                 onClick={() => setInputCatOpen((prev) => !prev)}
@@ -338,26 +340,33 @@ const Notes = () => {
                 onChange={(e) => setCategories(e.target.value)}
               />
             )}
-            <div className="cat">
-              {categoriesList.map((cat) => (
-                <div
-                  className="items"
-                  onDragOver={(e) => handleCategoryDragOver(e, cat)}
-                  onDrop={() => handleCategoryDrop(cat.id, draggedNote.id)}>
-                  <span>
-                    <CiFolderOn />
-                  </span>
-                  <span className="name">
-                    {cat.name}
-                    <button
-                      className="delete"
-                      onClick={() => handleDeleteCategory(cat.id)}>
-                      <AiOutlineDelete />
-                    </button>
-                  </span>
-                </div>
-              ))}
-            </div>
+            {showCat && (
+                 <div className="cat">
+                 {categoriesList.map((cat) => (
+                   <div
+                     className="items"
+                     onDragOver={(e) => handleCategoryDragOver(e, cat)}
+                     onDrop={() => handleCategoryDrop(cat.id, draggedNote.id)}>
+                     <span>
+                       <CiFolderOn />
+                     </span>
+                     <span className="name">
+                       {cat.name}
+                       <button
+                         className="delete"
+                         onClick={() => handleDeleteCategory(cat.id)}>
+                         <AiOutlineDelete />
+                       </button>
+                     </span>
+                   </div>
+                 ))}
+               </div>
+
+
+
+
+            )}
+         
           </li>
         </ul>
       </div>

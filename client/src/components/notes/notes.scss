@@ -9,6 +9,7 @@
     flex: 3;
     // background-color: rgb(85, 160, 226);
     // height: 100%;
+ 
 
     cursor: pointer;
 
@@ -98,13 +99,38 @@
 
        
         .cat {
+          max-height: 350px;
+          overflow-y: auto;
+          margin-top: 50px;
+          width: 200px;
+          position: absolute;
+
+            /* Style the scrollbar */
+  &::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  /* Style the thumb (the draggable handle) */
+  &::-webkit-scrollbar-thumb {
+    background-color: #333;
+  }
+
+  /* Style the track (the area behind the thumb) */
+  &::-webkit-scrollbar-track {
+    // background-color: #ddd;
+  }
+         
+
+
           .items {
             display: flex;
             align-items: center;
-            height: 50px;
+            // height: 50px;
             margin-left: 0px;
             margin-bottom: 20px;
             margin-top: 50px;
+            width: 110px;
         
             .name {
               margin-left: -10px;
@@ -170,6 +196,7 @@
     flex: 3;
     background-color: rgb(213, 218, 219);
     height: 580px;
+   
 
     input {
       width: 96%;
@@ -292,6 +319,7 @@
   .left {
     flex: 7;
     // background-color: beige;
+    margin-right: -50px;
 
     .scratchOpen {
       height: 570px;
