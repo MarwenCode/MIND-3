@@ -267,6 +267,8 @@ function Chat() {
                           }
                           key={msg.id}>
                           {/* <span className="logo">{msg.sender?.username}</span> */}
+                        
+                            {msg.sender == currentUser.id ? "You" : selectedUser.username}
                           <p className="messageText">{msg.text}</p>
                           <div ref={messagesEndRef}></div>
                         </div>

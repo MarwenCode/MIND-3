@@ -61,12 +61,13 @@ const Notes = () => {
     const newValue = e.currentTarget.value;
     setMarkdownTitle(newValue);
     setTitle(newValue);
+    
   };
 
   const createNote = async (e) => {
     e.preventDefault();
     // console.log(categoryId);
-    if (!title && !description) {
+    if (!title || !description) {
       return;
     }
     const newNote = {
@@ -304,6 +305,20 @@ const Notes = () => {
     saveAs(blob, `${title}.txt`);
   };
 
+
+
+
+  ////
+    useEffect(() => {
+      if (selectedNote) {
+        setEditedTitle(selectedNote.title);
+        setEditedDescription(selectedNote.description);
+      }
+    }, [selectedNote]);
+    
+
+
+
   return (
     <div className="notes">
       <div className="right">
@@ -433,52 +448,55 @@ const Notes = () => {
       )}
 
 <form
-        className="left"
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleUpdate(selectedNote.id);
-        }}>
-        {scratchOpen ? (
-          <textarea className="scratchOpen" />
-        ) : (
-          <div className="markInput">
-            <section>
-              {selectedNote ? (
-                <>
-                  <input
-                    className="title"
-                    placeholder="Title"
-                    type="text"
-                    autoFocus={true}
-                    value={editedTitle || selectedNote.title}
-                    onChange={(e) => setEditedTitle(e.target.value)}
-                  />
-                  <textarea
-                    value={editedDescription || selectedNote.description}
-                    onChange={(e) => setEditedDescription(e.target.value)}
-                  />
-                  <button type="submit">Update</button>
-                  {/* <button type="submit" onClick={(note) => handleDelete(note)}>
+  className="left"
+  onSubmit={(e) => {
+    e.preventDefault();
+    handleUpdate(selectedNote.id);
+  }}
+>
+  {scratchOpen ? (
+    <textarea className="scratchOpen" />
+  ) : (
+    <div className="markInput">
+      <section>
+        {selectedNote ? (
+          <>
+            <input
+              className="title"
+              placeholder="Title"
+              type="text"
+              autoFocus={true}
+              value={editedTitle}
+              onChange={(e) => setEditedTitle(e.target.value)}
+            />
+            <textarea
+              value={editedDescription}
+              onChange={(e) => setEditedDescription(e.target.value)}
+            />
+            <button type="submit">Update</button>
+            {/* <button type="submit" onClick={(note) => handleDelete(note)}>
                     Delete
                   </button> */}
-                </>
-              ) : (
-                <>
-                  <input
-                    className="title"
-                    placeholder="Title"
-                    type="text"
-                    autoFocus={true}
-                    value={title}
-                    onChange={onInputChangeTitle}
-                  />
-                  <textarea value={description} onChange={onInputChange} />
-                </>
-              )}
-            </section>
-          </div>
+          </>
+        ) : (
+          <>
+            <input
+              className="title"
+              placeholder="Title"
+              type="text"
+              autoFocus={true}
+              value={title}
+              onChange={onInputChangeTitle}
+            />
+            <textarea value={description} onChange={onInputChange} />
+          </>
         )}
-      </form>
+      </section>
+    </div>
+  )}
+</form>
+
+
     </div>
   );
 };

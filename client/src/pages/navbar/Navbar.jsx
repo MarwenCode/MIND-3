@@ -17,6 +17,9 @@ const Navbar = () => {
             <Link to="/notes" className="link">
               <li className="item"> Notes </li>
             </Link>
+            <Link to="/chat" className="link">
+          <li className="item"> Chat</li>
+        </Link>
 
             <div className="logout">
               <span>{currentUser?.username}</span>
@@ -36,10 +39,8 @@ const Navbar = () => {
 
         {/* <Link to="/tasks" className="link">
           <li className="item">   Tasks</li>
-        </Link>
-        <Link to="/chat" className="link">
-          <li className="item"> Chat</li>
         </Link> */}
+      
       </ul>
     </div>
   );
