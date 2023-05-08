@@ -20,26 +20,26 @@ function Chat() {
   const socket = socketRef.current || io("http://127.0.0.1:5173");
   socketRef.current = socket;
 
-  useEffect(() => {
-    socket.on("connect", () => {
-      console.log("Connected to server");
-    });
+  // useEffect(() => {
+  //   socket.on("connect", () => {
+  //     console.log("Connected to server");
+  //   });
 
-    // Listen for new messages and update the UI in real-time
-    socket.on("newMessage", (message) => {
-      setGetMessages((prevMessages) => [...prevMessages, message]);
+  //   // Listen for new messages and update the UI in real-time
+  //   socket.on("newMessage", (message) => {
+  //     setGetMessages((prevMessages) => [...prevMessages, message]);
 
-      // Increment the message count for the receiver
-      setNewMessageCounts((counts) => ({
-        ...counts,
-        [message.receiver]: (counts[message.receiver] || 0) + 1,
-      }));
-    });
+  //     // Increment the message count for the receiver
+  //     setNewMessageCounts((counts) => ({
+  //       ...counts,
+  //       [message.receiver]: (counts[message.receiver] || 0) + 1,
+  //     }));
+  //   });
 
-    return () => {
-      socket.off("newMessage");
-    };
-  }, [socket]);
+  //   return () => {
+  //     socket.off("newMessage");
+  //   };
+  // }, [socket]);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -82,29 +82,29 @@ function Chat() {
   
   // const socket = useRef(io("http://127.0.0.1:5173"));
   
-  useEffect(() => {
-    if (!selectedUser) return;
+  // useEffect(() => {
+  //   if (!selectedUser) return;
   
-    // Listen for new messages from the server
-    socket.current?.on("newMessage", ({ sender, text }) => {
-      if (sender === selectedUser.id) {
-        setGetMessages((prevMessages) => [...prevMessages, { sender, text }]);
-        setNewMessageCounts((prevCounts) => ({
-          ...prevCounts,
-          [selectedUser.id]: prevCounts[selectedUser.id] ? prevCounts[selectedUser.id] + 1 : 1,
-        }));
-      } else {
-        setNewMessageCounts((prevCounts) => ({
-          ...prevCounts,
-          [sender]: prevCounts[sender] ? prevCounts[sender] + 1 : 1,
-        }));
-      }
-    });
+  //   // Listen for new messages from the server
+  //   socket.current?.on("newMessage", ({ sender, text }) => {
+  //     if (sender === selectedUser.id) {
+  //       setGetMessages((prevMessages) => [...prevMessages, { sender, text }]);
+  //       setNewMessageCounts((prevCounts) => ({
+  //         ...prevCounts,
+  //         [selectedUser.id]: prevCounts[selectedUser.id] ? prevCounts[selectedUser.id] + 1 : 1,
+  //       }));
+  //     } else {
+  //       setNewMessageCounts((prevCounts) => ({
+  //         ...prevCounts,
+  //         [sender]: prevCounts[sender] ? prevCounts[sender] + 1 : 1,
+  //       }));
+  //     }
+  //   });
   
-    return () => {
-      socket.current?.off("newMessage");
-    };
-  }, [selectedUser]);
+  //   return () => {
+  //     socket.current?.off("newMessage");
+  //   };
+  // }, [selectedUser]);
 
   const [prevSelectedUser, setPrevSelectedUser] = useState(null);
 
