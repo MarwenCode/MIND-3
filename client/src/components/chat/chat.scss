@@ -1,13 +1,14 @@
 .chat {
-  width: 80%;
+  width: 100%;
   height: 78vh;
   background-color: white;
   display: flex;
   margin-top: 70px;
   margin-left: 10px;
   margin-right: 50px;
-  position: absolute;
-  overflow-y: hidden;
+  position: relative;
+  z-index: 0;
+ 
 
   .usersList {
     flex: 2;
@@ -51,13 +52,15 @@
 
   .chatBox {
     flex: 8;
+   
 
     .chatBoxWrapper {
+      margin-top: 10px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      position: relative;
-      height: 500px;
+      height: 650px;
+    
 
       .chatBoxTop {
         overflow-y: scroll;
@@ -151,17 +154,19 @@
         align-items: center;
         justify-content: space-between;
         position: relative;
-
+      
         .chatMessageInput {
-          width: 80%;
-          height: 90px;
+          width: calc(100% - 10px);
+          max-width: 1200px;
+          height: 52px;
           padding: 10px;
-          margin-left: 100px;
-          margin-bottom: -20px;
-          resize:none ;
+          margin-left: 30px;
+          margin-top: -30px;
+          margin-bottom: 30px;
+          resize: none;
+          word-wrap: break-word;
         }
-
-       
+      
         .chatSubmitButton {
           width: 70px;
           height: 40px;
@@ -172,10 +177,14 @@
           color: white;
           margin-right: 10px;
           position: absolute;
-          margin-left: 550px;
+          right: 0;
           margin-top: -20px;
+          outline: none;
+          z-index: 1;
+          padding-right: 10px;
         }
       }
+      
     }
   }
 

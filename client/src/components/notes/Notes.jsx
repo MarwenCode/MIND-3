@@ -49,7 +49,9 @@ const Notes = () => {
 
   const [searchTerm, setSearchTerm] = useState("");
 
-  const [showCat, setShowCat] = useState(false)
+  const [showCat, setShowCat] = useState(false);
+
+  const [colorSelectedNote , setColorSelectedNote] = useState(null)
 
   const onInputChange = (e) => {
     const newValue = e.currentTarget.value;
@@ -114,12 +116,19 @@ const Notes = () => {
   console.log(selectedNote);
 
   const handleNoteClick = (note) => {
-    setSelectedNote({
-      id: note.id,
-      title: note.title,
-      description: note.description,
-    });
+    if (selectedNote && selectedNote.id === note.id) {
+      setSelectedNote(null);
+      setColorSelectedNote(null);
+    } else {
+      setSelectedNote({
+        id: note.id,
+        title: note.title,
+        description: note.description,
+      });
+      setColorSelectedNote(note.id);
+    }
   };
+  
 
   const handleUpdate = async (id) => {
     const updatedNote = {
@@ -400,11 +409,17 @@ const Notes = () => {
               <div className="allNotes">
                 {filteredNotes?.map((note) => (
                   <div
-                    className="container"
+                  className={`container ${note.id === colorSelectedNote ? "selected" : ""}`}
                     key={note.id}
                     draggable
                     onDragStart={(e) => handleNoteDragStart(e, note)}
-                    onClick={() => handleNoteClick(note)}>
+                    onClick={() => handleNoteClick(note)}
+
+                   
+                    
+                    
+                    
+                    >
                     <div className="threeDots">
                       <span onClick={() => setSelectedNoteId(note.id)}>
                         <BsThreeDots />
@@ -423,7 +438,11 @@ const Notes = () => {
 
                   
 
-                    <div className="text">
+                    <div className="text"
+                   
+                 
+                    
+                    >
                       <h2 className="title">{note.title}</h2>
 
                       <div className="cat">
