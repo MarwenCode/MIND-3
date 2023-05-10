@@ -14,28 +14,33 @@
     flex: 2;
     color: #000000;
     background-color: #f7f0f0;
-
+    cursor: pointer;
+  
     .user {
       display: flex;
       width: 90%;
       align-items: center;
-
+      transition: background-color 0.3s; /* Add transition for smooth effect */
+  
+      &:hover {
+        background-color: #e0e0e0; /* Apply hover effect on the entire user container */
+       
+      }
+  
       .left {
-        width: 50px;
+        width: 70px;
         font-size: 30px;
       }
-
+  
       .right {
         display: flex;
         align-items: center;
-
+  
         .username {
-          
-
+          margin-left: 10px;
         }
-
+  
         .badge {
-
           border-radius: 80%;
           background-color: #646cff;
           font-size: 20px;
@@ -43,12 +48,12 @@
           color: white;
           width: 20px;
           cursor: pointer;
-
         }
-
       }
     }
   }
+  
+  
 
   .chatBox {
     flex: 8;
@@ -154,6 +159,61 @@
         align-items: center;
         justify-content: space-between;
         position: relative;
+
+        .emoticons {
+         
+          .icons  {
+            display: flex;
+
+            span {
+              width: 65px;
+              height: 35px;
+              display: flex;
+              justify-content: space-between;
+              top: -100px;
+              margin-left: 60px;
+              position: absolute;
+              color: #000;
+              cursor: pointer;
+              
+             }
+
+             .attach {
+              top: -100px;
+              position: absolute;
+              margin-left: 150px;
+              cursor: pointer;
+             }
+
+
+
+
+            
+          }
+
+        
+
+
+          .showEmoticons {
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: absolute;
+            top: -350px;
+            left: 200px;
+            width: 150px;
+            height: 50px;
+            z-index:1;
+            color:#000;
+            cursor: pointer;
+            transform: translate(50%, 50%);
+
+
+          }
+          
+
+        }
       
         .chatMessageInput {
           width: calc(100% - 10px);

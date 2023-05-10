@@ -4,8 +4,12 @@ import { RxAvatar } from "react-icons/rx";
 import { AppContext } from "../../context/context";
 import { io } from "socket.io-client";
 import { toast } from "react-toastify";
+import {BsEmojiSmile,BsEmojiSunglasses,BsEmojiNeutral,} from "react-icons/bs";
+import {GrAttachment} from "react-icons/gr";
 import axios from "axios";
 import "./chat.scss";
+import Emoticons from "./Emoticons";
+
 
 function Chat() {
   const { currentUser } = useContext(AppContext);
@@ -14,6 +18,7 @@ function Chat() {
   const [messageInput, setMessageInput] = useState("");
   const [getMessages, setGetMessages] = useState([]);
   const [newMessageCounts, setNewMessageCounts] = useState({});
+  const [showEmoticons, setShowEmoticons] = useState(false);
 
   // Connect to the Socket.io server
   const socketRef = useRef();
@@ -66,11 +71,13 @@ function Chat() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [getMessages]);
-  
+
   useEffect(() => {
     // Code to fetch online users and set them in the state
     const getAllusers = async () => {
-      const res = await axios.get(`http://localhost:8000/api/auth/users?currentUserId=${currentUser.id}`);
+      const res = await axios.get(
+        `http://localhost:8000/api/auth/users?currentUserId=${currentUser.id}`
+      );
       const users = res.data.map((user) => ({
         ...user,
         newMessageCounts: newMessageCounts[user.id] || 0,
@@ -79,12 +86,12 @@ function Chat() {
     };
     getAllusers();
   }, [newMessageCounts, currentUser.id]);
-  
+
   // const socket = useRef(io("http://127.0.0.1:5173"));
-  
+
   // useEffect(() => {
   //   if (!selectedUser) return;
-  
+
   //   // Listen for new messages from the server
   //   socket.current?.on("newMessage", ({ sender, text }) => {
   //     if (sender === selectedUser.id) {
@@ -100,7 +107,7 @@ function Chat() {
   //       }));
   //     }
   //   });
-  
+
   //   return () => {
   //     socket.current?.off("newMessage");
   //   };
@@ -108,33 +115,34 @@ function Chat() {
 
   const [prevSelectedUser, setPrevSelectedUser] = useState(null);
 
-  
   useEffect(() => {
     async function fetchMessages() {
       if (!selectedUser) {
         setGetMessages([]);
         return;
       }
-  
+
       if (selectedUser.id !== prevSelectedUser?.id) {
         setNewMessageCounts((prevCounts) => ({
           ...prevCounts,
           [selectedUser.id]: 0,
         }));
       }
-  
+
       try {
-        const response = await axios.get(`/api/messages/${currentUser.id}/${selectedUser.id}`);
+        const response = await axios.get(
+          `/api/messages/${currentUser.id}/${selectedUser.id}`
+        );
         setGetMessages(response.data.messages);
         setNewMessageCounts(response.data.newMessageCounts);
       } catch (error) {
         console.error(error);
       }
     }
-  
+
     fetchMessages();
   }, [currentUser?.id, selectedUser?.id, prevSelectedUser?.id]);
-  
+
   const handleUserSelect = async (user) => {
     setSelectedUser(user);
     try {
@@ -148,7 +156,6 @@ function Chat() {
       console.log("error:", error);
     }
   };
-  
 
   const handleSendMessage = async () => {
     if (!selectedUser) {
@@ -206,12 +213,10 @@ function Chat() {
       }));
     });
   }, []);
-  
-  
+
   const handleInputChange = (event) => {
     setMessageInput(event.target.value);
   };
-  
 
   console.log(getMessages);
 
@@ -267,8 +272,10 @@ function Chat() {
                           }
                           key={msg.id}>
                           {/* <span className="logo">{msg.sender?.username}</span> */}
-                        
-                            {msg.sender == currentUser.id ? "You" : selectedUser.username}
+
+                          {msg.sender == currentUser.id
+                            ? "You"
+                            : selectedUser.username}
                           <p className="messageText">{msg.text}</p>
                           <div ref={messagesEndRef}></div>
                         </div>
@@ -280,6 +287,28 @@ function Chat() {
             </div>
           </div>
           <div className="chatBoxBottom">
+            <div
+              className="emoticons"
+              onClick={() => setShowEmoticons((prev) => !prev)}>
+              <div className="icons">
+                <span>
+                <BsEmojiSmile /> <BsEmojiSunglasses /> <BsEmojiNeutral />
+
+                </span>
+               
+                  <div className="attach">
+                  <GrAttachment />
+
+                  </div>
+            
+                
+              </div>
+              <div className="showEmoticons">
+              {showEmoticons && <Emoticons />}
+
+              </div>
+             
+            </div>
             <button className="chatSubmitButton" onClick={handleSendMessage}>
               <FaLocationArrow />
             </button>
