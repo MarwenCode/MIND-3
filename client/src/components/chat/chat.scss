@@ -178,12 +178,7 @@
               
              }
 
-             .attach {
-              top: -100px;
-              position: absolute;
-              margin-left: 150px;
-              cursor: pointer;
-             }
+            
 
 
 
@@ -214,6 +209,12 @@
           
 
         }
+        .attach {
+          top: -100px;
+          position: absolute;
+          margin-left: 150px;
+          cursor: pointer;
+         }
       
         .chatMessageInput {
           width: calc(100% - 10px);
