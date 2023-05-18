@@ -13,6 +13,7 @@ import { GrAttachment } from "react-icons/gr";
 import axios from "axios";
 import "./chat.scss";
 import Emoticons from "./Emoticons";
+import AddFile from "./AddFile";
 
 function Chat() {
   const { currentUser } = useContext(AppContext);
@@ -22,8 +23,9 @@ function Chat() {
   const [getMessages, setGetMessages] = useState([]);
   const [newMessageCounts, setNewMessageCounts] = useState({});
   const [showEmoticons, setShowEmoticons] = useState(false);
+  const [showFileModel, setShowFileModel] = useState(false);
   const [selectedEmojis, setSelectedEmojis] = useState([]);
-
+  const [selectedFile, setSelectedFile] = useState(null);
 
   // Connect to the Socket.io server
   const socketRef = useRef();
@@ -120,7 +122,6 @@ function Chat() {
     const updatedInput = messageInput + emoji;
     setMessageInput(updatedInput);
   };
-  
 
   const handleSendMessage = async () => {
     if (!selectedUser) {
@@ -139,10 +140,11 @@ function Chat() {
     }
 
     const encodedMessage = encodeURIComponent(
-      messageInput + selectedEmojis.join('')
+      messageInput + selectedEmojis.join("")
     );
     const message = {
-      text: encodedMessage,
+      text: messageInput,
+      file: selectedFile,
       sender: currentUser.id,
       receiver: selectedUser.id,
     };
@@ -180,11 +182,6 @@ function Chat() {
   const handleInputChange = (event) => {
     setMessageInput(event.target.value);
   };
-  
-  
-  
-  
-  
 
   console.log(getMessages);
 
@@ -231,24 +228,57 @@ function Chat() {
                       console.log(currentUser.id);
                       console.log(selectedUser.id);
                       return (
+                        // <div
+                        //   className={
+                        //     msg.sender === currentUser.id
+                        //       ? "sender"
+                        //       : "receiver"
+                        //   }
+                        //   key={msg.id}>
+                        //   {msg.sender === currentUser.id
+                        //     ? "You"
+                        //     : selectedUser.username}
+                        //   {msg.text && (
+                        //     <p className="messageText">
+                        //       {decodeURIComponent(msg.text)}
+                        //     </p>
+                        //   )}
+                        //   {msg.file && (
+                        //     <div>
+                        //       <a href={msg.file.fileUrl} download>
+                        //         Download File
+                        //       </a>
+                        //     </div>
+                        //   )}
+                        //   <div ref={messagesEndRef}></div>
+                        // </div>
                         <div
-                          // className={
-                          //   selectedUser.id !== currentUser.id ? "receiver" : "sender"
-                          // }
-                          className={
-                            msg.sender == currentUser.id ? "sender" : "receiver"
-                          }
-                          key={msg.id}>
-                          {/* <span className="logo">{msg.sender?.username}</span> */}
+                        // className={
+                        //   selectedUser.id !== currentUser.id ? "receiver" : "sender"
+                        // }
+                        className={
+                          msg.sender == currentUser.id ? "sender" : "receiver"
+                        }
+                        key={msg.id}>
+                        {/* <span className="logo">{msg.sender?.username}</span> */}
 
-                          {msg.sender == currentUser.id
-                            ? "You"
-                            : selectedUser.username}
-                          <p className="messageText">
-                            {decodeURIComponent(msg.text)}
-                          </p>
-                          <div ref={messagesEndRef}></div>
-                        </div>
+                        {msg.sender == currentUser.id
+                          ? "You"
+                          : selectedUser.username}
+                        <p className="messageText">
+                          {decodeURIComponent(msg.text)}
+                        </p>
+
+                        {msg.file && (
+                            <div>
+                              <a href={msg.file.fileUrl} download>
+                                Download File
+                              </a>
+                            </div>
+                          )}
+                        
+                        <div ref={messagesEndRef}></div>
+                      </div>
                       );
                     })}
                   </div>
@@ -273,7 +303,13 @@ function Chat() {
             </div>
 
             <div className="attach">
-              <GrAttachment />
+              <GrAttachment onClick={() => setShowFileModel((prev) => !prev)} />
+              {showFileModel && (
+                <AddFile
+                  setSelectedFile={setSelectedFile}
+                  selectedFile={selectedFile}
+                />
+              )}
             </div>
             <button className="chatSubmitButton" onClick={handleSendMessage}>
               <FaLocationArrow />

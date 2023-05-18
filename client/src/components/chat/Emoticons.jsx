@@ -29,7 +29,7 @@ import React from 'react';
 import "./emoticons.scss";
 
 const Emoticons = ({ handleEmojiSelect  }) => {
-  const emojis = ["😃", "😊", "👍", "❤️", "🔥"];
+  const emojis = ["😃", "😊", "👍", "❤️", "🔥","😴", "😄", "😃", "⛔", "🎠", "🚓", "🚇", '🍅', '🍄', '🥦', '🥒', '🌽', '🥕', '🥑'];
 
   // const handleClick = (emoji) => {
   //   handleEmojiSelect(emoji);
