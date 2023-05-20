@@ -14,7 +14,7 @@ import striptags from "striptags";
 import { AppContext } from "../../context/context";
 import Modal from "./modal/Modal";
 import axios from "axios";
-import { saveAs } from 'file-saver';
+import { saveAs } from "file-saver";
 // import Editor from "../editor/Editor";
 
 const Notes = () => {
@@ -51,7 +51,7 @@ const Notes = () => {
 
   const [showCat, setShowCat] = useState(false);
 
-  const [colorSelectedNote , setColorSelectedNote] = useState(null)
+  const [colorSelectedNote, setColorSelectedNote] = useState(null);
 
   const onInputChange = (e) => {
     const newValue = e.currentTarget.value;
@@ -63,7 +63,6 @@ const Notes = () => {
     const newValue = e.currentTarget.value;
     setMarkdownTitle(newValue);
     setTitle(newValue);
-    
   };
 
   const createNote = async (e) => {
@@ -128,7 +127,6 @@ const Notes = () => {
       setColorSelectedNote(note.id);
     }
   };
-  
 
   const handleUpdate = async (id) => {
     const updatedNote = {
@@ -305,28 +303,24 @@ const Notes = () => {
     note.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  //download note : 
-  
+  //download note :
+
   const downloadNote = (note) => {
     const title = note.title;
     const description = note.description;
-    const blob = new Blob([`Title: ${title}\n\nDescription: ${description}`], { type: 'text/plain;charset=utf-8' });
+    const blob = new Blob([`Title: ${title}\n\nDescription: ${description}`], {
+      type: "text/plain;charset=utf-8",
+    });
     saveAs(blob, `${title}.txt`);
   };
 
-
-
-
   ////
-    useEffect(() => {
-      if (selectedNote) {
-        setEditedTitle(selectedNote.title);
-        setEditedDescription(selectedNote.description);
-      }
-    }, [selectedNote]);
-    
-
-
+  useEffect(() => {
+    if (selectedNote) {
+      setEditedTitle(selectedNote.title);
+      setEditedDescription(selectedNote.description);
+    }
+  }, [selectedNote]);
 
   return (
     <div className="notes">
@@ -348,7 +342,8 @@ const Notes = () => {
           </li>
           <li className="categories">
             <summary className="more">
-              <MdExpandMore   onClick={() => setShowCat((prev) => !prev)} /> Categories
+              <MdExpandMore onClick={() => setShowCat((prev) => !prev)} />{" "}
+              Categories
               <AiOutlinePlus
                 className="plus"
                 onClick={() => setInputCatOpen((prev) => !prev)}
@@ -365,32 +360,27 @@ const Notes = () => {
               />
             )}
             {showCat && (
-                 <div className="cat">
-                 {categoriesList.map((cat) => (
-                   <div
-                     className="items"
-                     onDragOver={(e) => handleCategoryDragOver(e, cat)}
-                     onDrop={() => handleCategoryDrop(cat.id, draggedNote.id)}>
-                     <span>
-                       <CiFolderOn />
-                     </span>
-                     <span className="name">
-                       {cat.name}
-                       <button
-                         className="delete"
-                         onClick={() => handleDeleteCategory(cat.id)}>
-                         <AiOutlineDelete />
-                       </button>
-                     </span>
-                   </div>
-                 ))}
-               </div>
-
-
-
-
+              <div className="cat">
+                {categoriesList.map((cat) => (
+                  <div
+                    className="items"
+                    onDragOver={(e) => handleCategoryDragOver(e, cat)}
+                    onDrop={() => handleCategoryDrop(cat.id, draggedNote.id)}>
+                    <span>
+                      <CiFolderOn />
+                    </span>
+                    <span className="name">
+                      {cat.name}
+                      <button
+                        className="delete"
+                        onClick={() => handleDeleteCategory(cat.id)}>
+                        <AiOutlineDelete />
+                      </button>
+                    </span>
+                  </div>
+                ))}
+              </div>
             )}
-         
           </li>
         </ul>
       </div>
@@ -409,17 +399,13 @@ const Notes = () => {
               <div className="allNotes">
                 {filteredNotes?.map((note) => (
                   <div
-                  className={`container ${note.id === colorSelectedNote ? "selected" : ""}`}
+                    className={`container ${
+                      note.id === colorSelectedNote ? "selected" : ""
+                    }`}
                     key={note.id}
                     draggable
                     onDragStart={(e) => handleNoteDragStart(e, note)}
-                    onClick={() => handleNoteClick(note)}
-
-                   
-                    
-                    
-                    
-                    >
+                    onClick={() => handleNoteClick(note)}>
                     <div className="threeDots">
                       <span onClick={() => setSelectedNoteId(note.id)}>
                         <BsThreeDots />
@@ -436,13 +422,7 @@ const Notes = () => {
                       />
                     )}
 
-                  
-
-                    <div className="text"
-                   
-                 
-                    
-                    >
+                    <div className="text">
                       <h2 className="title">{note.title}</h2>
 
                       <div className="cat">
@@ -466,56 +446,53 @@ const Notes = () => {
         </div>
       )}
 
-<form
-  className="left"
-  onSubmit={(e) => {
-    e.preventDefault();
-    handleUpdate(selectedNote.id);
-  }}
->
-  {scratchOpen ? (
-    <textarea className="scratchOpen" />
-  ) : (
-    <div className="markInput">
-      <section>
-        {selectedNote ? (
-          <>
-            <input
-              className="title"
-              placeholder="Title"
-              type="text"
-              autoFocus={true}
-              value={editedTitle}
-              onChange={(e) => setEditedTitle(e.target.value)}
-            />
-            <textarea
-              value={editedDescription}
-              onChange={(e) => setEditedDescription(e.target.value)}
-            />
-            <button type="submit">Update</button>
-            {/* <button type="submit" onClick={(note) => handleDelete(note)}>
+      <form
+        className="left"
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleUpdate(selectedNote.id);
+        }}>
+        {scratchOpen ? (
+          <textarea className="scratchOpen" />
+        ) : (
+          <div className="markInput">
+            <section>
+              {selectedNote ? (
+                <>
+                  <input
+                    className="title"
+                    placeholder="Title"
+                    type="text"
+                    autoFocus={true}
+                    value={editedTitle}
+                    onChange={(e) => setEditedTitle(e.target.value)}
+                  />
+                  <textarea
+                    value={editedDescription}
+                    onChange={(e) => setEditedDescription(e.target.value)}
+                  />
+                  <button type="submit">Update</button>
+                  {/* <button type="submit" onClick={(note) => handleDelete(note)}>
                     Delete
                   </button> */}
-          </>
-        ) : (
-          <>
-            <input
-              className="title"
-              placeholder="Title"
-              type="text"
-              autoFocus={true}
-              value={title}
-              onChange={onInputChangeTitle}
-            />
-            <textarea value={description} onChange={onInputChange} />
-          </>
+                </>
+              ) : (
+                <>
+                  <input
+                    className="title"
+                    placeholder="Title"
+                    type="text"
+                    autoFocus={true}
+                    value={title}
+                    onChange={onInputChangeTitle}
+                  />
+                  <textarea value={description} onChange={onInputChange} />
+                </>
+              )}
+            </section>
+          </div>
         )}
-      </section>
-    </div>
-  )}
-</form>
-
-
+      </form>
     </div>
   );
 };

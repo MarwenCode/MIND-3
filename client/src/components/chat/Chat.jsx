@@ -15,6 +15,7 @@ import "./chat.scss";
 import Emoticons from "./Emoticons";
 import AddFile from "./AddFile";
 
+
 function Chat() {
   const { currentUser } = useContext(AppContext);
   const [onlineUsers, setOnlineUsers] = useState([]);
@@ -143,7 +144,7 @@ function Chat() {
       messageInput + selectedEmojis.join("")
     );
     const message = {
-      text: messageInput,
+      text: encodedMessage,
       file: selectedFile,
       sender: currentUser.id,
       receiver: selectedUser.id,
@@ -163,21 +164,7 @@ function Chat() {
     }
   };
 
-  // const handleInputChange = (event) => {
-  //   const inputText = event.target.value;
-  //   const newMessageInput = inputText + (selectedEmoji ? selectedEmoji : "");
-  //   setMessageInput(newMessageInput);
-  // };
-
-  // const handleInputChange = (event) => {
-  //   const decodedInput = decodeURIComponent(event.target.value);
-  //   setMessageInput(decodedInput);
-  // };
-
-  // const handleInputChange = (event) => {
-  //   setMessageInput(event.target.value);
-  //   setSelectedEmojis([]);
-  // };
+ 
 
   const handleInputChange = (event) => {
     setMessageInput(event.target.value);
@@ -185,11 +172,36 @@ function Chat() {
 
   console.log(getMessages);
 
-  ///////////////////////////////////////////////////////////////////////////////////////:
-
   console.log(currentUser);
 
   console.log(newMessageCounts);
+
+
+  //socket io :
+
+  useEffect(() => {
+    const socket = io('http://localhost:8000');
+  
+    socket.on('connect', () => {
+      console.log('Socket.IO connected!');
+    });
+  
+    socket.on('disconnect', () => {
+      console.log('Socket.IO disconnected!');
+    });
+  
+    // Listen for the "messageReceived" event
+    // socket.on('messageReceived', (message) => {
+    //   console.log('Message received:', message);
+    //   // Do something with the received message (e.g., update state, display in the UI, etc.)
+    // });
+  
+    // // Clean up the socket connection on component unmount
+    // return () => {
+    //   socket.disconnect();
+    // };
+  }, []);
+  
 
   return (
     <div className="chat">
