@@ -15,7 +15,6 @@ import "./chat.scss";
 import Emoticons from "./Emoticons";
 import AddFile from "./AddFile";
 
-
 function Chat() {
   const { currentUser } = useContext(AppContext);
   const [onlineUsers, setOnlineUsers] = useState([]);
@@ -27,11 +26,13 @@ function Chat() {
   const [showFileModel, setShowFileModel] = useState(false);
   const [selectedEmojis, setSelectedEmojis] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [socket, setSocket] = useState(null);
+  const socketRef = useRef(null);
 
   // Connect to the Socket.io server
-  const socketRef = useRef();
-  const socket = socketRef.current || io("http://127.0.0.1:5173");
-  socketRef.current = socket;
+  // const socketRef = useRef();
+  // const socket = socketRef.current || io("http://127.0.0.1:5173");
+  // socketRef.current = socket;
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -124,6 +125,42 @@ function Chat() {
     setMessageInput(updatedInput);
   };
 
+  //socket io :
+
+  useEffect(() => {
+    // Connect to the Socket.IO server
+    const socket = io("http://localhost:8000");
+  
+    // Listen for the "message" event
+    socket.on("message", (message) => {
+      console.log("Message received:", message);
+      setGetMessages((prevMessages) => [...prevMessages, message]);
+    });
+  
+    // Listen for the "connect" event
+    socket.on("connect", () => {
+      console.log("Socket.IO connected!");
+    });
+  
+    // Listen for the "disconnect" event
+    socket.on("disconnect", () => {
+      console.log("Socket.IO disconnected!");
+    });
+  
+    // Store the socket connection in a ref
+    socketRef.current = socket;
+  
+    // Clean up the socket connection on component unmount
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+
+
+  
+  
+
+
   const handleSendMessage = async () => {
     if (!selectedUser) {
       console.log("No user selected");
@@ -156,15 +193,20 @@ function Chat() {
         message
       );
 
+      socketRef.current.emit("message", message);
+
       setGetMessages((prevMessages) => [...prevMessages, message]);
       setMessageInput(""); // Clear the message input after sending
       setSelectedEmojis([]); // Clear the selected emojis array
+
+      
+
+      // Clear the input field or reset the state
+   
     } catch (error) {
       console.log(error);
     }
   };
-
- 
 
   const handleInputChange = (event) => {
     setMessageInput(event.target.value);
@@ -175,33 +217,6 @@ function Chat() {
   console.log(currentUser);
 
   console.log(newMessageCounts);
-
-
-  //socket io :
-
-  useEffect(() => {
-    const socket = io('http://localhost:8000');
-  
-    socket.on('connect', () => {
-      console.log('Socket.IO connected!');
-    });
-  
-    socket.on('disconnect', () => {
-      console.log('Socket.IO disconnected!');
-    });
-  
-    // Listen for the "messageReceived" event
-    // socket.on('messageReceived', (message) => {
-    //   console.log('Message received:', message);
-    //   // Do something with the received message (e.g., update state, display in the UI, etc.)
-    // });
-  
-    // // Clean up the socket connection on component unmount
-    // return () => {
-    //   socket.disconnect();
-    // };
-  }, []);
-  
 
   return (
     <div className="chat">
@@ -240,57 +255,28 @@ function Chat() {
                       console.log(currentUser.id);
                       console.log(selectedUser.id);
                       return (
-                        // <div
-                        //   className={
-                        //     msg.sender === currentUser.id
-                        //       ? "sender"
-                        //       : "receiver"
-                        //   }
-                        //   key={msg.id}>
-                        //   {msg.sender === currentUser.id
-                        //     ? "You"
-                        //     : selectedUser.username}
-                        //   {msg.text && (
-                        //     <p className="messageText">
-                        //       {decodeURIComponent(msg.text)}
-                        //     </p>
-                        //   )}
-                        //   {msg.file && (
-                        //     <div>
-                        //       <a href={msg.file.fileUrl} download>
-                        //         Download File
-                        //       </a>
-                        //     </div>
-                        //   )}
-                        //   <div ref={messagesEndRef}></div>
-                        // </div>
                         <div
-                        // className={
-                        //   selectedUser.id !== currentUser.id ? "receiver" : "sender"
-                        // }
-                        className={
-                          msg.sender == currentUser.id ? "sender" : "receiver"
-                        }
-                        key={msg.id}>
-                        {/* <span className="logo">{msg.sender?.username}</span> */}
+                          className={
+                            msg.sender == currentUser.id ? "sender" : "receiver"
+                          }
+                          key={msg.id}>
+                          {msg.sender == currentUser.id
+                            ? "You"
+                            : selectedUser.username}
+                          <p className="messageText">
+                            {decodeURIComponent(msg.text)}
+                          </p>
 
-                        {msg.sender == currentUser.id
-                          ? "You"
-                          : selectedUser.username}
-                        <p className="messageText">
-                          {decodeURIComponent(msg.text)}
-                        </p>
-
-                        {msg.file && (
+                          {msg.file && (
                             <div>
                               <a href={msg.file.fileUrl} download>
                                 Download File
                               </a>
                             </div>
                           )}
-                        
-                        <div ref={messagesEndRef}></div>
-                      </div>
+
+                          <div ref={messagesEndRef}></div>
+                        </div>
                       );
                     })}
                   </div>

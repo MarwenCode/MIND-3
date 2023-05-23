@@ -79,6 +79,45 @@ export const updateNote = (req, res) => {
 
 
 
+export const deleteNote = (req, res) => {
+  const noteId = req.params.id;
+  console.log("Deleting note with id:", noteId);
+
+  const query = "DELETE FROM notes WHERE id = ?";
+
+  DataBase.query(query, [noteId], (error, data) => {
+    if (error) {
+      res.json(error);
+    } else {
+      res.status(200).json("Note deleted ");
+      console.log("Note deleted successfully");
+    }
+  });
+};
+
+
+
+//create Scratch Note 
+
+export const createScrachNote = (req, res) => {
+  const notesQuery =
+    "INSERT INTO scratchnote (`id`, `description`, `created_at`) VALUES ?";
+  const values = [
+    [ req.body.id,
+      req.body.description,
+      new Date(req.body.created_at).toISOString().slice(0, 19).replace('T', ' '),
+    ],
+  ];
+  DataBase.query(notesQuery, [values], (error, data) => {
+    if (error) return res.status(500).json(error);
+    if (data) return res.status(200).json("Note created");
+  });
+};
+
+
+
+
+
 //delete a note 
 // export const deleteNote = (req, res) => {
 //   const { id: noteId } = req.params;
@@ -120,21 +159,7 @@ export const updateNote = (req, res) => {
 //   })
 // }
 
-export const deleteNote = (req, res) => {
-  const noteId = req.params.id;
-  console.log("Deleting note with id:", noteId);
 
-  const query = "DELETE FROM notes WHERE id = ?";
-
-  DataBase.query(query, [noteId], (error, data) => {
-    if (error) {
-      res.json(error);
-    } else {
-      res.status(200).json("Note deleted ");
-      console.log("Note deleted successfully");
-    }
-  });
-};
 
 
 

@@ -15,7 +15,17 @@ import path, { dirname } from 'path';
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
+// const io = new Server(server);
+
+const io = new Server(server, {
+  cors: {
+    origin: "http://127.0.0.1:5173", // Update with your client's origin
+    methods: ["GET", "POST"], // Add the allowed methods
+    allowedHeaders: ["my-custom-header"], // Add any custom headers you want to allow
+    credentials: true, // Set to true if you are using cookies or sessions
+  },
+});
+
 
 dotenv.config();
 
@@ -25,11 +35,16 @@ const __dirname = dirname(__filename);
 // Enable CORS
 app.use(cors());
 
-// app.use(cors({
-//   origin: 'http://127.0.0.1:5173',
-//   methods: ['GET', 'POST'],
-//   allowedHeaders: ['Content-Type', 'Authorization']
-// }));
+// app.use((req, res, next) => {
+//   res.setHeader('Access-Control-Allow-Origin', '*');
+//   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+//   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+//   next();
+// });
+
+
+// app.use(cors({ origin: 'http://127.0.0.1:5173' }));
+
 
 // Upload files
 app.use("/files", express.static(path.join(__dirname, "/files")));
@@ -71,17 +86,14 @@ app.use("/api/categories", categoriesRoutes);
 app.use("/api/tasks", tasksRoutes);
 app.use("/api/messages", messageRoutes);
 
-
+// Set up socket.io
 initializeSocket(io);
 
 // Start the server
 const PORT = process.env.PORT || 8000;
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-
 });
 
-  // Set up socket.io
-  initializeSocket(server);
 
 
