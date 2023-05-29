@@ -101,9 +101,9 @@ export const deleteNote = (req, res) => {
 
 export const createScrachNote = (req, res) => {
   const notesQuery =
-    "INSERT INTO scratchnote (`id`, `description`, `created_at`) VALUES ?";
+    "INSERT INTO scratchnote (`description`, `created_at`) VALUES ?";
   const values = [
-    [ req.body.id,
+    [ 
       req.body.description,
       new Date(req.body.created_at).toISOString().slice(0, 19).replace('T', ' '),
     ],

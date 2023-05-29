@@ -34,6 +34,7 @@ const Notes = () => {
 
   //sratchNote
   const [descScratchNote, setDescScratchNote] = useState("");
+  const [EditDescSractNote, setEditScratchNote] = useState("");
   const [getScratchNote, setGetScratchNote] = useState([]);
 
 
@@ -333,22 +334,25 @@ const Notes = () => {
   //create Scratch Note 
 
 
-  const saveNoteData = async (note) => {
-    try {
-      await axios.post("http://localhost:8000/api/notes/scratchnote", note);
-    } catch (error) {
-      console.error(error);
-    }
+
+  const handleInputChange = (event) => {
+    const { value } = event.target;
+    setDescScratchNote(value);
+
+    // Save the note data to the backend immediately after each keystroke
+    saveNoteData();
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter" && description.length >= 10) {
+  const saveNoteData = async () => {
+    try {
       const newNote = {
         description: descScratchNote,
-        created_at: new Date().toString(),
+        created_at: new Date().toISOString(),
       };
-
-      saveNoteData(newNote);
+      await axios.post('http://localhost:8000/api/notes/scratchnote', newNote);
+      console.log('Note saved successfully');
+    } catch (error) {
+      console.error(error);
     }
   };
   
@@ -483,15 +487,21 @@ const Notes = () => {
         className="left"
         onSubmit={(e) => {
           e.preventDefault();
-          handleUpdate(selectedNote.id);
+          if (selectedNote) {
+            handleUpdate(selectedNote.id);
+          }
         }}>
         {scratchOpen ? (
-          <textarea
+          <>
+               <textarea
           className="scratchOpen"
           value={descScratchNote}
-          onChange={(e) => setDescScratchNote(e.target.value)}
-          onKeyDown={handleKeyDown}
+          onChange={handleInputChange}
         />
+        {/* <button onClick={handleButtonClick}>Save Note</button> */}
+          
+          </>
+     
         ) : (
           <div className="markInput">
             <section>
