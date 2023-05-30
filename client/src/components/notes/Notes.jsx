@@ -355,6 +355,26 @@ const Notes = () => {
       console.error(error);
     }
   };
+
+
+  //get scratchNote 
+
+  useEffect(() => {
+
+    const getScratchnote = async () => {
+     const res =  await axios.get('http://localhost:8000/api/notes/scratchnote');
+     console.log(res.data)
+     setGetScratchNote(res.data)
+    
+    }
+
+    getScratchnote()
+
+
+  }, [])
+
+  console.log(getScratchNote)
+ 
   
   
 
@@ -492,15 +512,17 @@ const Notes = () => {
           }
         }}>
         {scratchOpen ? (
-          <>
-               <textarea
-          className="scratchOpen"
-          value={descScratchNote}
-          onChange={handleInputChange}
-        />
-        {/* <button onClick={handleButtonClick}>Save Note</button> */}
+         
+         <textarea
+         className="scratchOpen"
+         value={getScratchNote.map((note) => note.description).join('\n')}
+         onChange={handleInputChange}
+         
+       />
+       
+       
           
-          </>
+         
      
         ) : (
           <div className="markInput">

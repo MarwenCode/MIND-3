@@ -114,6 +114,17 @@ export const createScrachNote = (req, res) => {
   });
 };
 
+// Get all Scratch Notes
+export const getScratchNotes = (req, res) => {
+  const notesQuery = "SELECT * FROM scratchnote";
+
+  DataBase.query(notesQuery, (error, data) => {
+    if (error) return res.status(500).json(error);
+    if (data) return res.status(200).json(data);
+  });
+};
+
+
 
 
 
