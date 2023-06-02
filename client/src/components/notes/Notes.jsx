@@ -335,45 +335,45 @@ const Notes = () => {
 
 
 
-  const handleInputChange = (event) => {
-    const { value } = event.target;
-    setDescScratchNote(value);
+  // const handleInputChange = (event) => {
+  //   const { value } = event.target;
+  //   setDescScratchNote(value);
 
-    // Save the note data to the backend immediately after each keystroke
-    saveNoteData();
-  };
+  //   // Save the note data to the backend immediately after each keystroke
+  //   saveNoteData();
+  // };
 
-  const saveNoteData = async () => {
-    try {
-      const newNote = {
-        description: descScratchNote,
-        created_at: new Date().toISOString(),
-      };
-      await axios.post('http://localhost:8000/api/notes/scratchnote', newNote);
-      console.log('Note saved successfully');
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // const saveNoteData = async () => {
+  //   try {
+  //     const newNote = {
+  //       description: descScratchNote,
+  //       created_at: new Date().toISOString(),
+  //     };
+  //     await axios.post('http://localhost:8000/api/notes/scratchnote', newNote);
+  //     console.log('Note saved successfully');
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
 
-  //get scratchNote 
+  // //get scratchNote 
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    const getScratchnote = async () => {
-     const res =  await axios.get('http://localhost:8000/api/notes/scratchnote');
-     console.log(res.data)
-     setGetScratchNote(res.data)
+  //   const getScratchnote = async () => {
+  //    const res =  await axios.get('http://localhost:8000/api/notes/scratchnote');
+  //    console.log(res.data)
+  //    setGetScratchNote(res.data)
     
-    }
+  //   }
 
-    getScratchnote()
+  //   getScratchnote()
 
 
-  }, [])
+  // }, [])
 
-  console.log(getScratchNote)
+  // console.log(getScratchNote)
  
   
   
@@ -515,8 +515,9 @@ const Notes = () => {
          
          <textarea
          className="scratchOpen"
-         value={getScratchNote.map((note) => note.description).join('\n')}
-         onChange={handleInputChange}
+        //  value={getScratchNote.map((note) => note.description).join('\n')}
+        //  onChange={handleInputChange}
+        value={selectedNote}
          
        />
        

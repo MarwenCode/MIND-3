@@ -60,7 +60,7 @@ const Inprogress = () => {
     <>
       <div className="backlog">
         <div className="section">
-          <h1 className="title">Backlog</h1>
+          <h1 className="title">In progress</h1>
           <div className="color"></div>
 
           {!addTicketMode && (

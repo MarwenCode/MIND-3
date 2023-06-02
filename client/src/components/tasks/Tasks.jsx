@@ -8,6 +8,8 @@ const Tasks = () => {
     <div className='tasks'>
         <BackLog />
         <Inprogress />
+        <Inprogress />
+       
 
     </div>
   )
