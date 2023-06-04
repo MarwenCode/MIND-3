@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { AiOutlineEdit } from "react-icons/ai";
+import SingleTask from "../singleTask/SingleTask";
 import "./backlog.scss";
 import axios from "axios";
 
@@ -107,27 +108,18 @@ const BackLog = () => {
             </form>
           )}
 
-          <div className="center">
-            <div
-              className="description"
-              onDragOver={handleDragOver}
-              onDrop={(event) => handleDrop(event, "backlog")}
-            >
-              {getTask.map((task) => (
-                <div
-                  className="task"
-                  key={task.id}
-                  draggable
-                  onDragStart={(event) => handleDragStart(event, task)}
-                >
-                  <p className="text">{task.description}</p>
-                  <span className="edit">
-                    <AiOutlineEdit />
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
+<div className="center">
+  <div
+    className="description"
+    onDragOver={handleDragOver}
+    onDrop={(event) => handleDrop(event, "backlog")}
+  >
+    {getTask.map((task) => (
+      <SingleTask key={task.id} task={task} />
+    ))}
+  </div>
+</div>
+
 
           {addTicketMode && (
   <div className="down">

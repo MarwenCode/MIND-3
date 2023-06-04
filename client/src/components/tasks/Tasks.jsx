@@ -9,8 +9,8 @@ const Tasks = () => {
     <div className='tasks'>
       <SideBar />
         <BackLog />
-        <Inprogress />
-        <Inprogress />
+        {/* <Inprogress />
+        <Inprogress /> */}
        
 
     </div>

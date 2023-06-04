@@ -1,8 +1,13 @@
-import React from 'react';
+import Reac, {useState, useEffect} from 'react';
 import "./sidebar.scss";
-import {BsSearch} from "react-icons/bs"
+import AddTicket from '../addTicket/AddTicket';
+import {BsSearch} from "react-icons/bs";
 
 const SideBar = () => {
+
+    const [addTicketMode, setAddTicketMode] = useState(false);
+
+
     return (
         <div className="sidebar">
           <div className="search-bar">
@@ -12,9 +17,9 @@ const SideBar = () => {
              
               placeholder="Search..."
             />
-            <button >Add Ticket</button>
+            <button  onClick={() => setAddTicketMode((prev) => !prev)} >Add Ticket</button>
           </div>
-          {/* Add any additional sidebar content here */}
+          <AddTicket addTicketMode ={addTicketMode}  setAddTicketMode={setAddTicketMode} />
         </div>
       );
 }

@@ -33,6 +33,23 @@ export const createTask = (req, res) => {
     })
   }
 
+  // Get a single task
+export const getSingleTask = (req, res) => {
+  const taskId = req.params.id;
+  const sql = "SELECT * FROM tasks WHERE id = ?";
+  DataBase.query(sql, taskId, (error, data) => {
+    if (error) {
+      console.log(error);
+      return res.json({ error: error.message });
+    }
+    return res.json(data);
+  });
+};
+
+
+
+
+
   //update a task 
   export const updateTask = (req, res) => {
     const { id: taskId } = req.params;

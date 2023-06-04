@@ -1,0 +1,41 @@
+
+    .singletask{
+         
+           
+        .description{
+            // display: flex;
+            
+           
+
+            .text {
+                background-color: white;
+                margin-left: 5px;
+                width:96%;
+                margin-top: 25px;
+                margin-bottom: 10px;
+                padding: 5px;
+                height: 15vh;
+                border-radius: 5px;
+                color: rgb(107, 105, 105);
+             
+            
+            }
+
+            
+            .edit{
+             
+                display: none;
+                
+            }
+
+            .text:hover + .edit {
+                position:absolute;
+                margin-top: 25px;
+                margin-left: 320px;
+                display: block;
+            }
+          
+
+            
+        }
+    }
