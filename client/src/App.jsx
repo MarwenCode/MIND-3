@@ -12,6 +12,7 @@ import { AppContext } from './context/context'
 
 import './App.scss'
 import SingleTaskPage from './components/tasks/singletaskpage/SingleTaskPage';
+import SingleTask from './components/tasks/singleTask/SingleTask';
 
 function App() {
   const {currentUser} = useContext(AppContext)
@@ -29,7 +30,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/notes" element={ currentUser ? <Notes /> : <Login />} />
         <Route path="/tasks" element={ currentUser ? <Tasks /> : <Login />} />
-        <Route path="/task/:id" element={ currentUser ? <SingleTaskPage /> : <Login />} />
+        <Route path="/task/:taskId" element={ currentUser ? <SingleTaskPage /> : <Login />} />
         <Route path="/chat" element={ currentUser ? <Chat /> : <Login />} />
      
       </Routes>

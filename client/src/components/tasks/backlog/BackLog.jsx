@@ -115,7 +115,7 @@ const BackLog = () => {
     onDrop={(event) => handleDrop(event, "backlog")}
   >
     {getTask.map((task) => (
-      <SingleTask key={task.id} task={task} />
+      <SingleTask key={task.id} task={task}   />
     ))}
   </div>
 </div>
