@@ -10,9 +10,8 @@ const Tasks = () => {
     <div className='tasks'>
       <SideBar />
         <BackLog />
-        <SingleTaskPage />
-        {/* <Inprogress />
-        <Inprogress /> */}
+       
+       
        
 
     </div>
