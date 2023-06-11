@@ -20,11 +20,13 @@
 
 // export default SingleTask;
 
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
+import { AppContext } from '../../../context/context';
 import "./singletask.scss";
 
 const SingleTask = ({ task }) => {
+  const { logout, currentUser } = useContext(AppContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskDetails, setTaskDetails] = useState(null);
 
@@ -47,10 +49,15 @@ const SingleTask = ({ task }) => {
     window.history.pushState(null, null, '/tasks');
   };
 
+  console.log(task);
+  console.log(currentUser);
+
   return (
-    <>
-      <div onClick={openModal}>
+    < div className='task-container'>
+      <div  className='description'  onClick={openModal}>
         <p>{task.description}</p>
+        <p>{task.created_at}</p>
+        <p>{task.reporter}</p>
       </div>
 
       {isModalOpen && taskDetails && (
@@ -59,12 +66,13 @@ const SingleTask = ({ task }) => {
             <h2>{taskDetails.title}</h2>
             <p>Description: {taskDetails.description}</p>
             <p>Reporter: {taskDetails.reporter}</p>
-            <p>Assigned: {taskDetails.assigned}</p>
+            {/* <p>Assigned: {taskDetails.reporter}</p> */}
+            <p>Assigned: {taskDetails.created_at}</p>
             <button onClick={closeModal}>Close</button>
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

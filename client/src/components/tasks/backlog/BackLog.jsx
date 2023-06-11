@@ -1,36 +1,47 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { AiOutlineEdit } from "react-icons/ai";
 import SingleTask from "../singleTask/SingleTask";
 import "./backlog.scss";
+import { AppContext } from "../../../context/context";
 import axios from "axios";
+import { CiLogin } from "react-icons/ci";
 
 const BackLog = () => {
+  const { logout, currentUser } = useContext(AppContext);
   const [description, setDescription] = useState("");
   const [getTask, setGetTask] = useState([]);
   const [addTicketMode, setAddTicketMode] = useState(false);
+  const [reporter, setReporter] = useState(currentUser?.username || "");
+  console.log(currentUser.username)
+  console.log(reporter)
 
-  const createTask = async (e) => {
-    e.preventDefault();
+  // const createTask = async (e) => {
+  //   e.preventDefault();
+  
+  //   const newTask = {
+  //     description,
+  //     created_at: new Date().toISOString().slice(0, 19).replace("T", " "),
+  //     // reporter: currentUser ?  currentUser?.username : "unknown",
+  //     reporter: reporter,
+  //     status: "backlog",
 
-    const newTask = {
-      description,
-      created_at: new Date().toISOString().slice(0, 19).replace("T", " "),
-      status: "backlog",
-    };
+     
+  //   };
+   
 
-    try {
-      const res = await axios.post(
-        "http://localhost:8000/api/tasks/task",
-        newTask
-      );
-      console.log(res);
+  //   try {
+  //     const res = await axios.post(
+  //       "http://localhost:8000/api/tasks/task",
+  //       newTask
+  //     );
+  //     console.log(res);
 
-      setDescription("");
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //     setDescription("");
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   useEffect(() => {
     const getAllTasks = async () => {
@@ -82,6 +93,9 @@ const BackLog = () => {
     });
   };
 
+  console.log(currentUser.username);
+  console.log(reporter);
+
   return (
     <>
       <div className="backlog">
@@ -126,7 +140,7 @@ const BackLog = () => {
     <button
       className="adBtn"
       onClick={(e) => {
-        createTask(e);
+        // createTask(e);
         setAddTicketMode(false); // reset addTicketMode after adding the task
       }}
     >

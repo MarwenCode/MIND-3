@@ -15,6 +15,7 @@ const AddTicket = ({ addTicketMode, setAddTicketMode }) => {
     const newTask = {
       description,
       created_at: new Date().toISOString().slice(0, 19).replace("T", " "),
+      reporter:currentUser.username,
       status: "backlog",
     };
 
@@ -26,10 +27,15 @@ const AddTicket = ({ addTicketMode, setAddTicketMode }) => {
       console.log(res);
 
       setDescription("");
+      window.location.reload("/tasks");
+    
+      
     } catch (error) {
       console.log(error);
     }
   };
+
+
 
   //getAll users
   useEffect(() => {

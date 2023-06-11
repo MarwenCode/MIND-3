@@ -3,22 +3,55 @@ import { DataBase } from "../connect.js";
 
 //create a Task
 
-export const createTask = (req, res) => {
-    const tasks =
-      "INSERT INTO tasks (`id`, `description`, `created_at`) VALUES ?";
-    const values = [
-      [
-        req.body.id,
-        req.body.description,
-        req.body.created_at,
+// export const createTask = (req, res) => {
+//     const tasks =
+//       "INSERT INTO tasks (`id`, `description`, `reporter`, `created_at`) VALUES ?";
+//     const values = [
+//       [
+//         req.body.id,
+//         req.body.description,
+//         req.body.reporter,
+//         // req.body.assigned,
+//         req.body.created_at,
       
-      ],
-    ];
-    DataBase.query(tasks, [values], (error, data) => {
-      if (error) return res.status(500).json(error);
-      if (data) return res.status(200).json("Task created");
-    });
+//       ],
+//     ];
+//     DataBase.query(tasks, [values], (error, data) => {
+//       if (error) return res.status(500).json(error);
+//       if (data) return res.status(200).json("Task created");
+//     });
+//   };
+
+
+// export const createTask = (req, res) => {
+//   const tasks =
+//     "INSERT INTO tasks (`id`, `description`, `reporter`, `created_at`) VALUES ?";
+//   const reporter = req.body.reporter;
+//   const values = [
+//     [req.body.id, req.body.description, reporter, req.body.created_at],
+//   ];
+//   DataBase.query(tasks, [values], (error, data) => {
+//     if (error) return res.status(500).json(error);
+//     if (data) return res.status(200).json("Task created");
+//   });
+// };
+
+
+export const createTask = (req, res) => {
+  const task = {
+    id: req.body.id,
+    description: req.body.description,
+    reporter: req.body.reporter || "",
+    created_at: req.body.created_at,
   };
+
+  const query = "INSERT INTO tasks SET ?";
+  DataBase.query(query, task, (error, data) => {
+    if (error) return res.status(500).json(error);
+    return res.status(200).json("Task created");
+  });
+};
+
 
   //get all tasks
   
