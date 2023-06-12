@@ -23,6 +23,7 @@
 import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { AppContext } from '../../../context/context';
+import { MdConstruction } from "react-icons/md";
 import "./singletask.scss";
 
 const SingleTask = ({ task }) => {
@@ -64,11 +65,21 @@ const SingleTask = ({ task }) => {
         <div className="modal">
           <div className="modal-content">
             <h2>{taskDetails.title}</h2>
-            <p>Description: {taskDetails.description}</p>
-            <p>Reporter: {taskDetails.reporter}</p>
-            {/* <p>Assigned: {taskDetails.reporter}</p> */}
-            <p>Assigned: {taskDetails.created_at}</p>
-            <button onClick={closeModal}>Close</button>
+            <span> <MdConstruction /> task: {taskDetails.id}</span>
+            <div className='desc'>
+              <span>Description:</span> 
+              <p>{taskDetails.description}</p>
+              </div>
+              <div className="resp">
+              <p className='reporter'>Reporter: {taskDetails.reporter}</p>
+            <p className='assignees'>Assignees: {taskDetails.assigned}</p>
+        
+
+              </div>
+              <button onClick={closeModal}>Close</button>
+         
+            {/* <p>Assigned:</p> */}
+           
           </div>
         </div>
       )}

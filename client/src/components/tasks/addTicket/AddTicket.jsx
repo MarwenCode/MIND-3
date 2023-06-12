@@ -8,6 +8,7 @@ const AddTicket = ({ addTicketMode, setAddTicketMode }) => {
 
   const [description, setDescription] = useState("");
   const [allUsers, setAllusers] = useState([]);
+  const [assigned, setAssigned] = useState("");
 
   const createTask = async (e) => {
     e.preventDefault();
@@ -15,7 +16,8 @@ const AddTicket = ({ addTicketMode, setAddTicketMode }) => {
     const newTask = {
       description,
       created_at: new Date().toISOString().slice(0, 19).replace("T", " "),
-      reporter:currentUser.username,
+      reporter: currentUser.username,
+      assigned,
       status: "backlog",
     };
 
@@ -28,14 +30,10 @@ const AddTicket = ({ addTicketMode, setAddTicketMode }) => {
 
       setDescription("");
       window.location.reload("/tasks");
-    
-      
     } catch (error) {
       console.log(error);
     }
   };
-
-
 
   //getAll users
   useEffect(() => {
@@ -63,11 +61,14 @@ const AddTicket = ({ addTicketMode, setAddTicketMode }) => {
             </div>
             <div className="assign">
               <label htmlFor="name-select">Assign :</label>
-              <select name="name" id="name-select">
+              <select
+                name="name"
+                id="name-select"
+                onChange={(e) => setAssigned(e.target.value)}>
                 <option value="">-- Select a user --</option>
                 {allUsers.map((user) => (
-                  <option key={user.id} value={user.id}>
-                    {user.username} 
+                  <option key={user.id} value={assigned}>
+                    {user.username}
                   </option>
                 ))}
               </select>

@@ -43,6 +43,7 @@ export const createTask = (req, res) => {
     description: req.body.description,
     reporter: req.body.reporter || "",
     created_at: req.body.created_at,
+    assigned:req.body.assigned
   };
 
   const query = "INSERT INTO tasks SET ?";
