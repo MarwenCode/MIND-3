@@ -103,16 +103,16 @@ const BackLog = () => {
           <h1 className="title">Backlog</h1>
           <div className="color"></div>
 
-          {!addTicketMode && (
+          {/* {!addTicketMode && (
             <button
               className="addCardBtn"
               onClick={() => setAddTicketMode((prev) => !prev)}
             >
               + add a card
             </button>
-          )}
+          )} */}
 
-          {addTicketMode && (
+          {/* {addTicketMode && (
             <form>
               <textarea
                 className="inputField"
@@ -120,7 +120,7 @@ const BackLog = () => {
                 onChange={(e) => setDescription(e.target.value)}
               />
             </form>
-          )}
+          )} */}
 
 <div className="center">
   <div
@@ -135,7 +135,7 @@ const BackLog = () => {
 </div>
 
 
-          {addTicketMode && (
+          {/* {addTicketMode && (
   <div className="down">
     <button
       className="adBtn"
@@ -150,7 +150,7 @@ const BackLog = () => {
       X
     </button>
   </div>
-)}
+)} */}
 
 </div>
       </div>
