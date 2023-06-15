@@ -13,35 +13,8 @@ const BackLog = () => {
   const [getTask, setGetTask] = useState([]);
   const [addTicketMode, setAddTicketMode] = useState(false);
   const [reporter, setReporter] = useState(currentUser?.username || "");
-  console.log(currentUser.username)
-  console.log(reporter)
-
-  // const createTask = async (e) => {
-  //   e.preventDefault();
-  
-  //   const newTask = {
-  //     description,
-  //     created_at: new Date().toISOString().slice(0, 19).replace("T", " "),
-  //     // reporter: currentUser ?  currentUser?.username : "unknown",
-  //     reporter: reporter,
-  //     status: "backlog",
-
-     
-  //   };
-   
-
-  //   try {
-  //     const res = await axios.post(
-  //       "http://localhost:8000/api/tasks/task",
-  //       newTask
-  //     );
-  //     console.log(res);
-
-  //     setDescription("");
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  console.log(currentUser.username);
+  console.log(reporter);
 
   useEffect(() => {
     const getAllTasks = async () => {
@@ -54,15 +27,20 @@ const BackLog = () => {
   }, []);
 
   const handleDragStart = (event, task) => {
+    console.log('handleDragStart called');
+
+    event.stopPropagation();
     event.dataTransfer.setData("task", JSON.stringify(task));
   };
 
   const handleDragEnter = (event) => {
+    console.log('handleDragEnter called');
     event.preventDefault();
     event.target.style.background = "#f0f0f0";
   };
 
   const handleDragLeave = (event) => {
+    console.log('handleDragLeave called');
     event.preventDefault();
     event.target.style.background = "";
   };
@@ -71,12 +49,12 @@ const BackLog = () => {
     console.log("handleDragOver called");
     event.preventDefault();
   };
-  
 
-  const handleDrop = async (event, status) => {
+  const handleDrop = async (event) => {
     event.preventDefault();
+    alert('Task dropped!');
     const task = JSON.parse(event.dataTransfer.getData("task"));
-    const updatedTask = { ...task, status };
+  console.log('Dropped task:', task);
     const res = await axios.put(
       `http://localhost:8000/api/tasks/task/${task.id}`,
       updatedTask
@@ -84,7 +62,7 @@ const BackLog = () => {
     setGetTask((prevTasks) => {
       const updatedTasks = prevTasks.map((t) => {
         if (t.id === task.id) {
-          return { ...t, status };
+          return { ...t};
         } else {
           return t;
         }
@@ -103,56 +81,25 @@ const BackLog = () => {
           <h1 className="title">Backlog</h1>
           <div className="color"></div>
 
-          {/* {!addTicketMode && (
-            <button
-              className="addCardBtn"
-              onClick={() => setAddTicketMode((prev) => !prev)}
-            >
-              + add a card
-            </button>
-          )} */}
-
-          {/* {addTicketMode && (
-            <form>
-              <textarea
-                className="inputField"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              />
-            </form>
-          )} */}
-
-<div className="center">
-  <div
-    className="description"
-    onDragOver={handleDragOver}
-    onDrop={(event) => handleDrop(event, "backlog")}
-  >
-    {getTask.map((task) => (
-      <SingleTask key={task.id} task={task}   />
-    ))}
-  </div>
-</div>
-
-
-          {/* {addTicketMode && (
-  <div className="down">
-    <button
-      className="adBtn"
-      onClick={(e) => {
-        // createTask(e);
-        setAddTicketMode(false); // reset addTicketMode after adding the task
-      }}
-    >
-      Add a card
-    </button>
-    <button className="cancel" onClick={() => setAddTicketMode(false)}>
-      X
-    </button>
-  </div>
-)} */}
-
-</div>
+          <div
+            className="center"
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
+          >
+            <div className="description">
+              {getTask.map((task) => (
+                <SingleTask
+                  key={task.id}
+                  task={task}
+                  onDragStart={(event) => handleDragStart(event, task)}
+                  onDragEnter={handleDragEnter}
+                  onDragLeave={handleDragLeave}
+                  draggable
+                />
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );

@@ -1,121 +1,96 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+// import React, { useState, useEffect, useRef } from "react";
+// import { Link, useLocation } from "react-router-dom";
 
-import { AiOutlineEdit } from "react-icons/ai";
-// import "./backlog.scss";
-import axios from "axios";
+// import { AiOutlineEdit } from "react-icons/ai";
+// // import "./backlog.scss";
+// import axios from "axios";
 
-// const getTicketLocal = () => {
-//   let description = localStorage.getItem("description");
-//   if (description) {
-//     return JSON.parse(localStorage.getItem("description"));
-//   } else {
-//     return [];
-//   }
-// };
+// // const getTicketLocal = () => {
+// //   let description = localStorage.getItem("description");
+// //   if (description) {
+// //     return JSON.parse(localStorage.getItem("description"));
+// //   } else {
+// //     return [];
+// //   }
+// // };
 
-const Inprogress = () => {
-  const [description, setDescription] = useState("");
-  const [getTask, setGetTask] = useState([]);
-  const [addTicketMode, setAddTicketMode] = useState(false);
+// const Inprogress = () => {
+//   const [description, setDescription] = useState("");
+//   const [getTask, setGetTask] = useState([]);
+//   const [addTicketMode, setAddTicketMode] = useState(false);
 
-  //create a new task
-  const createTask = async (e) => {
-    e.preventDefault();
+ 
 
-    const newTask = {
-      description,
-      created_at: new Date().toISOString().slice(0, 19).replace("T", " "),
-    };
+//   return (
+//     <>
+//       <div className="backlog">
+//         <div className="section">
+//           <h1 className="title">In progress</h1>
+//           <div className="color"></div>
 
-    try {
-      const res = await axios.post(
-        "http://localhost:8000/api/tasks/task",
-        newTask
-      );
-      console.log(res);
 
-      setDescription("");
-      // window.location.reload();
-      // setIsCreatingNewNote(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  //get all tasks
-  useEffect(() => {
-    const getAllTasks = async () => {
-      const res = await axios.get("http://localhost:8000/api/tasks/task");
-      console.log(res);
-      setGetTask(res.data);
-    };
-
-    getAllTasks();
-  }, []);
-
-  console.log(getTask);
-
-  return (
-    <>
-      <div className="backlog">
-        <div className="section">
-          <h1 className="title">In progress</h1>
-          <div className="color"></div>
-
-          {!addTicketMode && (
-            <button
-              className="addCardBtn"
-              onClick={() => setAddTicketMode((prev) => !prev)}>
-              + add a card
-            </button>
-          )}
-
-          {addTicketMode && (
-            <form>
-              <textarea
-                className="inputField"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              />
-            </form>
-          )}
-
-          <div className="center">
-            <div className="description">
-              {/* {getTask.map((task) => (
-                <>
-                  <p className="text">{task.description}</p>
-                  <span className="edit">
-                    <AiOutlineEdit />
-                  </span>
-                </>
-              ))} */}
-            </div>
+//           <div className="center">
+//             <div className="description">
+          
+//             </div>
 
           
-          </div>
+//           </div>
 
-          {addTicketMode && (
-          <div className="down">
-            <button
-              className="adBtn"
-              onClick={(e) => {
-                createTask(e);
-              }}>
-              Add a card
-            </button>
-            <button
-              className="cancel"
-              onClick={() => setAddTicketMode((prev) => !prev)}>
-              X
-            </button>
+     
+//         </div>
+//       </div>
+//     </>
+//   );
+// };
+
+// export default Inprogress;
+
+
+
+import React, { useState } from 'react';
+import { useDrop } from 'react-dnd';
+import SingleTask from '../singleTask/SingleTask';
+import './inprogress.scss';
+
+const Inprogress = () => {
+  const [tasks, setTasks] = useState([]);
+
+  const [, drop] = useDrop({
+    accept: 'task',
+    drop: (item) => {
+      const droppedTask = item.task;
+      console.log('Task dropped:', droppedTask);
+      setTasks((prevTasks) => [...prevTasks, droppedTask]);
+    },
+  });
+
+  return (
+    <div className="inprogress">
+      <div className="section">
+        <h1 className="title">In Progress</h1>
+        <div className="color"></div>
+
+        <div className="center">
+          <div className="description" ref={drop}>
+            {tasks.map((task) => (
+              <SingleTask key={task.id} task={task} />
+            ))}
           </div>
-        )}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
 export default Inprogress;
+
+
+
+
+
+
+
+
+
+

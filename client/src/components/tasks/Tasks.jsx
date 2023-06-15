@@ -10,6 +10,7 @@ const Tasks = () => {
     <div className='tasks'>
       <SideBar />
         <BackLog />
+        <Inprogress />
        
        
        
@@ -18,4 +19,4 @@ const Tasks = () => {
   )
 }
 
-export default Tasks
+export default Tasks;

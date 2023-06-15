@@ -9,35 +9,41 @@ import Notes from './components/notes/Notes';
 import Tasks from "./components/tasks/Tasks";
 import Chat from './components/chat/Chat';
 import { AppContext } from './context/context'
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+
 
 import './App.scss'
-// import SingleTaskPage from './components/tasks/singletaskpage/SingleTaskPage';
-// import SingleTask from './components/tasks/singleTask/SingleTask';
 
 function App() {
-  const {currentUser} = useContext(AppContext)
-  
- 
+  const { currentUser } = useContext(AppContext)
 
   return (
     <Router>
-    <div className="App" >
-      <Navbar/>
-     
-      <Routes>
-        <Route path="/" element={currentUser ? <Notes /> : <Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/notes" element={ currentUser ? <Notes /> : <Login />} />
-        <Route path="/tasks" element={ currentUser ? <Tasks /> : <Login />} />
-        {/* <Route path="/task/:taskId" element={ currentUser ? <SingleTaskPage /> : <Login />} /> */}
-        <Route path="/chat" element={ currentUser ? <Chat /> : <Login />} />
-     
-      </Routes>
-    </div>
-    <ToastContainer />
-  </Router>
+      <div className="App">
+        <Navbar />
+
+        <Routes>
+          <Route path="/" element={currentUser ? <Notes /> : <Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/notes" element={currentUser ? <Notes /> : <Login />} />
+          <Route path="/tasks" element={currentUser ? (
+            <DndProvider backend={HTML5Backend}>
+              <Tasks />
+            </DndProvider>
+          ) : (
+            <Login />
+          )} />
+          {/* <Route path="/task/:taskId" element={currentUser ? <SingleTaskPage /> : <Login />} /> */}
+          <Route path="/chat" element={currentUser ? <Chat /> : <Login />} />
+
+        </Routes>
+      </div>
+      <ToastContainer />
+    </Router>
   )
 }
 
-export default App
+export default App;
+

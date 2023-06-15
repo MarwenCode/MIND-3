@@ -4,7 +4,7 @@ import { AppContext } from "../../../context/context";
 import { MdConstruction } from "react-icons/md";
 import "./singletask.scss";
 
-const SingleTask = ({ task }) => {
+const SingleTask = ({ task, onDragStart  }) => {
   const { logout, currentUser } = useContext(AppContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskDetails, setTaskDetails] = useState(null);
@@ -30,7 +30,6 @@ const SingleTask = ({ task }) => {
     setIsModalOpen(false);
     window.history.pushState(null, null, "/tasks");
   };
-  
 
   console.log(task);
   console.log(currentUser);
@@ -52,7 +51,7 @@ const SingleTask = ({ task }) => {
   };
 
   return (
-    <div className="task-container">
+    <div className="task-container" draggable onDragStart={onDragStart}>
       <div className="description" onClick={openModal}>
         <p>{task.description}</p>
         <p>{task.created_at}</p>
@@ -60,64 +59,73 @@ const SingleTask = ({ task }) => {
       </div>
 
       {isModalOpen && taskDetails && (
-  <div className="modal">
-    <div className="modal-content">
-      <div className="top">
-        {/* <h2>{taskDetails.title}</h2> */}
-        <span className="icon">
-          <MdConstruction /> task: {taskDetails.id}
-        </span>
-      </div>
+        <div className="modal">
+          <div className="modal-content">
+            <div className="top">
+              {/* <h2>{taskDetails.title}</h2> */}
+              <span className="icon">
+                <MdConstruction /> task: {taskDetails.id}
+              </span>
+            </div>
 
-      <div className="center">
-        <div className="desc" onClick={() => setEditMode(true)}>
-          {editMode ? (
-            <>
-              <textarea
-                value={editMode ? editDescription : taskDetails.description}
-                onChange={(e) => setEditDescription(e.target.value)}
-              />
-              <button  className="update"   onClick={upDateTask}>Save</button>
+            <div className="center">
+              <div className="desc" onClick={() => setEditMode(true)}>
+                {editMode ? (
+                  <>
+                    <textarea
+                      value={
+                        editMode ? editDescription : taskDetails.description
+                      }
+                      onChange={(e) => setEditDescription(e.target.value)}
+                    />
+                    <button className="update" onClick={upDateTask}>
+                      Save
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <span>Description:</span>
+                    <p>{taskDetails.description}</p>
+                  </>
+                )}
+              </div>
 
+              {editMode && (
+                <button className="close" onClick={() => setEditMode(false)}>
+                  Close
+                </button>
+              )}
 
-            </>
-          ) : (
-            <>
-              <span>Description:</span>
-              <p>{taskDetails.description}</p>
-            </>
-          )}
+              <div className="resp">
+                <div className="reporter">
+                  <span>Reporter: </span>
+                  <p>{taskDetails.reporter}</p>
+                </div>
+                <div className="reporter">
+                  <span>Assignees:</span>
+                  <p>{taskDetails.assigned} test</p>
+                </div>
+              </div>
+            </div>
+            <div className="down">
+              <div className="comment">
+                <p>dsdqsd qsdqsdqsd</p>
+                <p>dsdqsd qsdqsdqsd</p>
+                <p>dsdqsd qsdqsdqsd</p>
+                <p>dsdqsd qsdqsdqsd</p>
+                <p>dsdqsd qsdqsdqsd</p>
+                <p>dsdqsd qsdqsdqsd</p>
+                <p>dsdqsd qsdqsdqsd</p>
+                <p>dsdqsd qsdqsdqsd</p>
+              </div>
+            </div>
 
-
-
-
-          
+            <button className="closeBtn" onClick={closeModal}>
+              Close
+            </button>
+          </div>
         </div>
-
-        {editMode &&     <button onClick={() => setEditMode(false)}>Close</button> }
-      
-
-        <div className="resp">
-          <p className="reporter">Reporter: {taskDetails.reporter}</p>
-          <p className="assignees">Assignees: {taskDetails.assigned}</p>
-        </div>
-      </div>
-      <div className="down">
-        <div className="comment">
-          <p>dsdqsd qsdqsdqsd</p>
-          <p>dsdqsd qsdqsdqsd</p>
-          <p>dsdqsd qsdqsdqsd</p>
-          <p>dsdqsd qsdqsdqsd</p>
-        </div>
-      </div>
-
-      <button className="closeBtn" onClick={closeModal}>
-        Close
-      </button>
-    </div>
-  </div>
-)}
-
+      )}
     </div>
   );
 };
