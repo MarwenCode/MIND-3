@@ -47,23 +47,26 @@
 // export default Inprogress;
 
 
-
 import React, { useState } from 'react';
-import { useDrop } from 'react-dnd';
 import SingleTask from '../singleTask/SingleTask';
 import './inprogress.scss';
 
-const Inprogress = () => {
-  const [tasks, setTasks] = useState([]);
+const Inprogress = ({ tasks }) => {
+  const [droppedTaskId, setDroppedTaskId] = useState(null);
 
-  const [, drop] = useDrop({
-    accept: 'task',
-    drop: (item) => {
-      const droppedTask = item.task;
-      console.log('Task dropped:', droppedTask);
-      setTasks((prevTasks) => [...prevTasks, droppedTask]);
-    },
-  });
+  const handleDrop = (event) => {
+    event.preventDefault();
+    const taskId = event.dataTransfer.getData('text/plain');
+    console.log('Drop Task ID:', taskId);
+
+    // Set the dropped task ID in state
+    setDroppedTaskId(taskId);
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+    console.log('Drag Over');
+  };
 
   return (
     <div className="inprogress">
@@ -72,18 +75,54 @@ const Inprogress = () => {
         <div className="color"></div>
 
         <div className="center">
-          <div className="description" ref={drop}>
+          <div className="description" onDrop={handleDrop} onDragOver={handleDragOver}>
             {tasks.map((task) => (
               <SingleTask key={task.id} task={task} />
             ))}
           </div>
         </div>
       </div>
+
+      {droppedTaskId && (
+        <div>
+          <h2>Dropped Task ID: {droppedTaskId}</h2>
+          {/* Render additional details or perform actions based on the dropped task */}
+        </div>
+      )}
     </div>
   );
 };
 
 export default Inprogress;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

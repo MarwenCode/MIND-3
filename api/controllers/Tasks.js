@@ -3,38 +3,6 @@ import { DataBase } from "../connect.js";
 
 //create a Task
 
-// export const createTask = (req, res) => {
-//     const tasks =
-//       "INSERT INTO tasks (`id`, `description`, `reporter`, `created_at`) VALUES ?";
-//     const values = [
-//       [
-//         req.body.id,
-//         req.body.description,
-//         req.body.reporter,
-//         // req.body.assigned,
-//         req.body.created_at,
-      
-//       ],
-//     ];
-//     DataBase.query(tasks, [values], (error, data) => {
-//       if (error) return res.status(500).json(error);
-//       if (data) return res.status(200).json("Task created");
-//     });
-//   };
-
-
-// export const createTask = (req, res) => {
-//   const tasks =
-//     "INSERT INTO tasks (`id`, `description`, `reporter`, `created_at`) VALUES ?";
-//   const reporter = req.body.reporter;
-//   const values = [
-//     [req.body.id, req.body.description, reporter, req.body.created_at],
-//   ];
-//   DataBase.query(tasks, [values], (error, data) => {
-//     if (error) return res.status(500).json(error);
-//     if (data) return res.status(200).json("Task created");
-//   });
-// };
 
 
 export const createTask = (req, res) => {

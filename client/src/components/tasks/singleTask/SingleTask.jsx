@@ -4,7 +4,7 @@ import { AppContext } from "../../../context/context";
 import { MdConstruction } from "react-icons/md";
 import "./singletask.scss";
 
-const SingleTask = ({ task, onDragStart  }) => {
+const SingleTask = ({ task, onDragStart, isDragged  }) => {
   const { logout, currentUser } = useContext(AppContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskDetails, setTaskDetails] = useState(null);
@@ -50,8 +50,23 @@ const SingleTask = ({ task, onDragStart  }) => {
     }
   };
 
+  const handleDragStart = (event) => {
+    console.log("Drag Start:", task.id);
+    event.stopPropagation();
+    event.dataTransfer.setData("text/plain", task.id);
+  };
+  
+  
+
+  const handleDragEnd = () => {
+    console.log("Drag End:", task.id);
+  };
   return (
-    <div className="task-container" draggable onDragStart={onDragStart}>
+    <div
+    className={`task-container ${isDragged ? 'dragged' : ''}`}
+      draggable={true}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}>
       <div className="description" onClick={openModal}>
         <p>{task.description}</p>
         <p>{task.created_at}</p>
