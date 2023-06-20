@@ -5,6 +5,7 @@ import authRoutes from "./routes/auth.js";
 import notesRoutes from "./routes/notes.js";
 import categoriesRoutes from "./routes/categories.js";
 import tasksRoutes from "./routes/tasks.js";
+import inprogressRoutes from "./routes/inprogress.js"
 import messageRoutes from "./routes/messages.js";
 import http from 'http';
 import initializeSocket from "./socket/socket.js";
@@ -12,6 +13,7 @@ import { Server } from 'socket.io';
 import multer from "multer";
 import { fileURLToPath } from 'url';
 import path, { dirname } from 'path';
+
 
 const app = express();
 const server = http.createServer(app);
@@ -84,6 +86,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/notes", notesRoutes);
 app.use("/api/categories", categoriesRoutes);
 app.use("/api/tasks", tasksRoutes);
+app.use("/api/inprogress", inprogressRoutes);
 app.use("/api/messages", messageRoutes);
 
 // Set up socket.io

@@ -8,7 +8,9 @@ const AddTicket = ({ addTicketMode, setAddTicketMode }) => {
 
   const [description, setDescription] = useState("");
   const [allUsers, setAllusers] = useState([]);
-  const [assigned, setAssigned] = useState("");
+  const [assignee, setAssigned] = useState("");
+  const [status, setStatus] = useState("Open");
+
 
   const createTask = async (e) => {
     e.preventDefault();
@@ -17,8 +19,8 @@ const AddTicket = ({ addTicketMode, setAddTicketMode }) => {
       description,
       created_at: new Date().toISOString().slice(0, 19).replace("T", " "),
       reporter: currentUser.username,
-      assigned,
-      status: "backlog",
+      assignee,
+      status,
     };
 
     try {
@@ -60,19 +62,32 @@ const AddTicket = ({ addTicketMode, setAddTicketMode }) => {
               <span> Reporter : {currentUser.username}</span>
             </div>
             <div className="assign">
-              <label htmlFor="name-select">Assign :</label>
+              <label htmlFor="name-select">Assignee:</label>
               <select
                 name="name"
                 id="name-select"
                 onChange={(e) => setAssigned(e.target.value)}>
                 <option value="">-- Select a user --</option>
                 {allUsers.map((user) => (
-                  <option key={user.id} value={assigned}>
+                  <option key={user.id} value={assignee}>
                     {user.username}
                   </option>
                 ))}
               </select>
             </div>
+            {/* <div className="status">
+              <label htmlFor="status-select">Status:</label>
+              <select
+              value={status}
+               onChange={(e) => setStatus(e.target.value)}
+              
+              >
+                <option>--Select Status--</option>
+                <option>Open</option> 
+                <option>In Progress</option>
+                <option>Closed</option>
+              </select>
+            </div> */}
           </div>
           <button
             className="adBtn"
