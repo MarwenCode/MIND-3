@@ -56,3 +56,23 @@ export const getTheInprogressTasks = (req, res) => {
   });
 };
 
+export const getSingleInprogressTask = (req, res) => {
+  const taskId = req.params.id;
+  console.log("Fetching in-progress task with ID:", taskId);
+  const sql = "SELECT * FROM inprogress WHERE id = ?";
+  DataBase.query(sql, taskId, (error, data) => {
+    if (error) {
+      console.log("Error fetching in-progress task:", error);
+      return res.json({ error: error.message });
+    }
+    if (data.length === 0) {
+      console.log("In-progress task not found");
+      return res.status(404).json("Task not found");
+    }
+    const taskDetails = data[0];
+    console.log("In-progress Task Details:", taskDetails);
+    return res.json(taskDetails);
+  });
+};
+
+

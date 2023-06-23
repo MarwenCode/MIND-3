@@ -1,6 +1,6 @@
 .task-container {
-  height: 150px;
-  background-color: #eceaea;
+  max-height: 150px;
+  background-color: #cecaca;
 
   .description {
     cursor: pointer;
@@ -8,6 +8,7 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     margin-bottom: 10px;
+    height: 100%;
 
     p {
       margin: 0;
@@ -15,7 +16,10 @@
     }
 
     &:hover {
-      background-color: #f5f5f5;
+      background-color: #636161;
+      max-height: 150px;
+      
+      
     }
   }
 }
