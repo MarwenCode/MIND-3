@@ -26,7 +26,7 @@ const Backlog = () => {
     console.log("Dragged Task ID:", taskId);
   };
 
-  const handleDragEnd = async (event, taskId) => {
+  const handleDragEnd = async (event) => {
     const taskElement = event.target.closest(".singleTask");
     const droppedTaskId = event.dataTransfer.getData("text/plain");
     console.log("Dropped Task ID:", droppedTaskId);
@@ -34,8 +34,9 @@ const Backlog = () => {
     try {
       // Extract the actual task ID from the droppedTaskId
       const actualTaskId = droppedTaskId.split("Open")[0];
+    
 
-      await axios.put(`http://localhost:8000/api/inprogress/${actualTaskId}`);
+      await axios.put(`http://localhost:8000/api/tasks/task/${actualTaskId}`);
       taskElement.style.opacity = 0.5;
       taskElement.classList.add("in-progress");
     } catch (error) {
@@ -68,3 +69,20 @@ const Backlog = () => {
 };
 
 export default Backlog;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

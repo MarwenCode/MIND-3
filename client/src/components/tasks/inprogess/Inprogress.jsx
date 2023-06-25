@@ -1,20 +1,67 @@
+// import React, { useState } from 'react';
+// import SingleTask from '../singleTask/SingleTask';
+// import './inprogress.scss';
+// import axios from 'axios';
 
+// const Inprogress = () => {
+//   const [droppedTaskId, setDroppedTaskId] = useState(null);
+
+//   const handleDrop = async (event) => {
+//     event.preventDefault();
+//     const taskId = event.dataTransfer.getData('text/plain');
+//     console.log('Dropped Task ID:', taskId);
+
+//     try {
+//       // Send a PUT request to update the task's status to 'In Progress'
+//       await axios.put(`http://localhost:8000/api/inprogress/${taskId}`);
+
+//       // Update the dropped task ID in state
+//       setDroppedTaskId(taskId);
+//     } catch (error) {
+//       console.error('Error updating task:', error);
+//     }
+//   };
+
+//   const handleDragOver = (event) => {
+//     event.preventDefault();
+//     console.log('Drag Over');
+//   };
+
+//   return (
+//     <div className="inprogress">
+//       <div className="section">
+//         <h1 className="title">In Progress</h1>
+//         <div className="color"></div>
+
+//         <div className="center">
+//           <div className="description" onDrop={handleDrop} onDragOver={handleDragOver}>
+//             {droppedTaskId && (
+//               <div>
+//                 <h2>Dropped Task ID: {droppedTaskId}</h2>
+//               </div>
+//             )}
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Inprogress;
 
 import React, { useState, useEffect } from "react";
 import SingleTask from "../singleTask/SingleTask";
-
 import "./inprogress.scss";
 import axios from "axios";
 
-const Inprogress = ({ task }) => {
+const Inprogress = ({ tasks }) => {
   const [droppedTaskId, setDroppedTaskId] = useState(null);
   const [inprogressTasks, setInprogressTasks] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(true);
 
   useEffect(() => {
     const fetchInprogressTasks = async () => {
       try {
-        const res = await axios.get("http://localhost:8000/api/tasks");
+        const res = await axios.get("http://localhost:8000/api/inprogress");
         setInprogressTasks(res.data);
       } catch (error) {
         console.error("Error fetching in-progress tasks:", error);
@@ -24,13 +71,14 @@ const Inprogress = ({ task }) => {
     fetchInprogressTasks();
   }, []);
 
-  const handleDrop = async (taskId) => {
+  const handleDrop = async (event) => {
     event.preventDefault();
+    const taskId = event.dataTransfer.getData("text/plain");
     console.log("Dropped Task ID:", taskId);
 
     try {
       // Send a PUT request to update the task's status to 'In Progress'
-      await axios.put(`http://localhost:8000/api/tasks/${taskId}`);
+      await axios.put(`http://localhost:8000/api/inprogress/${taskId}`);
     } catch (error) {
       console.error("Error updating task:", error);
     }
@@ -41,8 +89,6 @@ const Inprogress = ({ task }) => {
     console.log("Drag Over");
   };
 
-  console.log(inprogressTasks[0]);
-
   return (
     <div className="inprogress">
       <div className="section">
@@ -52,20 +98,22 @@ const Inprogress = ({ task }) => {
         <div className="center">
           <div
             className="description"
-            // onClick={openModal}
             onDrop={handleDrop}
             onDragOver={handleDragOver}>
-            <div className="inprogressTask">
-              {inprogressTasks.map((task) => (
-                <div className="details">
-                  {isModalOpen && (
-                    <SingleTask key={task.id} taskInProg={task} />
-                  )}
-                </div>
-              ))}
-            </div>
+            {droppedTaskId && (
+              <div>
+                <h2>Dropped Task ID: {droppedTaskId}</h2>
+              </div>
+            )}
           </div>
         </div>
+      </div>
+
+      {/* Display in-progress tasks */}
+      <div>
+        {inprogressTasks.map((task) => (
+          <SingleTask key={task.id} task={task} />
+        ))}
       </div>
     </div>
   );

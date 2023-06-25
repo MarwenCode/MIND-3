@@ -86,7 +86,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/notes", notesRoutes);
 app.use("/api/categories", categoriesRoutes);
 app.use("/api/tasks", tasksRoutes);
-app.use("/api/tasks", inprogressRoutes);
+app.use("/api/inprogress", inprogressRoutes);
 app.use("/api/messages", messageRoutes);
 
 // Set up socket.io
