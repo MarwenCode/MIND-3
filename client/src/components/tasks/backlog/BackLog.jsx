@@ -3,46 +3,52 @@ import SingleTask from "../singleTask/SingleTask";
 import "./backlog.scss";
 import axios from "axios";
 
-const Backlog = () => {
-  const [backlogTasks, setBacklogTasks] = useState([]);
+const Backlog = ({ tasks, onDragStart, onDrop }) => {
+  // const [backlogTasks, setBacklogTasks] = useState([]);
 
-  useEffect(() => {
-    const getAllTasks = async () => {
-      try {
-        const res = await axios.get("http://localhost:8000/api/tasks/task");
-        setBacklogTasks(res.data);
-      } catch (error) {
-        console.error("Error fetching tasks:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const getAllTasks = async () => {
+  //     try {
+  //       const res = await axios.get("http://localhost:8000/api/tasks/task");
+  //       setBacklogTasks(res.data);
+  //     } catch (error) {
+  //       console.error("Error fetching tasks:", error);
+  //     }
+  //   };
 
-    getAllTasks();
-  }, []);
+  //   getAllTasks();
+  // }, []);
 
-  console.log(backlogTasks);
+  // const handleDragStart = (event, taskId) => {
+  //   event.dataTransfer.setData("text/plain", taskId);
+  //   console.log("Dragged Task ID:", taskId);
+  // };
 
-  const handleDragStart = (event, taskId) => {
-    event.dataTransfer.setData("text/plain", taskId);
-    console.log("Dragged Task ID:", taskId);
-  };
+  // const handleDragEnd = async (event, taskId) => {
+  //   event.preventDefault();
+  //   event.stopPropagation();
 
-  const handleDragEnd = async (event) => {
-    const taskElement = event.target.closest(".singleTask");
-    const droppedTaskId = event.dataTransfer.getData("text/plain");
-    console.log("Dropped Task ID:", droppedTaskId);
+  //   const taskElement = event.target.closest(".singleTask");
+  //   if (!taskElement) {
+  //     return;
+  //   }
 
-    try {
-      // Extract the actual task ID from the droppedTaskId
-      const actualTaskId = droppedTaskId.split("Open")[0];
-    
+  //   const droppedTaskId = taskId.trim();
+  //   console.log("Dropped Task ID:", droppedTaskId);
 
-      await axios.put(`http://localhost:8000/api/tasks/task/${actualTaskId}`);
-      taskElement.style.opacity = 0.5;
-      taskElement.classList.add("in-progress");
-    } catch (error) {
-      console.error("Error updating task:", error);
-    }
-  };
+  //   try {
+  //     // Update the task status to "In Progress" with a PUT request
+  //     await axios.put(`http://localhost:8000/api/tasks/task/${droppedTaskId}`);
+
+  //     taskElement.style.opacity = 0.5;
+  //     taskElement.classList.add("in-progress");
+
+  //     // Move the dropped task from backlogTasks to inProgressTasks
+  //     setBacklogTasks(prevTasks => prevTasks.filter((task) => task.id !== droppedTaskId));
+  //   } catch (error) {
+  //     console.error("Error updating task:", error);
+  //   }
+  // };
 
   return (
     <div className="backlog">
@@ -51,14 +57,16 @@ const Backlog = () => {
         <div className="color"></div>
 
         <div className="center">
-          <div className="description">
-            {backlogTasks.map((task) => (
+        <div className="description">
+            {tasks.map((task) => (
               <SingleTask
                 key={task.id}
                 task={task}
                 draggable="true"
-                onDragStart={(event) => handleDragStart(event, task.id)}
-                onDragEnd={(event) => handleDragEnd(event, task.id)}
+                onDragStart={(event) => onDragStart(event, task.id)}
+                onDrop={onDrop}
+                data-task-id={task.id}
+                className="singleTask"
               />
             ))}
           </div>
@@ -69,6 +77,8 @@ const Backlog = () => {
 };
 
 export default Backlog;
+
+
 
 
 
