@@ -150,7 +150,6 @@ const SingleTask = ({ task, onDragStart, onDragEnd, taskInProg }) => {
                 <p>dsdqsd qsdqsdqsd</p>
                 <p>dsdqsd qsdqsdqsd</p>
                 <p>dsdqsd qsdqsdqsd</p>
-                <p>dsdqsd qsdqsdqsd</p>
               </div>
             </div>
 
