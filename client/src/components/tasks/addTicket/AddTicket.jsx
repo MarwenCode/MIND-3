@@ -8,7 +8,7 @@ const AddTicket = ({ addTicketMode, setAddTicketMode }) => {
 
   const [description, setDescription] = useState("");
   const [allUsers, setAllusers] = useState([]);
-  const [assignee, setAssigned] = useState("");
+  const [assigned, setAssigned] = useState("");
   const [status, setStatus] = useState("Open");
 
 
@@ -19,7 +19,7 @@ const AddTicket = ({ addTicketMode, setAddTicketMode }) => {
       description,
       created_at: new Date().toISOString().slice(0, 19).replace("T", " "),
       reporter: currentUser.username,
-      assignee,
+      assigned,
       status,
     };
 
@@ -69,8 +69,8 @@ const AddTicket = ({ addTicketMode, setAddTicketMode }) => {
                 onChange={(e) => setAssigned(e.target.value)}>
                 <option value="">-- Select a user --</option>
                 {allUsers.map((user) => (
-                  <option key={user.id} value={assignee}>
-                    {user.username}
+                  <option key={user.id} value={user.username}>
+                  {user.username}
                   </option>
                 ))}
               </select>

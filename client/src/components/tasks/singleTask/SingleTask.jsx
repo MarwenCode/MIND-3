@@ -13,7 +13,7 @@ const SingleTask = ({ task, onDragStart, onDragEnd, taskInProg }) => {
   const [editDescription, setEditDescription] = useState(task?.description);
 
   const { id } = useParams();
-  const location = useLocation()
+  const location = useLocation();
 
   console.log(taskDetails);
 
@@ -56,9 +56,6 @@ const SingleTask = ({ task, onDragStart, onDragEnd, taskInProg }) => {
       console.log(error);
     }
   };
-  
-
-
 
   const closeModal = (e) => {
     // e.stopPropagation();
@@ -91,11 +88,24 @@ const SingleTask = ({ task, onDragStart, onDragEnd, taskInProg }) => {
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}>
       <div className="description" onClick={openModal}>
-        <p>{taskDetails?.description}</p>
-        <p>{taskDetails?.created_at}</p>
-        <p>{taskDetails?.reporter}</p>
-        <p>{taskDetails?.assignee}</p>
-        <p>{taskDetails?.status}</p>
+      <div className="task">
+          <span className="prop"> Status:</span>
+          <span className="value">{taskDetails?.status}</span>
+        </div>
+      <div className="task">
+          <span className="prop"> Assignee:</span>
+          <span className="value">{taskDetails?.description}</span>
+        </div>
+        <div className="task">
+          <span className="prop"> Reporter:</span>
+          <span className="value">{taskDetails?.reporter}</span>
+        </div>
+        
+        <div className="task">
+          <span className="prop"> created-at:</span>
+          <span className="value">{taskDetails?.created_at}</span>
+        </div>
+       
       </div>
 
       {isModalOpen && (
