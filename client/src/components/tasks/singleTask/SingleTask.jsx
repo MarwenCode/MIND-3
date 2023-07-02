@@ -12,8 +12,8 @@
 //   const [editMode, setEditMode] = useState(false);
 //   const [editDescription, setEditDescription] = useState(task?.description);
 
-  // const { id } = useParams();
-  // const location = useLocation();
+// const { id } = useParams();
+// const location = useLocation();
 
 //   console.log(taskDetails);
 
@@ -50,12 +50,12 @@
 //       const taskId = task ? task.id : taskInProg.id;
 //       const url = `/task/${taskId}`;
 
-      // Update the URL without opening a new page
-  //     window.history.pushState(null, null, url);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+// Update the URL without opening a new page
+//     window.history.pushState(null, null, url);
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 
 //   const closeModal = (e) => {
 //     // e.stopPropagation();
@@ -163,30 +163,33 @@
 
 // export default SingleTask;
 
-
-
-
-
-
 import React, { useState, useContext } from "react";
 import axios from "axios";
 import { AppContext } from "../../../context/context";
 import { MdConstruction } from "react-icons/md";
 import "./singletask.scss";
 
-const SingleTask = ({ task, onDragStart, onDragEnd, onDragOver, onDrop }) => {
+const SingleTask = ({
+  task,
+  onDragStart,
+  onDragEnd,
+  onDragOver,
+  onDrop,
+  taskInProg,
+}) => {
   const { logout, currentUser } = useContext(AppContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskDetails, setTaskDetails] = useState(task);
   const [editMode, setEditMode] = useState(false);
-  const [editDescription, setEditDescription] = useState(task.description);
+  const [editDescription, setEditDescription] = useState(task?.description);
 
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
+  // const openModal = () => {
+  //   setIsModalOpen(true);
+  // };
 
   const closeModal = () => {
     setIsModalOpen(false);
+    window.history.pushState(null, null, "/tasks");
   };
 
   const upDateTask = async () => {
@@ -198,20 +201,55 @@ const SingleTask = ({ task, onDragStart, onDragEnd, onDragOver, onDrop }) => {
         ...prevDetails,
         description: editDescription,
       }));
+
       setEditMode(false);
     } catch (error) {
       console.log(error);
     }
   };
 
+  //open Modal
+  // const openModal = async () => {
+  //   setIsModalOpen(true);
 
-  const handleDragStart = (event) => {
-    console.log("Drag Start:", task.id);
-    event.stopPropagation();
-    event.dataTransfer.setData("text/plain", task.id);
+  //   try {
+  //     const response = await axios.get(
+  //       `http://localhost:8000/api/tasks/task/${task.id}`
+  //     );
+  //     const taskDetails = response.data[0];
+  //           setTaskDetails(taskDetails);
+  //           setEditDescription(taskDetails.description);
+  //     // Update the URL without opening a new page
+  //     const url = `/task/${task.id}`;
+  //     window.history.pushState(null, null, url);
+  //   } catch (error) {
+  //     console.log(error);
+  //     //   }
+  //   }
+  // };
+
+  const openModal = async () => {
+    setIsModalOpen(true);
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/tasks/task/${task.id || taskInProg.id}`
+      );
+      const taskDetails = response?.data[0];
+      setTaskDetails(taskDetails);
+      setEditDescription(taskDetails?.description);
+      if (taskInProg) {
+        window.history.pushState(null, null, `/task/${taskInProg.id}`);
+      } else {
+        window.history.pushState(null, null, `/task/${task.id}`);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-
+  const handleDragStart = (event) => {
+    onDragStart(event, task.id);
+  };
 
   const handleDragEnd = () => {
     console.log("Drag End:", task.id);
@@ -221,30 +259,20 @@ const SingleTask = ({ task, onDragStart, onDragEnd, onDragOver, onDrop }) => {
     event.preventDefault();
   };
 
-
-
   return (
     <div
-    className="task-container"
-  // draggable={true}
-  // onDragStart={handleDragStart}
-  // onDragEnd={handleDragEnd}
-
-
-  draggable="true"
-  onDragStart={(event) => onDragStart(event, task.id)}
-  onDragEnd={handleDragEnd}
-  onDragOver={onDragOver}
-  onDrop={onDrop}
-  data-task-id={task.id}
-    
-  >
+      className="task-container"
+      draggable="true"
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+      onDragOver={onDragOver}
+      onDrop={onDrop}>
       <div className="description" onClick={openModal}>
-      <div className="task">
+        <div className="task">
           <span className="prop"> Status:</span>
           <span className="value">{taskDetails?.status}</span>
         </div>
-      <div className="task">
+        <div className="task">
           <span className="prop"> Assignee:</span>
           <span className="value">{taskDetails?.description}</span>
         </div>
@@ -252,12 +280,11 @@ const SingleTask = ({ task, onDragStart, onDragEnd, onDragOver, onDrop }) => {
           <span className="prop"> Reporter:</span>
           <span className="value">{taskDetails?.reporter}</span>
         </div>
-        
+
         <div className="task">
           <span className="prop"> created-at:</span>
           <span className="value">{taskDetails?.created_at}</span>
         </div>
-       
       </div>
 
       {isModalOpen && (
@@ -265,7 +292,7 @@ const SingleTask = ({ task, onDragStart, onDragEnd, onDragOver, onDrop }) => {
           <div className="modal-content">
             <div className="top">
               <span className="icon">
-                <MdConstruction /> task: {taskDetails.id}
+                <MdConstruction /> task: {taskDetails?.id}
               </span>
             </div>
 
@@ -284,7 +311,7 @@ const SingleTask = ({ task, onDragStart, onDragEnd, onDragOver, onDrop }) => {
                 ) : (
                   <>
                     <span>Description:</span>
-                    <p>{taskDetails.description}</p>
+                    <p>{taskDetails?.description || taskInProg?.description}</p>
                   </>
                 )}
               </div>
@@ -298,11 +325,11 @@ const SingleTask = ({ task, onDragStart, onDragEnd, onDragOver, onDrop }) => {
               <div className="resp">
                 <div className="reporter">
                   <span>Reporter: </span>
-                  <p>{taskDetails.reporter}</p>
+                  <p>{taskDetails?.reporter}</p>
                 </div>
                 <div className="reporter">
                   <span>Assignees:</span>
-                  <p>{taskDetails.assigned} test</p>
+                  <p>{taskDetails?.assigned} test</p>
                 </div>
               </div>
             </div>
