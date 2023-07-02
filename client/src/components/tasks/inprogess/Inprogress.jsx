@@ -52,7 +52,7 @@ const Inprogress = ({setBacklogTasks, onDragStart }) => {
         <div className="center">
           <div className="description">
             {inProgressTasks.map((task) => (
-              <SingleTask key={task.id} task={task} onDragStart={onDragStart} />
+              <SingleTask key={task.id} task={task} onDragStart={onDragStart}  taskInProg={task} />
             ))}
           </div>
         </div>
