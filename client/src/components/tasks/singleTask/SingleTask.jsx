@@ -17,6 +17,7 @@ const SingleTask = ({
   const [taskDetails, setTaskDetails] = useState(task);
   const [editMode, setEditMode] = useState(false);
   const [editDescription, setEditDescription] = useState(task?.description);
+  const [commentMode, setCommentMode] = useState(false)
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -159,9 +160,26 @@ const SingleTask = ({
 
             <div className="down">
               <div className="comment">
+                {commentMode ? (
+                  <textarea />
+                )
+              
+              
+               : (
+
+                <>
+                   <p>dsdqsd qsdqsdqsd</p>
                 <p>dsdqsd qsdqsdqsd</p>
                 <p>dsdqsd qsdqsdqsd</p>
-                <p>dsdqsd qsdqsdqsd</p>
+                
+                </>
+
+             
+
+
+
+               )}
+            
               </div>
             </div>
 

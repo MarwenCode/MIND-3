@@ -7,6 +7,7 @@ import categoriesRoutes from "./routes/categories.js";
 import tasksRoutes from "./routes/tasks.js";
 import inprogressRoutes from "./routes/inprogress.js"
 import messageRoutes from "./routes/messages.js";
+import commentsRoutes from "./routes/comments.js";
 import http from 'http';
 import initializeSocket from "./socket/socket.js";
 import { Server } from 'socket.io';
@@ -88,6 +89,7 @@ app.use("/api/categories", categoriesRoutes);
 app.use("/api/tasks", tasksRoutes);
 app.use("/api/inprogress", inprogressRoutes);
 app.use("/api/messages", messageRoutes);
+app.use("/api/comments", commentsRoutes)
 
 // Set up socket.io
 initializeSocket(io);
