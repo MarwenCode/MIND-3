@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Backlog from "./backlog/Backlog";
+import Backlog from "./backlog/BackLog";
 import Inprogress from "./inprogess/Inprogress";
 import SideBar from "./sidebar/SideBar";
 import "./tasks.scss";

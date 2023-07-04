@@ -1,8 +1,9 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { AppContext } from "../../../context/context";
 import { MdConstruction } from "react-icons/md";
 import "./singletask.scss";
+
 
 const SingleTask = ({
   task,
@@ -17,7 +18,9 @@ const SingleTask = ({
   const [taskDetails, setTaskDetails] = useState(task);
   const [editMode, setEditMode] = useState(false);
   const [editDescription, setEditDescription] = useState(task?.description);
-  const [commentMode, setCommentMode] = useState(false)
+  // const [commentMode, setCommentMode] = useState(true);
+  const [getComment, setgetComment] = useState([]);
+  const [text, setText] = useState("")
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -82,6 +85,45 @@ const SingleTask = ({
   const handleDragOver = (event) => {
     event.preventDefault();
   };
+
+  // create comment
+  const addComment = async (e) => {
+    e.preventDefault();
+
+    const newComment = {
+      text,
+      userId: currentUser.id,
+      created_at: new Date().toISOString().slice(0, 19).replace("T", " "),
+    };
+
+    try {
+      const res = await axios.post(
+        "http://localhost:8000/api/comments",
+        newComment
+      );
+      console.log(res.data);
+    } catch (error) {
+      console.log(error);
+
+    }
+  };
+
+  //get comments
+
+  // useEffect(() => {
+  //   const getComments = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         "http://localhost:8000/api/comments/allcomments"
+  //       );
+  //       setgetComment(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching comments:", error);
+  //     }
+  //   };
+
+  //   getComments();
+  // });
 
   return (
     <div
@@ -160,26 +202,21 @@ const SingleTask = ({
 
             <div className="down">
               <div className="comment">
-                {commentMode ? (
-                  <textarea />
-                )
-              
-              
-               : (
+                <div className="field">
+                  <textarea    value={text}
+                      onChange={(e) => setText(e.target.value)}/>
+                  <button onClick={(e) => addComment(e)}>Add</button>
+                </div>
 
-                <>
-                   <p>dsdqsd qsdqsdqsd</p>
-                <p>dsdqsd qsdqsdqsd</p>
-                <p>dsdqsd qsdqsdqsd</p>
-                
-                </>
-
-             
+                <div className="text">
+                  {getComment.map((comment) => (
+                     <p>{comment.text}</p>
+                    
 
 
-
-               )}
-            
+                  ))}
+                 
+                </div>
               </div>
             </div>
 
