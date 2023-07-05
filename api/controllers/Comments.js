@@ -9,7 +9,8 @@ export const createComment = (req, res) => {
       id: req.body.id,
       text: req.body.text,
       userId: req.body.userId, // Set the userId to the provided value
-      created_at: req.body.created_at
+      created_at: req.body.created_at,
+      taskId:req.body.taskId
     };
   
     const query = "INSERT INTO comments SET ?";
@@ -23,7 +24,8 @@ export const createComment = (req, res) => {
 
 
   export const getAllComments = (req, res) => {
-    const sql ="SELECT * FROM comments";
+    const sql = "SELECT * FROM comments WHERE taskId = 1";
+
     DataBase.query(sql, (error, data) => {
         if (error) {
             console.log(error);
@@ -32,4 +34,21 @@ export const createComment = (req, res) => {
         return res.json(data)
     })
   }
+
+
+
+  export const getCommentsByTaskId = (req, res) => {
+    const taskId = req.params.id;
+  
+    const sql = "SELECT * FROM comments WHERE taskId = ?";
+    DataBase.query(sql, [taskId], (error, data) => {
+      if (error) {
+        console.log(error);
+        return res.status(500).json({ error: error.message });
+      }
+      return res.status(200).json(data);
+    });
+  };
+  
+  
   

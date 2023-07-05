@@ -94,6 +94,7 @@ const SingleTask = ({
       text,
       userId: currentUser.id,
       created_at: new Date().toISOString().slice(0, 19).replace("T", " "),
+      taskId:task.id,
     };
 
     try {
@@ -102,6 +103,7 @@ const SingleTask = ({
         newComment
       );
       console.log(res.data);
+      setText("");
     } catch (error) {
       console.log(error);
 
@@ -123,7 +125,23 @@ const SingleTask = ({
   //   };
 
   //   getComments();
-  // });
+  // }, [text]);
+
+  useEffect(() => {
+    const getComments = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/comments/taskId/${task.id}`
+        );
+        setgetComment(response.data);
+      } catch (error) {
+        console.error("Error fetching comments:", error);
+      }
+    };
+  
+    getComments();
+  }, [text]);
+  
 
   return (
     <div
@@ -208,9 +226,12 @@ const SingleTask = ({
                   <button onClick={(e) => addComment(e)}>Add</button>
                 </div>
 
+                
+
                 <div className="text">
                   {getComment.map((comment) => (
                      <p>{comment.text}</p>
+                 
                     
 
 
