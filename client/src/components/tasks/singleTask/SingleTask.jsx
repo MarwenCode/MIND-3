@@ -4,7 +4,6 @@ import { AppContext } from "../../../context/context";
 import { MdConstruction } from "react-icons/md";
 import "./singletask.scss";
 
-
 const SingleTask = ({
   task,
   onDragStart,
@@ -20,7 +19,7 @@ const SingleTask = ({
   const [editDescription, setEditDescription] = useState(task?.description);
   // const [commentMode, setCommentMode] = useState(true);
   const [getComment, setgetComment] = useState([]);
-  const [text, setText] = useState("")
+  const [text, setText] = useState("");
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -94,7 +93,8 @@ const SingleTask = ({
       text,
       userId: currentUser.id,
       created_at: new Date().toISOString().slice(0, 19).replace("T", " "),
-      taskId:task.id,
+      taskId: task.id,
+      username: currentUser.username,
     };
 
     try {
@@ -106,7 +106,6 @@ const SingleTask = ({
       setText("");
     } catch (error) {
       console.log(error);
-
     }
   };
 
@@ -138,10 +137,9 @@ const SingleTask = ({
         console.error("Error fetching comments:", error);
       }
     };
-  
+
     getComments();
   }, [text]);
-  
 
   return (
     <div
@@ -178,6 +176,9 @@ const SingleTask = ({
               <span className="icon">
                 <MdConstruction /> task: {taskDetails?.id}
               </span>
+              <span className="closeBtn" onClick={closeModal}>
+              X
+            </span>
             </div>
 
             <div className="center">
@@ -217,33 +218,39 @@ const SingleTask = ({
                 </div>
               </div>
             </div>
+          
 
             <div className="down">
+          
               <div className="comment">
                 <div className="field">
-                  <textarea    value={text}
-                      onChange={(e) => setText(e.target.value)}/>
+                  <textarea
+                    value={text}
+                    onChange={(e) => setText(e.target.value)}
+                  />
                   <button onClick={(e) => addComment(e)}>Add</button>
                 </div>
 
-                
-
                 <div className="text">
                   {getComment.map((comment) => (
-                     <p>{comment.text}</p>
-                 
-                    
+                    <>
+                      <div className="left">
+                        <span className="username">{comment.username}</span>
+                        <span className="date">
+                          {new Date(comment.created_at).toDateString()}
+                        </span>
+                      </div>
 
-
+                      <div className="right">
+                        <p>{comment.text}</p>
+                      </div>
+                    </>
                   ))}
-                 
                 </div>
               </div>
             </div>
 
-            <button className="closeBtn" onClick={closeModal}>
-              Close
-            </button>
+          
           </div>
         </div>
       )}

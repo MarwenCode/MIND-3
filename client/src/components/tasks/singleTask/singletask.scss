@@ -169,7 +169,7 @@
 //         .text {
 //           // Styles for the comment text container
 //           // ...
-      
+
 //           p {
 //             // Styles for the comment text
 //             margin: 10px 0;
@@ -178,7 +178,7 @@
 //             border-radius: 8px;
 //             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 //             // Add any other styles you want for the comment text
-            
+
 //             // Example styles for a card-like layout
 //             display: flex;
 //             align-items: center;
@@ -213,7 +213,6 @@
 //   }
 // }
 
-
 .task-container {
   background-color: #f5f5f5;
   border-radius: 8px;
@@ -221,8 +220,6 @@
   padding: 16px;
   margin-bottom: 16px;
   max-height: 150px;
-
- 
 
   .description {
     cursor: pointer;
@@ -279,9 +276,18 @@
         display: flex;
         align-items: center;
         margin-bottom: 16px;
+       
 
         .icon {
           margin-right: 8px;
+        }
+
+        .closeBtn {
+          margin-left: 580px;
+          background-color: #242424;
+          padding: 10px;
+          color: white;
+          border-radius: 10px;
         }
       }
 
@@ -316,10 +322,10 @@
           display: flex;
           justify-content: flex-end;
           align-items: center;
-        
+
           .reporter {
             margin-left: 10px;
-        
+
             span {
               // text-transform: uppercase;
               padding: 5px 10px;
@@ -328,10 +334,9 @@
               color: #fff;
               border: none;
               border-radius: 4px;
-              color:rgb(90, 88, 88)
-             
+              color: rgb(90, 88, 88);
             }
-        
+
             p {
               display: inline-block;
               padding: 5px 10px;
@@ -344,7 +349,6 @@
             }
           }
         }
-        
       }
 
       .down {
@@ -368,13 +372,38 @@
           }
 
           .text {
-            p {
-              margin: 8px 0;
-              padding: 8px;
-              background-color: #f5f5f5;
-              border-radius: 8px;
-              box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-              text-align: left;
+            // display: flex;
+
+            // margin: 8px 0;
+            // padding: 8px;
+            // background-color: #f5f5f5;
+            // border-radius: 8px;
+            // box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            // text-align: left;
+
+            .right {
+              p {
+                margin: 8px 0;
+                padding: 8px;
+                background-color: #f5f5f5;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                text-align: left;
+                color: rgb(36, 34, 34);
+                font-size: medium;
+                font-weight: 500;
+              }
+            }
+
+            .left {
+              display: flex;
+
+              .username {
+                color: rgb(68, 65, 62);
+              }
+              .date {
+                margin-left: 50px;
+              }
             }
           }
         }

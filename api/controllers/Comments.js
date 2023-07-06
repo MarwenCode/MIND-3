@@ -10,7 +10,8 @@ export const createComment = (req, res) => {
       text: req.body.text,
       userId: req.body.userId, // Set the userId to the provided value
       created_at: req.body.created_at,
-      taskId:req.body.taskId
+      taskId:req.body.taskId,
+      username:req.body.username
     };
   
     const query = "INSERT INTO comments SET ?";
