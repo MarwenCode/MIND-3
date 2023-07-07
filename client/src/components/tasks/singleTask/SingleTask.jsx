@@ -16,7 +16,7 @@ const SingleTask = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskDetails, setTaskDetails] = useState(task);
   const [editMode, setEditMode] = useState(false);
-  const [editDescription, setEditDescription] = useState(task?.description);
+  const [editDescription, setEditDescription] = useState("");
   // const [commentMode, setCommentMode] = useState(true);
   const [getComment, setgetComment] = useState([]);
   const [text, setText] = useState("");
@@ -59,7 +59,7 @@ const SingleTask = ({
 
       const taskDetailsData = response?.data[0];
       setTaskDetails(taskDetailsData);
-      setEditDescription(taskDetailsData?.description);
+      setEditDescription(taskDetailsData?.description || "");
 
       const url = task ? `/tasks/${task.id}` : `/tasks/${taskInProg.id}`;
       window.history.pushState(null, null, url);
@@ -141,6 +141,12 @@ const SingleTask = ({
     getComments();
   }, [text]);
 
+
+  const handleEditMode = () => {
+    setEditMode(true);
+    // setEditDescription(taskDetails?.description);
+  };
+  
   return (
     <div
       className="task-container"
@@ -177,20 +183,28 @@ const SingleTask = ({
                 <MdConstruction /> task: {taskDetails?.id}
               </span>
               <span className="closeBtn" onClick={closeModal}>
-              X
-            </span>
+                X
+              </span>
             </div>
 
             <div className="center">
-              <div className="desc" onClick={() => setEditMode(true)}>
+              <div
+                className="desc"
+                onClick={handleEditMode}>
                 {editMode ? (
                   <>
                     <textarea
-                      value={editDescription}
+                      value={taskDetails?.description || taskInProg?.description}
                       onChange={(e) => setEditDescription(e.target.value)}
                     />
                     <button className="update" onClick={upDateTask}>
                       Save
+                    </button>
+
+                    <button
+                      className="close"
+                      onClick={() => setEditMode(false)}>
+                      Close
                     </button>
                   </>
                 ) : (
@@ -201,11 +215,9 @@ const SingleTask = ({
                 )}
               </div>
 
-              {editMode && (
-                <button className="close" onClick={() => setEditMode(false)}>
-                  Close
-                </button>
-              )}
+              {/* {editMode && (
+               
+              )} */}
 
               <div className="resp">
                 <div className="reporter">
@@ -218,18 +230,16 @@ const SingleTask = ({
                 </div>
               </div>
             </div>
-          
 
             <div className="down">
-          
               <div className="comment">
                 <div className="field">
                   <textarea
                     value={text}
                     onChange={(e) => setText(e.target.value)}
                   />
-                  <button onClick={(e) => addComment(e)}>Add</button>
                 </div>
+                <button onClick={(e) => addComment(e)}>Add</button>
 
                 <div className="text">
                   {getComment.map((comment) => (
@@ -249,8 +259,6 @@ const SingleTask = ({
                 </div>
               </div>
             </div>
-
-          
           </div>
         </div>
       )}

@@ -267,23 +267,23 @@
       background-color: white;
       border-radius: 8px;
       padding: 16px;
-      max-width: 700px;
-      width: 120%;
+      // max-width: 1500px;
+      width: 55%;
       max-height: calc(130% - 32px);
+      height: 650px;
       overflow-y: auto;
 
       .top {
         display: flex;
         align-items: center;
         margin-bottom: 16px;
-       
 
         .icon {
           margin-right: 8px;
         }
 
         .closeBtn {
-          margin-left: 580px;
+          margin-left: 850px;
           background-color: #242424;
           padding: 10px;
           color: white;
@@ -296,9 +296,19 @@
           margin-bottom: 16px;
 
           textarea {
-            width: 110%;
-            min-height: 300px;
+            // width: 80%;
+            min-height: 100px;
+            // resize: vertical;
+            // min-height: 40px;
             resize: vertical;
+            width: 100%;
+            color: aqua;
+            
+           
+          }
+
+          button {
+            margin: 10px;
           }
 
           .update {
@@ -364,10 +374,6 @@
               min-height: 40px;
               resize: vertical;
               width: 600px;
-            }
-
-            button {
-              margin-left: 8px;
             }
           }
 
