@@ -3,6 +3,7 @@ import axios from "axios";
 import { AppContext } from "../../../context/context";
 import { MdConstruction } from "react-icons/md";
 import "./singletask.scss";
+import { CiLogin } from "react-icons/ci";
 
 const SingleTask = ({
   task,
@@ -16,31 +17,28 @@ const SingleTask = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskDetails, setTaskDetails] = useState(task);
   const [editMode, setEditMode] = useState(false);
-  const [editDescription, setEditDescription] = useState("");
+  // const [editDescription, setEditDescription] = useState(
+  //   task?.description || ""
+  // );
+  // const [editInprogressDescription, setEditInprogressDescription] = useState(
+  //   taskInProg?.description || ""
+  // );
+
+  const [editDescription, setEditDescription] = useState(
+    task?.description || taskInProg?.description || ""
+  );
+
   // const [commentMode, setCommentMode] = useState(true);
   const [getComment, setgetComment] = useState([]);
   const [text, setText] = useState("");
+
+  console.log(taskInProg);
+  console.log(task);
 
   const closeModal = () => {
     setIsModalOpen(false);
     fetchTaskDetails();
     window.location.href = "/tasks";
-  };
-
-  const upDateTask = async () => {
-    try {
-      await axios.put(`http://localhost:8000/api/tasks/task/${task.id}`, {
-        description: editDescription,
-      });
-      setTaskDetails((prevDetails) => ({
-        ...prevDetails,
-        description: editDescription,
-      }));
-
-      setEditMode(false);
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   //fetch task details
@@ -84,6 +82,39 @@ const SingleTask = ({
   const handleDragOver = (event) => {
     event.preventDefault();
   };
+
+  //update task
+
+  const upDateTask = async () => {
+    try {
+      if (taskInProg) {
+        await axios.put(
+          `http://localhost:8000/api/inprogress/task/${taskInProg.id}`,
+          {
+            description: editDescription,
+          }
+        );
+      } else if (task) {
+        await axios.put(`http://localhost:8000/api/tasks/task/${task.id}`, {
+          description: editDescription,
+        });
+      }
+
+      setTaskDetails((prevDetails) => ({
+        ...prevDetails,
+        description: editDescription,
+      }));
+
+      setEditMode(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //
+
+  console.log(taskInProg?.id);
+  console.log(task.id);
 
   // create comment
   const addComment = async (e) => {
@@ -141,12 +172,17 @@ const SingleTask = ({
     getComments();
   }, [text]);
 
-
   const handleEditMode = () => {
     setEditMode(true);
     // setEditDescription(taskDetails?.description);
   };
+
+  // console.log(task.id);
+  // console.log(taskInProg.id)
+
+  //delete single task 
   
+
   return (
     <div
       className="task-container"
@@ -188,15 +224,16 @@ const SingleTask = ({
             </div>
 
             <div className="center">
-              <div
-                className="desc"
-                onClick={handleEditMode}>
+              <div className="desc" onClick={handleEditMode}>
                 {editMode ? (
                   <>
                     <textarea
-                      value={taskDetails?.description || taskInProg?.description}
-                      onChange={(e) => setEditDescription(e.target.value)}
+                      value={editDescription || taskInProg.description}
+                      onChange={(e) => {
+                        setEditDescription(e.target.value);
+                      }}
                     />
+
                     <button className="update" onClick={upDateTask}>
                       Save
                     </button>
@@ -208,10 +245,10 @@ const SingleTask = ({
                     </button>
                   </>
                 ) : (
-                  <>
-                    <span>Description:</span>
-                    <p>{taskDetails?.description || taskInProg?.description}</p>
-                  </>
+                  <div className="desc">
+                    <span className="title">Description:</span>
+                    <span className="text">{taskDetails?.description || taskInProg?.description}</span>
+                  </div>
                 )}
               </div>
 
@@ -257,7 +294,13 @@ const SingleTask = ({
                     </>
                   ))}
                 </div>
+
+             
               </div>
+              <div className="delete">
+              <button>Delete</button>
+              </div>
+            
             </div>
           </div>
         </div>

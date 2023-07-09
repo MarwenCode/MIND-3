@@ -85,7 +85,7 @@ export const getSingleTask = (req, res) => {
         return res.status(404).json("Task not found");
       }
       return res.status(200).json("Task updated");
-    });
+    })
   };
 
 

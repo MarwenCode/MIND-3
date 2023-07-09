@@ -76,3 +76,25 @@ export const getSingleInprogressTask = (req, res) => {
 };
 
 
+//update the task from the inprogress table
+// Update the task from the InProgress table
+export const updateTaskInProgress = (req, res) => {
+  const taskId = req.params.id;
+  const { description } = req.body;
+  const query = "UPDATE inprogress SET description = ? WHERE id = ?";
+  const values = [description, taskId];
+  DataBase.query(query, values, (error, result) => {
+    if (error) {
+      return res.status(500).json(error);
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json("Task not found in InProgress");
+    }
+    return res.status(200).json("Task updated in InProgress");
+  });
+};
+
+
+
+
+

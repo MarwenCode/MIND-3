@@ -256,7 +256,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 110%;
+    width: 120%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     display: flex;
@@ -303,8 +303,6 @@
             resize: vertical;
             width: 100%;
             color: aqua;
-            
-           
           }
 
           button {
@@ -315,13 +313,27 @@
             margin-top: 8px;
           }
 
-          span {
-            font-weight: bold;
-          }
-
           p {
             margin-top: 8px;
           }
+          .desc {
+            
+            margin-left: -840px;
+
+            .text {
+              
+            }
+
+            .title {
+              color: #242424;
+              font-weight: 550;
+
+            }
+
+          
+          }
+
+         
         }
 
         .close {
@@ -411,6 +423,15 @@
                 margin-left: 50px;
               }
             }
+          }
+        }
+
+        .delete {
+          position: absolute;
+            margin-left: 900px;
+            margin-top: 400px;
+          button {
+          
           }
         }
       }

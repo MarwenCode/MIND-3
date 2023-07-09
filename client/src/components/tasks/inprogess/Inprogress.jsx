@@ -43,6 +43,9 @@ const Inprogress = ({setBacklogTasks, onDragStart }) => {
     console.log("Drag Over");
   };
 
+
+
+
   return (
     <div className="inprogress" onDrop={handleDrop} onDragOver={handleDragOver}>
       <div className="section">
