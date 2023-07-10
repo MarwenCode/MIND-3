@@ -96,5 +96,22 @@ export const updateTaskInProgress = (req, res) => {
 
 
 
+//dekete inprogress tasks
+export const deleteTask = (req, res) => {
+  const taskId= req.params.id;
+  console.log("deleting task with id:", taskId);
+
+  const query = "DELETE FROM inprogress WHERE id = ?";
+  DataBase.query(query, [taskId] , (error, data) => {
+    if (error) {
+      res.json(error);
+    } else {
+      res.status(200).json("task deleted ");
+      console.log("task deleted successfully");
+    }
+  });
+};
+
+
 
 

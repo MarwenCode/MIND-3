@@ -181,7 +181,25 @@ const SingleTask = ({
   // console.log(taskInProg.id)
 
   //delete single task 
-  
+
+  const deleteTask = async () => {
+    try {
+    
+      if (taskInProg) {
+        await axios.delete(
+          `http://localhost:8000/api/inprogress/task/${taskInProg.id}`);
+      } else if (task) {
+        await axios.delete(`http://localhost:8000/api/tasks/task/${task.id}`);
+      }
+      setIsModalOpen(false)
+      window.location.href = "/tasks";
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  console.log(taskDetails?.id)
+
 
   return (
     <div
@@ -197,7 +215,7 @@ const SingleTask = ({
           <span className="value">{taskDetails?.status}</span>
         </div>
         <div className="task">
-          <span className="prop"> Task: </span>
+          <span className="prop"> Task:</span>
           <span className="value">{taskDetails?.description}</span>
         </div>
         <div className="task">
@@ -216,7 +234,7 @@ const SingleTask = ({
           <div className="modal-content">
             <div className="top">
               <span className="icon">
-                <MdConstruction /> task: {taskDetails?.id}
+              <MdConstruction /> task: <span className="id">{task?.id}</span>   
               </span>
               <span className="closeBtn" onClick={closeModal}>
                 X
@@ -298,7 +316,7 @@ const SingleTask = ({
              
               </div>
               <div className="delete">
-              <button>Delete</button>
+              <button onClick={deleteTask} >Delete</button>
               </div>
             
             </div>

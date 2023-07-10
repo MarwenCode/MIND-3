@@ -89,5 +89,22 @@ export const getSingleTask = (req, res) => {
   };
 
 
+  //delete task
+  export const deleteTask = (req, res) => {
+    const taskId= req.params.id;
+    console.log("deleting task with id:", taskId);
+
+    const query = "DELETE FROM tasks WHERE id = ?";
+    DataBase.query(query, [taskId] , (error, data) => {
+      if (error) {
+        res.json(error);
+      } else {
+        res.status(200).json("task deleted ");
+        console.log("task deleted successfully");
+      }
+    });
+  };
+
+
 
   

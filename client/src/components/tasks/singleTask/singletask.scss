@@ -270,7 +270,7 @@
       // max-width: 1500px;
       width: 55%;
       max-height: calc(130% - 32px);
-      height: 650px;
+      height: 550px;
       overflow-y: auto;
 
       .top {
@@ -280,6 +280,10 @@
 
         .icon {
           margin-right: 8px;
+
+          .id {
+            font-weight: 300;
+          }
         }
 
         .closeBtn {
@@ -376,6 +380,14 @@
       .down {
         margin-top: 16px;
 
+
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        gap: 420px;
+        margin-top: 20px;
+
         .comment {
           .field {
             display: flex;
@@ -427,10 +439,18 @@
         }
 
         .delete {
-          position: absolute;
-            margin-left: 900px;
-            margin-top: 400px;
-          button {
+          // position: absolute;
+            // margin-left: 900px;
+            margin-top: -400px;
+
+
+            margin-left: 850px;
+            // position: relative;
+          button{
+            // position: absolute; 
+            // bottom: -350px;
+          margin-top: auto;
+            margin-bottom: auto;
           
           }
         }
