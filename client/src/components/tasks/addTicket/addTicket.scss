@@ -2,6 +2,7 @@
   
     height: 100vh;
     position: absolute;
+    margin-top: 60px;
 
 
     left: 0;
@@ -33,6 +34,7 @@
                 }
             }
         }
+        
 
         .inputField {
             width: 100%;
@@ -56,6 +58,18 @@
 
 
     
+    }
+
+    .close {
+        margin-bottom: 1050px;
+        margin-left: 50px;
+        z-index: 1;
+
+       
+
+        button {
+           
+        }
     }
 
 }

@@ -11,7 +11,6 @@ const AddTicket = ({ addTicketMode, setAddTicketMode }) => {
   const [assigned, setAssigned] = useState("");
   const [status, setStatus] = useState("Open");
 
-
   const createTask = async (e) => {
     e.preventDefault();
 
@@ -51,12 +50,14 @@ const AddTicket = ({ addTicketMode, setAddTicketMode }) => {
   return (
     <div className="addticket">
       {addTicketMode && (
-        <form>
+        <>
+                <form>
           <textarea
             className="inputField"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
+
           <div className="resp">
             <div className="reporter">
               <span> Reporter : {currentUser.username}</span>
@@ -70,7 +71,7 @@ const AddTicket = ({ addTicketMode, setAddTicketMode }) => {
                 <option value="">-- Select a user --</option>
                 {allUsers.map((user) => (
                   <option key={user.id} value={user.username}>
-                  {user.username}
+                    {user.username}
                   </option>
                 ))}
               </select>
@@ -98,6 +99,13 @@ const AddTicket = ({ addTicketMode, setAddTicketMode }) => {
             Add a card
           </button>
         </form>
+
+        <div className="close">
+             <button>X</button>
+        </div>
+        </>
+
+           
       )}
     </div>
   );
