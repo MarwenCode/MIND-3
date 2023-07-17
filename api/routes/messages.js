@@ -1,17 +1,12 @@
 import express from "express";
 import { sendMessage, getMessages } from "../controllers/Messages.js";
 
-const messageRoutes = express.Router()
-
-// messageRoutes.post("/message", createMessage)
+const messageRoutes = express.Router();
 
 messageRoutes.post("/sendmessage/:id", sendMessage);
 messageRoutes.get("/:user1/:user2", getMessages);
-// messageRoutes.get("/:toUser", getAllMessagesForRecipient)
 
-
-export default messageRoutes
-
+export default messageRoutes;
 
 // import express from "express";
 // import { postMessage, getMessages } from "../controllers/messageControllers.js";

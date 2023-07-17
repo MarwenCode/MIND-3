@@ -30,13 +30,10 @@ const Notes = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
-
-
   //sratchNote
   const [descScratchNote, setDescScratchNote] = useState("");
   const [EditDescSractNote, setEditScratchNote] = useState("");
   const [getScratchNote, setGetScratchNote] = useState([]);
-
 
   //edited notes
   const [editedTitle, setEditedTitle] = useState("");
@@ -330,10 +327,7 @@ const Notes = () => {
     }
   }, [selectedNote]);
 
-
-  //create Scratch Note 
-
-
+  //create Scratch Note
 
   // const handleInputChange = (event) => {
   //   const { value } = event.target;
@@ -356,8 +350,7 @@ const Notes = () => {
   //   }
   // };
 
-
-  // //get scratchNote 
+  // //get scratchNote
 
   // useEffect(() => {
 
@@ -365,19 +358,14 @@ const Notes = () => {
   //    const res =  await axios.get('http://localhost:8000/api/notes/scratchnote');
   //    console.log(res.data)
   //    setGetScratchNote(res.data)
-    
+
   //   }
 
   //   getScratchnote()
 
-
   // }, [])
 
   // console.log(getScratchNote)
- 
-  
-  
-
 
   return (
     <div className="notes">
@@ -512,19 +500,12 @@ const Notes = () => {
           }
         }}>
         {scratchOpen ? (
-         
-         <textarea
-         className="scratchOpen"
-        //  value={getScratchNote.map((note) => note.description).join('\n')}
-        //  onChange={handleInputChange}
-        value={selectedNote}
-         
-       />
-       
-       
-          
-         
-     
+          <textarea
+            className="scratchOpen"
+            //  value={getScratchNote.map((note) => note.description).join('\n')}
+            //  onChange={handleInputChange}
+            // value={selectedNote}
+          />
         ) : (
           <div className="markInput">
             <section>

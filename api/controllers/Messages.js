@@ -1,17 +1,12 @@
 import { DataBase } from "../connect.js";
 
-
-
-
-
-
-
 export const sendMessage = (req, res) => {
   console.log("sendMessage function called");
   const { sender, receiver, text } = req.body;
 
   // Insert the message into the specific-messages table
-  const sql = "INSERT INTO `specific-messages` (sender, receiver, text) VALUES (?, ?, ?)";
+  const sql =
+    "INSERT INTO `specific-messages` (sender, receiver, text) VALUES (?, ?, ?)";
 
   DataBase.query(sql, [sender, receiver, text], (err, result) => {
     if (err) {
@@ -25,21 +20,14 @@ export const sendMessage = (req, res) => {
   });
 };
 
-
-
-
-
-
 export const getMessages = (req, res) => {
   const { user1, user2 } = req.params;
-  console.log('user1:', user1);
-  console.log('user2:', user2);
+  console.log("user1:", user1);
+  console.log("user2:", user2);
 
   const sql = `SELECT * FROM \`specific-messages\` WHERE (sender = ? AND receiver = ?) OR (sender = ? AND receiver = ?) ORDER BY created_at ASC`;
- 
 
-
-  console.log('SQL:', sql);
+  console.log("SQL:", sql);
 
   DataBase.query(sql, [user1, user2, user2, user1], (err, result) => {
     if (err) {
@@ -51,7 +39,6 @@ export const getMessages = (req, res) => {
     return res.status(200).json(result);
   });
 };
-
 
 //create a Task
 
@@ -72,56 +59,46 @@ export const getMessages = (req, res) => {
 //       if (data) return res.status(200).json("message created");
 //     });
 //   };
-  
 
-  //get all messages
-  
-  // export const getAllMessages = (req, res) => {
-  //   const sql = "SELECT * FROM messages";
-  //   DataBase.query(sql, (error, data) => {
-  //       if (error) {
-  //           console.log(error)
-  //           return res.json({error: error.message})
-  //       }
-  //       return res.json(data)
-  //   })
-  // }
+//get all messages
 
-  //get messages between two users
-  // export const getAllMessagesForRecipient = (req, res) => {
-  //   const sender = req.user.username;
-  //   const receiver = req.params.friend;
-  
-  //   const sql = `
-  //     SELECT *
-  //     FROM specific-messages
-  //     WHERE (sender = ? AND receiver = ?) OR (sender = ? AND receiver = ?)
-  //     ORDER BY react_at ASC`;
-  //   const values = [sender, receiver, receiver, sender];
-  
-  //   DataBase.query(sql, values, (error, data) => {
-  //     if (error) {
-  //       return res.status(500).json({ error: error.message });
-  //     }
-  //     if (data.length === 0) {
-  //       return res.status(404).json({ error: 'No messages found' });
-  //     }
-  //     return res.json(data);
-  //   });
-  // };
-  
+// export const getAllMessages = (req, res) => {
+//   const sql = "SELECT * FROM messages";
+//   DataBase.query(sql, (error, data) => {
+//       if (error) {
+//           console.log(error)
+//           return res.json({error: error.message})
+//       }
+//       return res.json(data)
+//   })
+// }
 
+//get messages between two users
+// export const getAllMessagesForRecipient = (req, res) => {
+//   const sender = req.user.username;
+//   const receiver = req.params.friend;
+
+//   const sql = `
+//     SELECT *
+//     FROM specific-messages
+//     WHERE (sender = ? AND receiver = ?) OR (sender = ? AND receiver = ?)
+//     ORDER BY react_at ASC`;
+//   const values = [sender, receiver, receiver, sender];
+
+//   DataBase.query(sql, values, (error, data) => {
+//     if (error) {
+//       return res.status(500).json({ error: error.message });
+//     }
+//     if (data.length === 0) {
+//       return res.status(404).json({ error: 'No messages found' });
+//     }
+//     return res.json(data);
+//   });
+// };
 
 // Post a new message
 
-
-
-
-
-
-
-
-//get messages between tow users 
+//get messages between tow users
 // export const getMessages = (req, res) => {
 //   const sender = req.user.username; // assuming you have authenticated the user with passport
 //   const receiver = req.params.friend;
@@ -135,18 +112,6 @@ export const getMessages = (req, res) => {
 //     return res.status(200).json(result);
 //   });
 // };
-
-
-
-
-
-
-
-
-
-
-
-
 
 // export const getMessages = (req, res) => {
 //   const { user1, user2 } = req.params;
@@ -165,17 +130,16 @@ export const getMessages = (req, res) => {
 
 //     // Query to get the count of unread messages for each sender
 //     const unreadCountSql = `
-//     SELECT 
-//       sender, 
-//       COUNT(*) as unread_count 
-//     FROM 
-//       \`specific-messages\` 
-//     WHERE 
-//       receiver = ? AND is_read = 0 
-//     GROUP BY 
+//     SELECT
+//       sender,
+//       COUNT(*) as unread_count
+//     FROM
+//       \`specific-messages\`
+//     WHERE
+//       receiver = ? AND is_read = 0
+//     GROUP BY
 //       sender
 //   `;
-  
 
 //     DataBase.query(unreadCountSql, [user1], (err, unreadCountResult) => {
 //       if (err) {
@@ -193,16 +157,12 @@ export const getMessages = (req, res) => {
 //           unread_count: unreadCount ? unreadCount.unread_count : 0,
 //         };
 //       });
-      
 
 //       console.log(messages);
 //       return res.status(200).json(messages);
 //     });
 //   });
 // };
-
-
-
 
 // export const markMessageAsRead = (req, res) => {
 //   const { messageId } = req.params;
@@ -222,33 +182,21 @@ export const getMessages = (req, res) => {
 //   });
 // };
 
-
-
-
-
-
-
-
-
-
-
-
-
 // export const getMessages = (req, res) => {
 //   const { user1, user2 } = req.params;
 //   console.log('user1:', user1);
 //   console.log('user2:', user2);
 
 //   const sql = `
-//     SELECT 
+//     SELECT
 //       m.sender,
 //       m.receiver,
 //       COUNT(CASE WHEN m.is_read = 0 AND m.receiver = ? THEN 1 END) as unread_count
-//     FROM 
+//     FROM
 //       \`specific-messages\` m
-//     WHERE 
+//     WHERE
 //       (m.sender = ? AND m.receiver = ?) OR (m.sender = ? AND m.receiver = ?)
-//     GROUP BY 
+//     GROUP BY
 //       m.sender, m.receiver`;
 
 //   console.log('SQL:', sql);
@@ -264,18 +212,17 @@ export const getMessages = (req, res) => {
 //   });
 // };
 
-
 // export const getMessages = (req, res) => {
 //   const { user1, user2 } = req.params;
 
 //   const sql = `
-//     SELECT 
+//     SELECT
 //       *
-//     FROM 
+//     FROM
 //       \`specific-messages\` m
-//     WHERE 
+//     WHERE
 //       (m.sender = ? AND m.receiver = ?) OR (m.sender = ? AND m.receiver = ?)
-//     ORDER BY 
+//     ORDER BY
 //       m.created_at ASC`;
 
 //   DataBase.query(sql, [user1, user2, user2, user1], (err, result) => {
@@ -289,25 +236,22 @@ export const getMessages = (req, res) => {
 //   });
 // };
 
-
-
-
 // export const getMessages = (req, res) => {
 //   const { user1, user2 } = req.params;
 //   console.log('user1:', user1);
 //   console.log('user2:', user2);
 
 //   const sql = `
-//     SELECT 
+//     SELECT
 //       m.*,
 //       COUNT(CASE WHEN m.is_read = 0 AND m.receiver = ? THEN 1 END) as unread_count
-//     FROM 
+//     FROM
 //       \`specific-messages\` m
-//     WHERE 
+//     WHERE
 //       (m.sender = ? AND m.receiver = ?) OR (m.sender = ? AND m.receiver = ?)
-//     GROUP BY 
+//     GROUP BY
 //       m.id
-//     ORDER BY 
+//     ORDER BY
 //       m.created_at ASC`;
 
 //   console.log('SQL:', sql);
@@ -322,18 +266,6 @@ export const getMessages = (req, res) => {
 //     return res.status(200).json(result);
 //   });
 // };
-
-
-
-
-
-
-  
-  
-
-
-
-
 
 // export const getMessages = (req, res) => {
 //   if (!req.user || !req.user.id) {

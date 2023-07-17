@@ -3,7 +3,8 @@ import SingleTask from "../singleTask/SingleTask";
 import "./backlog.scss";
 import axios from "axios";
 
-const Backlog = ({ tasks, onDragStart, onDrop, isFetching, onDragEnd }) => {
+const Backlog = ({ tasks, onDragStart, onDrop, isFetching, onDragEnd, filteredTasks }) => {
+ 
   const [backlogTasks, setBacklogTasks] = useState([]);
 
   // useEffect(() => {
@@ -28,21 +29,31 @@ const Backlog = ({ tasks, onDragStart, onDrop, isFetching, onDragEnd }) => {
         {isFetching ? (
           <p>Loading backlog tasks...</p>
         ) : (
+          
           <div className="center">
-            <div className="description">
-              {tasks.map((task) => (
-                <SingleTask
-                  key={task.id}
-                  task={task}
-                  draggable="true"
-                  onDragStart={(event) => onDragStart(event, task.id)}
-                  // onDrop={onDrop}
-                  onDragEnd={onDragEnd}
-                  data-task-id={task.id}
-                  className="singleTask"
-                />
-              ))}
-            </div>
+            
+            
+                <div className="description">
+                {tasks?.map((task) => (
+                 
+                  <SingleTask
+                    key={task.id}
+                    task={task}
+                    draggable="true"
+                    onDragStart={(event) => onDragStart(event, task.id)}
+                    // onDrop={onDrop}
+                    onDragEnd={onDragEnd}
+                    data-task-id={task.id}
+                    className="singleTask"
+                  />
+                ))}
+              </div>
+
+
+
+
+        
+          
           </div>
         )}
       </div>

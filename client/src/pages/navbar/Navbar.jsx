@@ -18,29 +18,20 @@ const Navbar = () => {
               <li className="item"> Notes </li>
             </Link>
             <Link to="/chat" className="link">
-          <li className="item"> Chat</li>
-        </Link>
+              <li className="item"> Chat</li>
+            </Link>
+            <Link to="/tasks" className="link">
+              <li className="item"> Tasks</li>
+            </Link>
 
             <div className="logout">
               <span>{currentUser?.username}</span>
-            
 
-              
-
-            
-              <span  onClick={logout}> Logout  </span>
+              <span onClick={logout}> Logout </span>
               <FiLogOut />
-           
-              
             </div>
           </>
         )}
-      
-
-        <Link to="/tasks" className="link">
-          <li className="item">   Tasks</li>
-        </Link>
-      
       </ul>
     </div>
   );

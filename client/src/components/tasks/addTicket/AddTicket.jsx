@@ -3,13 +3,13 @@ import { AppContext } from "../../../context/context";
 import "./addTicket.scss";
 import axios from "axios";
 
-const AddTicket = ({ addTicketMode, setAddTicketMode }) => {
+const AddTicket = ({ addTicketMode, setAddTicketMode, closeModal }) => {
   const { currentUser } = useContext(AppContext);
 
   const [description, setDescription] = useState("");
   const [allUsers, setAllusers] = useState([]);
   const [assigned, setAssigned] = useState("");
-  const [status, setStatus] = useState("Open");
+  const [status, setStatus] = useState("open");
 
   const createTask = async (e) => {
     e.preventDefault();
@@ -51,32 +51,37 @@ const AddTicket = ({ addTicketMode, setAddTicketMode }) => {
     <div className="addticket">
       {addTicketMode && (
         <>
-                <form>
-          <textarea
-            className="inputField"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
+          <form>
+            <textarea
+              className="inputField"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
 
-          <div className="resp">
-            <div className="reporter">
-              <span> Reporter : {currentUser.username}</span>
-            </div>
-            <div className="assign">
-              <label htmlFor="name-select">Assignee:</label>
-              <select
-                name="name"
-                id="name-select"
-                onChange={(e) => setAssigned(e.target.value)}>
-                <option value="">-- Select a user --</option>
-                {allUsers.map((user) => (
-                  <option key={user.id} value={user.username}>
-                    {user.username}
-                  </option>
-                ))}
-              </select>
-            </div>
-            {/* <div className="status">
+            <div className="resp">
+              <div className="reporter">
+                <span> Reporter : {currentUser.username}</span>
+              </div>
+              <div className="reporter">
+                <span> status : {status}</span>
+              </div>
+             
+      
+              <div className="assign">
+                <label htmlFor="name-select">Assignee:</label>
+                <select
+                  name="name"
+                  id="name-select"
+                  onChange={(e) => setAssigned(e.target.value)}>
+                  <option value="">-- Select a name --</option>
+                  {allUsers.map((user) => (
+                    <option key={user.id} value={user.username}>
+                      {user.username}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              {/* <div className="status">
               <label htmlFor="status-select">Status:</label>
               <select
               value={status}
@@ -89,23 +94,21 @@ const AddTicket = ({ addTicketMode, setAddTicketMode }) => {
                 <option>Closed</option>
               </select>
             </div> */}
+            </div>
+            <button
+              className="adBtn"
+              onClick={(e) => {
+                createTask(e);
+                setAddTicketMode(false); // reset addTicketMode after adding the task
+              }}>
+              Add a card
+            </button>
+          </form>
+
+          <div className="close">
+            <button onClick={closeModal}>X</button>
           </div>
-          <button
-            className="adBtn"
-            onClick={(e) => {
-              createTask(e);
-              setAddTicketMode(false); // reset addTicketMode after adding the task
-            }}>
-            Add a card
-          </button>
-        </form>
-
-        <div className="close">
-             <button>X</button>
-        </div>
         </>
-
-           
       )}
     </div>
   );

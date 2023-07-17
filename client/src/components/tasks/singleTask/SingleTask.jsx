@@ -180,26 +180,25 @@ const SingleTask = ({
   // console.log(task.id);
   // console.log(taskInProg.id)
 
-  //delete single task 
+  //delete single task
 
   const deleteTask = async () => {
     try {
-    
       if (taskInProg) {
         await axios.delete(
-          `http://localhost:8000/api/inprogress/task/${taskInProg.id}`);
+          `http://localhost:8000/api/inprogress/task/${taskInProg.id}`
+        );
       } else if (task) {
         await axios.delete(`http://localhost:8000/api/tasks/task/${task.id}`);
       }
-      setIsModalOpen(false)
+      setIsModalOpen(false);
       window.location.href = "/tasks";
     } catch (error) {
       console.log(error);
     }
   };
 
-  console.log(taskDetails?.id)
-
+  console.log(taskDetails?.id);
 
   return (
     <div
@@ -234,7 +233,7 @@ const SingleTask = ({
           <div className="modal-content">
             <div className="top">
               <span className="icon">
-              <MdConstruction /> task: <span className="id">{task?.id}</span>   
+                <MdConstruction /> task: <span className="id">{task?.id}</span>
               </span>
               <span className="closeBtn" onClick={closeModal}>
                 X
@@ -265,23 +264,25 @@ const SingleTask = ({
                 ) : (
                   <div className="desc">
                     <span className="title">Description:</span>
-                    <span className="text">{taskDetails?.description || taskInProg?.description}</span>
+                    <span className="text">
+                      {taskDetails?.description || taskInProg?.description}
+                    </span>
                   </div>
                 )}
               </div>
 
-              {/* {editMode && (
-               
-              )} */}
-
               <div className="resp">
                 <div className="reporter">
                   <span>Reporter: </span>
-                  <p>{taskDetails?.reporter}</p>
+                  <p>{taskDetails?.reporter  || taskInProg?.reporter}</p>
                 </div>
                 <div className="reporter">
                   <span>Assignees:</span>
-                  <p>{taskDetails?.assigned} test</p>
+                  <p>{taskDetails?.assigned || taskInProg?.assigned}</p>
+                </div>
+                <div className="reporter">
+                  <span>Status:</span>
+                  <p>{taskDetails?.status || taskInProg?.status}</p>
                 </div>
               </div>
             </div>
@@ -312,13 +313,10 @@ const SingleTask = ({
                     </>
                   ))}
                 </div>
-
-             
               </div>
               <div className="delete">
-              <button onClick={deleteTask} >Delete</button>
+                <button onClick={deleteTask}>Delete</button>
               </div>
-            
             </div>
           </div>
         </div>
