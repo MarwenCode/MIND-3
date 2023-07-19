@@ -8,7 +8,7 @@ const AddTicket = ({ addTicketMode, setAddTicketMode, closeModal }) => {
 
   const [description, setDescription] = useState("");
   const [allUsers, setAllusers] = useState([]);
-  const [assigned, setAssigned] = useState("");
+  const [assignee, setAssigned] = useState("");
   const [status, setStatus] = useState("open");
 
   const createTask = async (e) => {
@@ -18,7 +18,7 @@ const AddTicket = ({ addTicketMode, setAddTicketMode, closeModal }) => {
       description,
       created_at: new Date().toISOString().slice(0, 19).replace("T", " "),
       reporter: currentUser.username,
-      assigned,
+      assignee,
       status,
     };
 

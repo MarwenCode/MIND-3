@@ -24,6 +24,11 @@ const SingleTask = ({
   //   taskInProg?.description || ""
   // );
 
+  const [editStatus, setEditStatus] = useState(taskDetails?.status || taskInProg?.status);
+  const [editAssigned, setEditAssigned] = useState(taskDetails?.assigned || taskInProg?.assigned)
+
+  const [allUsers, setAllusers] = useState([]);
+
   const [editDescription, setEditDescription] = useState(
     task?.description || taskInProg?.description || ""
   );
@@ -92,6 +97,7 @@ const SingleTask = ({
           `http://localhost:8000/api/inprogress/task/${taskInProg.id}`,
           {
             description: editDescription,
+        
           }
         );
       } else if (task) {
@@ -103,6 +109,7 @@ const SingleTask = ({
       setTaskDetails((prevDetails) => ({
         ...prevDetails,
         description: editDescription,
+  
       }));
 
       setEditMode(false);
@@ -200,6 +207,71 @@ const SingleTask = ({
 
   console.log(taskDetails?.id);
 
+
+
+  //getAll users
+  useEffect(() => {
+    const getAllusers = async () => {
+      const res = await axios.get("http://localhost:8000/api/auth/users");
+      console.log(res.data);
+      setAllusers(res.data);
+    };
+
+    getAllusers();
+  }, []);
+
+//edit the status and assigned task
+  const handleAssigneesChange = (value) => {
+    setEditAssigned(value);
+  };
+  
+  const handleStatusChange = (value) => {
+    setEditStatus(value);
+  };
+  
+  // New function to handle updating status and assignee
+// ...
+
+// New function to handle updating status and assignee
+const updateStatusAndAssignee = async () => {
+  try {
+    if (taskInProg) {
+      await axios.put(
+        `http://localhost:8000/api/inprogress/task/${taskInProg.id}`,
+        {
+          status: editStatus,
+          assignee: editAssigned,
+        }
+      );
+    } else if (task) {
+      await axios.put(`http://localhost:8000/api/tasks/task/${task.id}`, {
+        status: editStatus,
+        assignee: editAssigned,
+      });
+    }
+
+    // Update the taskDetails state
+    setTaskDetails((prevDetails) => ({
+      ...prevDetails,
+      status: editStatus,
+      assigned: editAssigned,
+    }));
+
+    setEditMode(false);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+  
+  useEffect(() => {
+    // Call the update function when there's a change in status or assignee
+    updateStatusAndAssignee();
+  }, [editStatus, editAssigned]);
+
+ 
+
   return (
     <div
       className="task-container"
@@ -274,15 +346,31 @@ const SingleTask = ({
               <div className="resp">
                 <div className="reporter">
                   <span>Reporter: </span>
-                  <p>{taskDetails?.reporter  || taskInProg?.reporter}</p>
+                  <p>{taskDetails?.reporter}</p>
                 </div>
                 <div className="reporter">
                   <span>Assignees:</span>
-                  <p>{taskDetails?.assigned || taskInProg?.assigned}</p>
+                  <select
+                    value={editAssigned}
+                    onChange={(e) => handleAssigneesChange(e.target.value)}>
+                    <option value="">-- Select an assignee --</option>
+                    {allUsers?.map((user) => (
+                      <option key={user.id} value={user.username}>
+                        {user.username}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div className="reporter">
                   <span>Status:</span>
-                  <p>{taskDetails?.status || taskInProg?.status}</p>
+                  <select
+                    value={editStatus}
+                    onChange={(e) => handleStatusChange(e.target.value)}>
+                    <option value="">-- Select a status --</option>
+                    <option value="Open">Open</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Done">Done</option>
+                  </select>
                 </div>
               </div>
             </div>

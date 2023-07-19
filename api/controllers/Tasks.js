@@ -11,7 +11,7 @@ export const createTask = (req, res) => {
     description: req.body.description,
     reporter: req.body.reporter || "",
     created_at: req.body.created_at,
-    assigned: req.body.assigned,
+    assignee: req.body.assigned,
     status: req.body.status // Include the status property
   };
 
@@ -71,12 +71,51 @@ export const getSingleTask = (req, res) => {
   //   });
   // };
 
+//update the description only 
+  // export const updateTask = (req, res) => {
+  //   const taskId = req.params.id;
+  //   const { description } = req.body;
+  //   const query = "UPDATE tasks SET description = ? WHERE id = ?";
+  //   const values = [description, taskId];
+  //   DataBase.query(query, values, (error, result) => {
+  //     if (error) {
+  //       return res.status(500).json(error);
+  //     }
+  //     if (result.affectedRows === 0) {
+  //       return res.status(404).json("Task not found");
+  //     }
+  //     return res.status(200).json("Task updated");
+  //   })
+  // };
 
   export const updateTask = (req, res) => {
     const taskId = req.params.id;
-    const { description } = req.body;
-    const query = "UPDATE tasks SET description = ? WHERE id = ?";
-    const values = [description, taskId];
+    const { description, status, assignee } = req.body;
+  
+    // Prepare the SQL query and values based on the provided fields
+    let query = "UPDATE tasks SET";
+    const values = [];
+  
+    if (description !== undefined) {
+      query += " description = ?";
+      values.push(description);
+    }
+  
+    if (status !== undefined) {
+      if (values.length > 0) query += ",";
+      query += " status = ?";
+      values.push(status);
+    }
+  
+    if (assignee !== undefined) {
+      if (values.length > 0) query += ",";
+      query += " assignee = ?";
+      values.push(assignee);
+    }
+  
+    query += " WHERE id = ?";
+    values.push(taskId);
+  
     DataBase.query(query, values, (error, result) => {
       if (error) {
         return res.status(500).json(error);
@@ -85,8 +124,32 @@ export const getSingleTask = (req, res) => {
         return res.status(404).json("Task not found");
       }
       return res.status(200).json("Task updated");
-    })
+    });
   };
+  
+
+
+  //update the status and the assignee :
+  // Update the status and assignee
+export const updateTaskStatusAndAssignee = (req, res) => {
+  const taskId = req.params.id;
+  const { status, assignee } = req.body;
+  const query = "UPDATE tasks SET status = ?, assignee = ? WHERE id = ?";
+  const values = [status, assignee, taskId];
+  DataBase.query(query, values, (error, result) => {
+    if (error) {
+      return res.status(500).json(error);
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json("Task not found");
+    }
+    return res.status(200).json("Task status and assignee updated");
+  });
+};
+
+
+
+
 
 
   //delete task

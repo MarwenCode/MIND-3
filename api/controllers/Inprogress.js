@@ -78,19 +78,77 @@ export const getSingleInprogressTask = (req, res) => {
 
 //update the task from the inprogress table
 // Update the task from the InProgress table
+// export const updateTaskInProgress = (req, res) => {
+//   const taskId = req.params.id;
+//   const { description } = req.body;
+//   const query = "UPDATE inprogress SET description = ? WHERE id = ?";
+//   const values = [description, taskId];
+//   DataBase.query(query, values, (error, result) => {
+//     if (error) {
+//       return res.status(500).json(error);
+//     }
+//     if (result.affectedRows === 0) {
+//       return res.status(404).json("Task not found in InProgress");
+//     }
+//     return res.status(200).json("Task updated in InProgress");
+//   });
+// };
+
 export const updateTaskInProgress = (req, res) => {
   const taskId = req.params.id;
-  const { description } = req.body;
-  const query = "UPDATE inprogress SET description = ? WHERE id = ?";
-  const values = [description, taskId];
+  const { description, status, assignee } = req.body;
+
+  // Prepare the SQL query and values based on the provided fields
+  let query = "UPDATE inprogress SET";
+  const values = [];
+
+  if (description !== undefined) {
+    query += " description = ?";
+    values.push(description);
+  }
+
+  if (status !== undefined) {
+    if (values.length > 0) query += ",";
+    query += " status = ?";
+    values.push(status);
+  }
+
+  if (assignee !== undefined) {
+    if (values.length > 0) query += ",";
+    query += " assignee = ?";
+    values.push(assignee);
+  }
+
+  query += " WHERE id = ?";
+  values.push(taskId);
+
   DataBase.query(query, values, (error, result) => {
     if (error) {
       return res.status(500).json(error);
     }
     if (result.affectedRows === 0) {
-      return res.status(404).json("Task not found in InProgress");
+      return res.status(404).json("Task not found");
     }
-    return res.status(200).json("Task updated in InProgress");
+    return res.status(200).json("Task updated");
+  });
+};
+
+
+//update status and assignee
+
+export const updateTaskStatusAndAssignee = (req, res) => {
+  const taskId = req.params.id;
+  const { status, assignee } = req.body;
+  const query = "UPDATE inprogress SET status = ?, assignee = ? WHERE id = ?";
+  const values = [status, assignee, taskId];
+  DataBase.query(query, values, (error, result) => {
+    if (error) {
+      return res.status(500).json(error);
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json("Task not found");
+    }
+    return res.status(200).json("Task status and assignee updated");
   });
 };
 
