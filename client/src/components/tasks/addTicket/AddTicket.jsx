@@ -106,7 +106,10 @@ const AddTicket = ({ addTicketMode, setAddTicketMode, closeModal }) => {
           </form>
 
           <div className="close">
-            <button onClick={closeModal}>X</button>
+            <button onClick={closeModal}> 
+            <span>close </span>
+            
+            X</button>
           </div>
         </>
       )}
