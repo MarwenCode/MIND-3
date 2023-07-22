@@ -434,6 +434,14 @@
               .date {
                 margin-left: 50px;
               }
+
+              .avatar {
+                width: 70px;
+                font-size: 20px;
+                object-fit: cover;
+                border-radius: 50%;
+              
+              }
             }
           }
         }

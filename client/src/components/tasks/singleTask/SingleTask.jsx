@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { AppContext } from "../../../context/context";
 import { MdConstruction } from "react-icons/md";
+import { RxAvatar } from "react-icons/rx";
 import "./singletask.scss";
 import { CiLogin } from "react-icons/ci";
 
@@ -25,7 +26,7 @@ const SingleTask = ({
   // );
 
   const [editStatus, setEditStatus] = useState(taskDetails?.status || taskInProg?.status);
-  const [editAssigned, setEditAssigned] = useState(taskDetails?.assigned || taskInProg?.assigned)
+  const [editAssigned, setEditAssigned] = useState(taskDetails?.assignee || taskInProg?.assigned)
 
   const [allUsers, setAllusers] = useState([]);
 
@@ -298,6 +299,10 @@ const updateStatusAndAssignee = async () => {
           <span className="prop"> created-at:</span>
           <span className="value">{taskDetails?.created_at}</span>
         </div>
+        <div className="task">
+          <span className="prop"> assignee:</span>  hgffd
+          <span className="value">{taskDetails?.assignee}</span>
+        </div>
       </div>
 
       {isModalOpen && (
@@ -353,7 +358,7 @@ const updateStatusAndAssignee = async () => {
                   <select
                     value={editAssigned}
                     onChange={(e) => handleAssigneesChange(e.target.value)}>
-                    <option value="">-- Select an assignee --</option>
+                    <option>-- Select an assignee --</option>
                     {allUsers?.map((user) => (
                       <option key={user.id} value={user.username}>
                         {user.username}
@@ -366,7 +371,7 @@ const updateStatusAndAssignee = async () => {
                   <select
                     value={editStatus}
                     onChange={(e) => handleStatusChange(e.target.value)}>
-                    <option value="">-- Select a status --</option>
+                    <option>-- Select a status --</option>
                     <option value="Open">Open</option>
                     <option value="In Progress">In Progress</option>
                     <option value="Done">Done</option>
@@ -389,7 +394,9 @@ const updateStatusAndAssignee = async () => {
                   {getComment.map((comment) => (
                     <>
                       <div className="left">
+                      <span className="avatar"> <RxAvatar/> </span>
                         <span className="username">{comment.username}</span>
+                      
                         <span className="date">
                           {new Date(comment.created_at).toDateString()}
                         </span>
