@@ -300,7 +300,7 @@ const updateStatusAndAssignee = async () => {
           <span className="value">{taskDetails?.created_at}</span>
         </div>
         <div className="task">
-          <span className="prop"> assignee:</span>  hgffd
+          <span className="prop"> assignee:</span>
           <span className="value">{taskDetails?.assignee}</span>
         </div>
       </div>
@@ -350,7 +350,7 @@ const updateStatusAndAssignee = async () => {
 
               <div className="resp">
                 <div className="reporter">
-                  <span>Reporter: </span>
+                  <span className="element">Reporter: </span>
                   <p>{taskDetails?.reporter}</p>
                 </div>
                 <div className="reporter">
@@ -367,7 +367,7 @@ const updateStatusAndAssignee = async () => {
                   </select>
                 </div>
                 <div className="reporter">
-                  <span>Status:</span>
+                  <span className="status"> Status:   </span>
                   <select
                     value={editStatus}
                     onChange={(e) => handleStatusChange(e.target.value)}>
