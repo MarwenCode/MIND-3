@@ -3,6 +3,7 @@ import axios from "axios";
 import { AppContext } from "../../../context/context";
 import { MdConstruction } from "react-icons/md";
 import { RxAvatar } from "react-icons/rx";
+import { RiDeleteBin5Line } from "react-icons/ri";
 import "./singletask.scss";
 import { CiLogin } from "react-icons/ci";
 
@@ -15,6 +16,7 @@ const SingleTask = ({
   taskInProg,
 }) => {
   const { logout, currentUser } = useContext(AppContext);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskDetails, setTaskDetails] = useState(task);
   const [editMode, setEditMode] = useState(false);
@@ -25,8 +27,12 @@ const SingleTask = ({
   //   taskInProg?.description || ""
   // );
 
-  const [editStatus, setEditStatus] = useState(taskDetails?.status || taskInProg?.status);
-  const [editAssigned, setEditAssigned] = useState(taskDetails?.assignee || taskInProg?.assigned)
+  const [editStatus, setEditStatus] = useState(
+    taskDetails?.status || taskInProg?.status
+  );
+  const [editAssigned, setEditAssigned] = useState(
+    taskDetails?.assignee || taskInProg?.assigned
+  );
 
   const [allUsers, setAllusers] = useState([]);
 
@@ -51,6 +57,7 @@ const SingleTask = ({
   const fetchTaskDetails = async () => {
     try {
       let response;
+
       if (task) {
         response = await axios.get(
           `http://localhost:8000/api/tasks/task/${task.id}`
@@ -67,13 +74,18 @@ const SingleTask = ({
 
       const url = task ? `/tasks/${task.id}` : `/tasks/${taskInProg.id}`;
       window.history.pushState(null, null, url);
+
+      setIsLoading(false);
+      setIsModalOpen(true); // Open the modal after data is fetche
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
     }
   };
 
   const openModal = () => {
     setIsModalOpen(true);
+
     fetchTaskDetails();
   };
 
@@ -98,7 +110,6 @@ const SingleTask = ({
           `http://localhost:8000/api/inprogress/task/${taskInProg.id}`,
           {
             description: editDescription,
-        
           }
         );
       } else if (task) {
@@ -110,7 +121,6 @@ const SingleTask = ({
       setTaskDetails((prevDetails) => ({
         ...prevDetails,
         description: editDescription,
-  
       }));
 
       setEditMode(false);
@@ -147,23 +157,6 @@ const SingleTask = ({
       console.log(error);
     }
   };
-
-  //get comments
-
-  // useEffect(() => {
-  //   const getComments = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         "http://localhost:8000/api/comments/allcomments"
-  //       );
-  //       setgetComment(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching comments:", error);
-  //     }
-  //   };
-
-  //   getComments();
-  // }, [text]);
 
   useEffect(() => {
     const getComments = async () => {
@@ -208,8 +201,6 @@ const SingleTask = ({
 
   console.log(taskDetails?.id);
 
-
-
   //getAll users
   useEffect(() => {
     const getAllusers = async () => {
@@ -221,57 +212,53 @@ const SingleTask = ({
     getAllusers();
   }, []);
 
-//edit the status and assigned task
+  //edit the status and assigned task
   const handleAssigneesChange = (value) => {
     setEditAssigned(value);
   };
-  
+
   const handleStatusChange = (value) => {
     setEditStatus(value);
   };
-  
-  // New function to handle updating status and assignee
-// ...
 
-// New function to handle updating status and assignee
-const updateStatusAndAssignee = async () => {
-  try {
-    if (taskInProg) {
-      await axios.put(
-        `http://localhost:8000/api/inprogress/task/${taskInProg.id}`,
-        {
+  // New function to handle updating status and assignee
+  // ...
+
+  // New function to handle updating status and assignee
+  const updateStatusAndAssignee = async () => {
+    try {
+      if (taskInProg) {
+        await axios.put(
+          `http://localhost:8000/api/inprogress/task/${taskInProg.id}`,
+          {
+            status: editStatus,
+            assignee: editAssigned,
+          }
+        );
+      } else if (task) {
+        await axios.put(`http://localhost:8000/api/tasks/task/${task.id}`, {
           status: editStatus,
           assignee: editAssigned,
-        }
-      );
-    } else if (task) {
-      await axios.put(`http://localhost:8000/api/tasks/task/${task.id}`, {
+        });
+      }
+
+      // Update the taskDetails state
+      setTaskDetails((prevDetails) => ({
+        ...prevDetails,
         status: editStatus,
-        assignee: editAssigned,
-      });
+        assigned: editAssigned,
+      }));
+
+      setEditMode(false);
+    } catch (error) {
+      console.log(error);
     }
+  };
 
-    // Update the taskDetails state
-    setTaskDetails((prevDetails) => ({
-      ...prevDetails,
-      status: editStatus,
-      assigned: editAssigned,
-    }));
-
-    setEditMode(false);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-
-  
   useEffect(() => {
     // Call the update function when there's a change in status or assignee
     updateStatusAndAssignee();
   }, [editStatus, editAssigned]);
-
- 
 
   return (
     <div
@@ -312,6 +299,11 @@ const updateStatusAndAssignee = async () => {
               <span className="icon">
                 <MdConstruction /> task: <span className="id">{task?.id}</span>
               </span>
+              <div className="delete">
+                <span onClick={deleteTask}>
+                  <RiDeleteBin5Line />
+                </span>
+              </div>
               <span className="closeBtn" onClick={closeModal}>
                 X
               </span>
@@ -351,7 +343,7 @@ const updateStatusAndAssignee = async () => {
               <div className="resp">
                 <div className="reporter">
                   <span className="element">Reporter: </span>
-                  <p>{taskDetails?.reporter}</p>
+                  <p>{taskDetails?.reporter || taskInProg?.reporter}</p>
                 </div>
                 <div className="reporter">
                   <span>Assignees:</span>
@@ -367,7 +359,7 @@ const updateStatusAndAssignee = async () => {
                   </select>
                 </div>
                 <div className="reporter">
-                  <span className="status"> Status:   </span>
+                  <span className="status"> Status: </span>
                   <select
                     value={editStatus}
                     onChange={(e) => handleStatusChange(e.target.value)}>
@@ -394,9 +386,12 @@ const updateStatusAndAssignee = async () => {
                   {getComment.map((comment) => (
                     <>
                       <div className="left">
-                      <span className="avatar"> <RxAvatar/> </span>
+                        <span className="avatar">
+                        
+                          <RxAvatar />
+                        </span>
                         <span className="username">{comment.username}</span>
-                      
+
                         <span className="date">
                           {new Date(comment.created_at).toDateString()}
                         </span>
@@ -408,9 +403,6 @@ const updateStatusAndAssignee = async () => {
                     </>
                   ))}
                 </div>
-              </div>
-              <div className="delete">
-                <button onClick={deleteTask}>Delete</button>
               </div>
             </div>
           </div>

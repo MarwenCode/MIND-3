@@ -288,11 +288,20 @@
 
         .closeBtn {
           margin-left: 850px;
-          background-color: #242424;
+          margin-top: -25px;
+          // background-color: #242424;
           padding: 10px;
-          color: white;
+          // color: white;
+          color:black;
           border-radius: 10px;
+          font-size: 20px;
         }
+
+        .delete {
+          font-size: 20px;
+        }
+
+      
       }
 
       .center {
@@ -429,6 +438,7 @@
               min-height: 40px;
               resize: vertical;
               width: 600px;
+              margin-top: -70px;
             }
           }
 

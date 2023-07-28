@@ -22,7 +22,13 @@
      
         padding: 20px 30px;
         width: 400px;
-        transform: translate(10%, -150%);
+        // transform: translate(10%, -150%);
+        margin-bottom: 550px;
+
+        textarea {
+            resize: vertical;
+            min-height: fit-content;
+        }
 
         .resp {
             color:black;
@@ -68,6 +74,7 @@
        
 
         button {
+            background-color: inherit;
            
         }
     }

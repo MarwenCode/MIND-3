@@ -107,9 +107,9 @@ const AddTicket = ({ addTicketMode, setAddTicketMode, closeModal }) => {
 
           <div className="close">
             <button onClick={closeModal}> 
-            <span>close </span>
+            Close X
             
-            X</button>
+            </button>
           </div>
         </>
       )}
